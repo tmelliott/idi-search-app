@@ -1,0 +1,36 @@
+@tailwind base;
+
+@layer base {
+  .header {
+    @apply flex justify-between drop-shadow-sm bg-white px-4 py-2;
+  }
+  .header > div {
+    @apply flex items-center gap-x-1;
+  }
+  .header .link {
+    @apply flex items-center text-xs bg-white hover:bg-gray-100 p-2 rounded;
+  }
+  .header .link svg {
+    @apply h-5 mr-1;
+  }
+
+  main h1 {
+    @apply text-xl mb-4;
+  }
+  main h2 {
+    @apply font-bold mb-2 mt-4;
+  }
+  main p {
+    @apply mb-2;
+  }
+  main p > a {
+    @apply text-blue-800 hover:text-blue-600;
+  }
+
+  .footer {
+    @apply px-4 py-2 bg-gray-900 text-gray-400 text-xs flex flex-col gap-y-1;
+  }
+  .footer a {
+    @apply text-blue-400 hover:text-blue-300;
+  }
+}
