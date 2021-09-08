@@ -1,6 +1,12 @@
+import Head from "next/head"
+
 function about() {
   return (
     <div>
+      <Head>
+        <title>About | What's in the IDI?</title>
+      </Head>
+
       <h1>IDI: Integrated Data Infrastructure</h1>
 
       <p>

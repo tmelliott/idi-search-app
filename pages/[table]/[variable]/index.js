@@ -1,3 +1,5 @@
+import Head from "next/head"
+
 import { CheckIcon, XIcon } from "@heroicons/react/solid"
 
 import content from "../../../data/idi.json"
@@ -5,6 +7,12 @@ import content from "../../../data/idi.json"
 function Variable(props) {
   return (
     <div>
+      <Head>
+        <title>
+          {props.variable_name} | {props.table_name} | What's in the IDI?
+        </title>
+      </Head>
+
       <h1>{props.variable_name}</h1>
 
       <p>

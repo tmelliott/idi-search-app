@@ -1,6 +1,12 @@
+import Head from "next/head"
+
 function help() {
   return (
     <div>
+      <Head>
+        <title>Help | What's in the IDI?</title>
+      </Head>
+
       <h1>User Guide</h1>
 
       <h2>Searching IDI variables</h2>
