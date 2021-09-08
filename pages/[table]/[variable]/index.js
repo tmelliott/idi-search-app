@@ -47,10 +47,11 @@ function Variable(props) {
   )
 }
 
-async function getStaticProps({ params }) {
+async function getServerSideProps(context) {
   const info = content.filter(
     (tab) =>
-      tab.table_name === params.table && tab.variable_name === params.variable
+      tab.table_name === context.query.table &&
+      tab.variable_name === context.query.variable
   )
 
   // IDI refresh variables
@@ -78,17 +79,17 @@ async function getStaticProps({ params }) {
   }
 }
 
-async function getStaticPaths() {
-  // list of tables in `data/tables.json`
-  const vars = content.map((variable) => ({
-    params: { table: variable.table_name, variable: variable.variable_name },
-  }))
+// async function getStaticPaths() {
+//   // list of tables in `data/tables.json`
+//   const vars = content.map((variable) => ({
+//     params: { table: variable.table_name, variable: variable.variable_name },
+//   }))
 
-  return {
-    paths: vars,
-    fallback: false,
-  }
-}
+//   return {
+//     paths: vars,
+//     fallback: false,
+//   }
+// }
 
 export default Variable
-export { getStaticProps, getStaticPaths }
+export { getServerSideProps }

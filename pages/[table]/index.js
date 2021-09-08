@@ -18,9 +18,10 @@ function Table(props) {
   )
 }
 
-async function getStaticProps({ params }) {
-  const info = content.filter((tab) => tab.table_name === params.table)[0]
-  console.log(info)
+async function getServerSideProps(context) {
+  const info = content.filter(
+    (tab) => tab.table_name === context.query.table
+  )[0]
 
   return {
     props: {
@@ -29,17 +30,17 @@ async function getStaticProps({ params }) {
   }
 }
 
-async function getStaticPaths() {
-  // list of tables in `data/tables.json`
-  const tables = content.map((table) => ({
-    params: { table: table.table_name },
-  }))
+// async function getStaticPaths() {
+//   // list of tables in `data/tables.json`
+//   const tables = content.map((table) => ({
+//     params: { table: table.table_name },
+//   }))
 
-  return {
-    paths: tables,
-    fallback: false,
-  }
-}
+//   return {
+//     paths: tables,
+//     fallback: false,
+//   }
+// }
 
 export default Table
-export { getStaticProps, getStaticPaths }
+export { getServerSideProps }
