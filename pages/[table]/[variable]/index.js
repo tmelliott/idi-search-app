@@ -29,6 +29,7 @@ function Variable(props) {
       <div className="flex">
         {props.refreshes.map((refresh) => (
           <div
+            key={refresh.date}
             className={`border p-1 pr-2 flex items-center text-xs font-bold ${
               refresh.available ? "bg-green-200" : "bg-red-200"
             }`}
