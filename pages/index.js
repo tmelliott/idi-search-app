@@ -8,11 +8,16 @@ export default function Home({ filterTerm, setFilterTerm }) {
         <title>What's in the IDI?</title>
       </Head>
 
-      <div className="h-full">
-        <VariableTable filterTerm={filterTerm} setFilterTerm={setFilterTerm} />
-      </div>
+      <div className="h-full flex">
+        <div className="h-full vartable-container">
+          <VariableTable
+            filterTerm={filterTerm}
+            setFilterTerm={setFilterTerm}
+          />
+        </div>
 
-      <div>{/* Output/info panel */}</div>
+        <div>variable information goes here</div>
+      </div>
     </div>
   )
 }

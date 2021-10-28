@@ -27,6 +27,10 @@
     @apply text-blue-800 hover:text-blue-600;
   }
 
+  .vartable-container {
+    min-width: 800px;
+  }
+
   .footer {
     @apply px-4 py-2 bg-gray-900 text-gray-400 text-xs flex flex-col gap-y-1;
   }
