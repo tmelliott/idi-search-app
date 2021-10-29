@@ -16,7 +16,7 @@ dictionaries <- list.files(file.path("data", "dictionaries"), full.names = TRUE)
     bind_rows() |>
     rename(
         table_name = "IDI Table Name",
-        field_name = "Field name",
+        name = "Field name",
         type = "Type",
         size = "Size",
         primary_key = "Primary Key?",
@@ -26,7 +26,9 @@ dictionaries <- list.files(file.path("data", "dictionaries"), full.names = TRUE)
     ) |>
     mutate(
         primary_key = !is.na(primary_key) & primary_key == "Y",
-        nullable = nullable == "Yes"
+        nullable = nullable == "Yes",
+        table_name = str_replace_all(table_name, "\\[|\\]", ""),
+        name = str_replace_all(name, "\\[|\\]", "")
     )
 
 adhoc <- dictionaries |>
@@ -43,7 +45,7 @@ adhoc_tables <- adhoc |>
     distinct()
 
 adhoc_vars <- adhoc |>
-    select(table, field_name, description, information) |>
+    select(table, name, description, information) |>
     # mend descriptions to markdown:
     mutate(
         description = gsub("\r\n", "\n", description),
@@ -56,15 +58,77 @@ adhoc_vars <- adhoc |>
 ## -- idi tables are another
 idi_tables <- idi |>
     select(collection, table) |>
-    distinct()
+    distinct() |>
+    mutate(
+        schema = paste(collection, table, sep = "."),
+        description = ""
+    ) |>
+    select(schema, collection, table, description)
 
 idi_vars <- idi |>
-    select(table, field_name, description, information) |>
+    select(collection, table, name, description, information) |>
     # mend descriptions to markdown:
     mutate(
         description = gsub("\r\n", "\n", description),
         # description = gsub("\t", " ", description),
         description = gsub("\u2022", "-", description),
+        description = gsub("\u8211", "-", description),
         description = gsub("\u2018|\u2019", "'", description),
         description = gsub("\u201C|\u201D", "\"", description)
-    )
+    ) |>
+    mutate(
+        table = paste(collection, table, sep = "."),
+        schema = paste(collection, table, name, sep = "."),
+    ) |>
+    select(schema, table, name, description, information)
+
+# create new table..
+library(RPostgreSQL)
+library(dbplyr)
+
+dotenv::load_dot_env(".env.local")
+
+con <- dbConnect(
+    PostgreSQL(),
+    user = Sys.getenv("PG_USER"),
+    password = Sys.getenv("PG_PASSWORD"),
+    host = Sys.getenv("PG_HOST"),
+    port = Sys.getenv("PG_PORT"),
+    dbname = Sys.getenv("PG_DATABASE")
+)
+
+dbExecute(con, "
+DROP TABLE IF EXISTS idi_vars;
+DROP TABLE IF EXISTS idi_tables;
+")
+
+# CREATE TABLE idi_tables (
+#     schema TEXT PRIMARY KEY,
+#     collection TEXT,
+#     \"table\" TEXT,
+#     description TEXT
+# );
+# CREATE TABLE idi_vars (
+#     schema TEXT PRIMARY KEY,
+#     \"table\" TEXT REFERENCES idi_tables (schema),
+#     name TEXT,
+#     description TEXT,
+#     information TEXT
+# );
+# ")
+
+dbWriteTable(con, "idi_vars", idi_vars, row.names = FALSE)
+dbWriteTable(con, "idi_tables", idi_tables, row.names = FALSE)
+
+dbExecute(con, "
+ALTER TABLE idi_tables
+    ADD CONSTRAINT idi_tables_pkey
+    PRIMARY KEY (schema);
+ALTER TABLE idi_vars
+    ADD CONSTRAINT idi_vars_pkey
+    PRIMARY KEY (schema);
+ALTER TABLE idi_vars
+    ADD CONSTRAINT idi_vars_table_fkey
+    FOREIGN KEY (\"table\")
+    REFERENCES idi_tables (schema);
+")
