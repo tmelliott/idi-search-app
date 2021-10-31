@@ -1,17 +1,11 @@
 # create tables to load into POSTGRES database ... limit (for now) of 10k rows
 library(tidyverse)
 
-# idi <- read_csv("data/idi.csv")
+files <- list.files(file.path("data", "dictionaries"), full.names = TRUE)
 
-# agencies <- idi |> select(agency)
+readxl::excel_sheets(files[1])
 
-# collections <- idi |> select(collection, agency)
-
-# variables_db <- idi |>
-#     # select(c('variable_name', str_which(colnames(idi), "^IDI"))) |>
-#     select(variable_name, table_name, description)
-
-dictionaries <- list.files(file.path("data", "dictionaries"), full.names = TRUE) |>
+dictionaries <- files |>
     lapply(readxl::read_excel, sheet = "Dataset_Summary") |>
     bind_rows() |>
     rename(

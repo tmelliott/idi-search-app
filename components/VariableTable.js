@@ -10,7 +10,7 @@ function VariableTable({ filterTerm, setFilterTerm }) {
 
   const fetchData = async () => {
     const res = await fetch(
-      "/api/variables?search=variables&term=" + filterTerm
+      "/api/search_variables?search=variables&term=" + filterTerm
     )
     const ret = await res.json()
     setData(
