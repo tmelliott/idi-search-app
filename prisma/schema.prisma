@@ -1,0 +1,29 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Table {
+  schema      String     @id
+  collection  String?
+  name        String?    @map("table")
+  description String?
+  variables   Variable[]
+
+  @@map("idi_tables")
+}
+
+model Variable {
+  schema       String  @id
+  table_schema String? @map("table")
+  name         String?
+  description  String?
+  information  String?
+  table        Table?  @relation(fields: [table_schema], references: [schema], onDelete: NoAction, onUpdate: NoAction)
+
+  @@map("idi_vars")
+}

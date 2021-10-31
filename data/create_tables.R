@@ -86,7 +86,7 @@ idi_vars <- idi |>
 library(RPostgreSQL)
 library(dbplyr)
 
-dotenv::load_dot_env(".env.local")
+dotenv::load_dot_env()
 
 con <- dbConnect(
     PostgreSQL(),
