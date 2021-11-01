@@ -1,0 +1,13 @@
+- name: New Zealand Police
+  collections:
+    - IDI NZ Police data
+    - IDI NZ Police data NIA Links Data
+    - IDI POL Recorded Crime Offenders data
+
+- name: Ministry of Health
+  collections:
+    - IDI MOH SOCRATES Disability Support Services data
+
+- name: Ministry of Justice
+  collections:
+    - IDI Ministry of Justice Criminal Court Charges data

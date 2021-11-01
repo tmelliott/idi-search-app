@@ -1,3 +1,6 @@
+if (getRversion() < numeric_version('4.1.0'))
+    stop("Script required R >= 4.1.0.")
+
 # create tables to load into POSTGRES database ... limit (for now) of 10k rows
 library(tidyverse)
 
@@ -5,12 +8,85 @@ files <- list.files(file.path("data", "dictionaries"), full.names = TRUE)
 
 readxl::excel_sheets(files[1])
 
-dictionaries <- files |>
+# - refresh period too
+
+agency_collection <- yaml::read_yaml("data/agencies.yaml") |>
+    lapply(\(x) {
+        tibble(
+            agency = x$name,
+            collection = x$collections
+        )
+    }) |>
+    bind_rows() |>
+    mutate(agency = factor(agency))
+
+agencies <- tibble(
+    agency_id = seq_along(levels(agency_collection$agency)),
+    agency_name = levels(agency_collection$agency)
+)
+
+agency_collection <- agency_collection |>
+    mutate(agency = as.integer(agency))
+
+collection_tables <- files |>
+    lapply(readxl::read_excel, sheet = "Index") |>
+    lapply(\(x) {
+        di <- grep("Dataset Name", x$Index)
+        dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
+        tables <- x[(di + 1):dj, ]
+        cn <- as.character(x[di, ])
+        tables <- tables[!is.na(cn)]
+        cn <- cn[!is.na(cn)]
+        colnames(tables) <- cn
+        col <- x[[2]][grep("Title", x$Index)]
+        list(
+            collection = tibble(
+                collection = col,
+                description = x[[2]][grep("Introduction", x$Index)],
+            ),
+            tables = tables |>
+                mutate(
+                    collection = col
+                )
+        )
+    })
+
+collections <- map(collection_tables, "collection") |>
+    bind_rows() |>
+    right_join(agency_collection) |>
+    mutate(
+        collection = factor(collection),
+        collection_id = as.integer(collection),
+        collection_name = as.character(collection),
+        agency_id = agency
+    ) |>
+    select(collection_id, collection_name, agency_id, description)
+
+datasets <- map(collection_tables, "tables") |>
+    bind_rows() |>
+    rename(
+        dataset = "Dataset Name",
+        description = "Description",
+        schema = "IDI Table Name",
+        reference_period = "Reference Period"
+    ) |>
+    right_join(
+        collections |> select(collection_id, collection_name),
+        by = c("collection" = "collection_name")
+    ) |>
+    mutate(
+        dataset = as.factor(dataset),
+        dataset_id = as.integer(dataset),
+        dataset_name = as.character(dataset)
+    ) |>
+    select(dataset_id, dataset_name, collection_id, schema, description, reference_period)
+
+variables <- files |>
     lapply(readxl::read_excel, sheet = "Dataset_Summary") |>
     bind_rows() |>
     rename(
-        table_name = "IDI Table Name",
-        name = "Field name",
+        schema = "IDI Table Name",
+        variable = "Field name",
         type = "Type",
         size = "Size",
         primary_key = "Primary Key?",
@@ -21,25 +97,29 @@ dictionaries <- files |>
     mutate(
         primary_key = !is.na(primary_key) & primary_key == "Y",
         nullable = nullable == "Yes",
-        table_name = str_replace_all(table_name, "\\[|\\]", ""),
-        name = str_replace_all(name, "\\[|\\]", "")
+        schema = str_replace_all(schema, "\\[|\\]", ""),
+        variable = str_replace_all(variable, "\\[|\\]", "")
     )
 
-adhoc <- dictionaries |>
-    filter(str_detect(dictionaries$table_name, "IDI_Adhoc")) |>
-    separate(table_name, c(NA_character_, "collection", "table"), "\\.")
+## TODO:
+# figure out agency (?) and collection (!) schema from variables list,
+# and replace integer ID with that.
 
-idi <- dictionaries |>
+adhoc <- variables |>
+    filter(str_detect(dictionaries$table_name, "IDI_Adhoc")) |>
+    separate(table_name, c(NA_character_, "collection", "dataset"), "\\.")
+
+idi <- variables |>
     filter(!str_detect(dictionaries$table_name, "IDI_Adhoc")) |>
-    separate(table_name, c("collection", "table"), "\\.")
+    separate(table_name, c("collection", "dataset"), "\\.")
 
 ## -- adhoc tables are one 'section'
 adhoc_tables <- adhoc |>
-    select(collection, table) |>
+    select(collection, dataset) |>
     distinct()
 
 adhoc_vars <- adhoc |>
-    select(table, name, description, information) |>
+    select(dataset, name, description, information) |>
     # mend descriptions to markdown:
     mutate(
         description = gsub("\r\n", "\n", description),
@@ -51,16 +131,16 @@ adhoc_vars <- adhoc |>
 
 ## -- idi tables are another
 idi_tables <- idi |>
-    select(collection, table) |>
+    select(collection, dataset) |>
     distinct() |>
     mutate(
-        schema = paste(collection, table, sep = "."),
+        schema = paste(collection, dataset, sep = "."),
         description = ""
     ) |>
-    select(schema, collection, table, description)
+    select(schema, collection, dataset, description)
 
 idi_vars <- idi |>
-    select(collection, table, name, description, information) |>
+    select(collection, dataset, name, description, information) |>
     # mend descriptions to markdown:
     mutate(
         description = gsub("\r\n", "\n", description),
@@ -71,10 +151,10 @@ idi_vars <- idi |>
         description = gsub("\u201C|\u201D", "\"", description)
     ) |>
     mutate(
-        table = paste(collection, table, sep = "."),
-        schema = paste(collection, table, name, sep = "."),
+        dataset = paste(collection, dataset, sep = "."),
+        schema = paste(collection, dataset, name, sep = "."),
     ) |>
-    select(schema, table, name, description, information)
+    select(schema, dataset, name, description, information)
 
 # create new table..
 library(RPostgreSQL)
