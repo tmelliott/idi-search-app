@@ -3,8 +3,19 @@ if (getRversion() < numeric_version('4.1.0'))
 
 # create tables to load into POSTGRES database ... limit (for now) of 10k rows
 library(tidyverse)
+library(googledrive)
+library(dotenv)
 
-files <- list.files(file.path("data", "dictionaries"), full.names = TRUE)
+drive_auth(Sys.getenv("GOOGLE_EMAIL"))
+g_files <- drive_ls(Sys.getenv("GOOGLE_PATH"))
+
+td <- tempdir()
+for (i in seq_len(nrow(g_files))) {
+    drive_download(g_files$id[i], path = file.path(td, g_files$name[i]))
+}
+files <- list.files(td, full.names = TRUE)
+
+#list.files(file.path("data", "dictionaries"), full.names = TRUE)
 
 # readxl::excel_sheets(files[1])
 
