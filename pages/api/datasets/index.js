@@ -5,8 +5,10 @@ const prisma = new PrismaClient()
 async function main(query) {
   let args = {
     select: {
-      variable_id: true,
       dataset_id: true,
+      dataset_name: true,
+      collection_id: true,
+      description: true,
     },
   }
   if (query !== undefined) {
@@ -14,19 +16,19 @@ async function main(query) {
       ...args,
       where: {
         OR: [
-          { variable_id: { contains: query, mode: "insensitive" } },
+          { dataset_name: { contains: query, mode: "insensitive" } },
           { description: { contains: query, mode: "insensitive" } },
         ],
       },
     }
   }
-  const variables = await prisma.variables.findMany(args)
-  return variables
+  const datasets = await prisma.datasets.findMany(args)
+  return datasets
 }
 
-export default async function variablesAPI(req, res) {
+export default async function datasetsAPI(req, res) {
   const query = req.query.q
-  const variables = await main(query)
+  const datasets = await main(query)
     .catch((e) => {
       throw e
     })
@@ -34,5 +36,5 @@ export default async function variablesAPI(req, res) {
       await prisma.$disconnect()
     })
 
-  res.status(200).json(variables)
+  res.status(200).json(datasets)
 }

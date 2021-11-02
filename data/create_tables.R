@@ -6,27 +6,23 @@ library(tidyverse)
 
 files <- list.files(file.path("data", "dictionaries"), full.names = TRUE)
 
-readxl::excel_sheets(files[1])
+# readxl::excel_sheets(files[1])
 
 # - refresh period too
 
 agency_collection <- yaml::read_yaml("data/agencies.yaml") |>
     lapply(\(x) {
         tibble(
-            agency = x$name,
-            collection = x$collections
+            agency_id = x$id,
+            agency_name = x$name,
+            collection_name = x$collections
         )
     }) |>
-    bind_rows() |>
-    mutate(agency = factor(agency))
+    bind_rows()
 
-agencies <- tibble(
-    agency_id = seq_along(levels(agency_collection$agency)),
-    agency_name = levels(agency_collection$agency)
-)
-
-agency_collection <- agency_collection |>
-    mutate(agency = as.integer(agency))
+agencies <- agency_collection |>
+    select(agency_id, agency_name) |>
+    distinct()
 
 collection_tables <- files |>
     lapply(readxl::read_excel, sheet = "Index") |>
@@ -41,12 +37,14 @@ collection_tables <- files |>
         col <- x[[2]][grep("Title", x$Index)]
         list(
             collection = tibble(
-                collection = col,
+                collection_name = col,
                 description = x[[2]][grep("Introduction", x$Index)],
             ),
             tables = tables |>
                 mutate(
-                    collection = col
+                    collection_name = col,
+                    dataset_id =
+                        gsub("\\[|\\]", "", tables[["IDI Table Name"]])
                 )
         )
     })
@@ -54,39 +52,23 @@ collection_tables <- files |>
 collections <- map(collection_tables, "collection") |>
     bind_rows() |>
     right_join(agency_collection) |>
-    mutate(
-        collection = factor(collection),
-        collection_id = as.integer(collection),
-        collection_name = as.character(collection),
-        agency_id = agency
-    ) |>
-    select(collection_id, collection_name, agency_id, description)
+    select(collection_name, agency_id, description)
 
 datasets <- map(collection_tables, "tables") |>
     bind_rows() |>
     rename(
-        dataset = "Dataset Name",
+        dataset_name = "Dataset Name",
         description = "Description",
-        schema = "IDI Table Name",
         reference_period = "Reference Period"
     ) |>
-    right_join(
-        collections |> select(collection_id, collection_name),
-        by = c("collection" = "collection_name")
-    ) |>
-    mutate(
-        dataset = as.factor(dataset),
-        dataset_id = as.integer(dataset),
-        dataset_name = as.character(dataset)
-    ) |>
-    select(dataset_id, dataset_name, collection_id, schema, description, reference_period)
+    select(dataset_id, dataset_name, collection_name, description, reference_period)
 
 variables <- files |>
     lapply(readxl::read_excel, sheet = "Dataset_Summary") |>
     bind_rows() |>
     rename(
         schema = "IDI Table Name",
-        variable = "Field name",
+        variable_id = "Field name",
         type = "Type",
         size = "Size",
         primary_key = "Primary Key?",
@@ -98,63 +80,49 @@ variables <- files |>
         primary_key = !is.na(primary_key) & primary_key == "Y",
         nullable = nullable == "Yes",
         schema = str_replace_all(schema, "\\[|\\]", ""),
-        variable = str_replace_all(variable, "\\[|\\]", "")
-    )
+        variable_id = str_replace_all(variable_id, "\\[|\\]", ""),
+        dataset_id = str_replace(schema, "IDI_Adhoc\\.", ""),
+        database_id = ifelse(str_detect(schema, "IDI_Adhoc"), "IDI_Adhoc", "IDI_Clean")
+    ) |>
+    select(variable_id, dataset_id, database_id, description, information)
 
 ## TODO:
 # figure out agency (?) and collection (!) schema from variables list,
 # and replace integer ID with that.
 
-adhoc <- variables |>
-    filter(str_detect(dictionaries$table_name, "IDI_Adhoc")) |>
-    separate(table_name, c(NA_character_, "collection", "dataset"), "\\.")
-
-idi <- variables |>
-    filter(!str_detect(dictionaries$table_name, "IDI_Adhoc")) |>
-    separate(table_name, c("collection", "dataset"), "\\.")
-
-## -- adhoc tables are one 'section'
-adhoc_tables <- adhoc |>
-    select(collection, dataset) |>
-    distinct()
-
-adhoc_vars <- adhoc |>
-    select(dataset, name, description, information) |>
-    # mend descriptions to markdown:
-    mutate(
-        description = gsub("\r\n", "\n", description),
-        # description = gsub("\t", " ", description),
-        description = gsub("\u2022", "-", description),
-        description = gsub("\u2018|\u2019", "'", description),
-        description = gsub("\u201C|\u201D", "\"", description)
-    )
-
-## -- idi tables are another
-idi_tables <- idi |>
-    select(collection, dataset) |>
+collections <- datasets |>
+    right_join(
+        variables |> select(dataset_id, database_id) |> distinct()
+    ) |>
+    select(collection_name, database_id) |>
     distinct() |>
+    left_join(collections) |>
     mutate(
-        schema = paste(collection, dataset, sep = "."),
-        description = ""
+        collection_id = make.names(gsub("\\s", "_", collection_name))
     ) |>
-    select(schema, collection, dataset, description)
+    select(collection_id, collection_name, agency_id, database_id, description)
 
-idi_vars <- idi |>
-    select(collection, dataset, name, description, information) |>
-    # mend descriptions to markdown:
-    mutate(
-        description = gsub("\r\n", "\n", description),
-        # description = gsub("\t", " ", description),
-        description = gsub("\u2022", "-", description),
-        description = gsub("\u8211", "-", description),
-        description = gsub("\u2018|\u2019", "'", description),
-        description = gsub("\u201C|\u201D", "\"", description)
-    ) |>
-    mutate(
-        dataset = paste(collection, dataset, sep = "."),
-        schema = paste(collection, dataset, name, sep = "."),
-    ) |>
-    select(schema, dataset, name, description, information)
+variables <- variables |> select(-database_id) |>
+    mutate(refreshes = "")
+
+datasets <- datasets |>
+    left_join(collections |> select(collection_name, collection_id)) |>
+    select(dataset_id, dataset_name, collection_id, description, reference_period)
+
+# Collection IDs
+
+fix_text <- function(x) {
+    x <- gsub("\r\n", "\n", x)
+    x <- gsub("\u2022", "-", x)
+    x <- gsub("\u8211", "-", x)
+    x <- gsub("\u2018|\u2019", "'", x)
+    x <- gsub("\u201C|\u201D", "\"", x)
+    x
+}
+
+collections$description <- fix_text(collections$description)
+datasets$description <- fix_text(datasets$description)
+variables$description <- fix_text(variables$description)
 
 # create new table..
 library(RPostgreSQL)
@@ -172,8 +140,10 @@ con <- dbConnect(
 )
 
 dbExecute(con, "
-DROP TABLE IF EXISTS idi_vars;
-DROP TABLE IF EXISTS idi_tables;
+DROP TABLE IF EXISTS variables;
+DROP TABLE IF EXISTS datasets;
+DROP TABLE IF EXISTS collections;
+DROP TABLE IF EXISTS agencies;
 ")
 
 # CREATE TABLE idi_tables (
@@ -191,18 +161,37 @@ DROP TABLE IF EXISTS idi_tables;
 # );
 # ")
 
-dbWriteTable(con, "idi_vars", idi_vars, row.names = FALSE)
-dbWriteTable(con, "idi_tables", idi_tables, row.names = FALSE)
+dbWriteTable(con, "agencies", agencies, row.names = FALSE)
+dbWriteTable(con, "collections", collections, row.names = FALSE)
+dbWriteTable(con, "datasets", datasets, row.names = FALSE)
+dbWriteTable(con, "variables", variables, row.names = FALSE)
 
 dbExecute(con, "
-ALTER TABLE idi_tables
-    ADD CONSTRAINT idi_tables_pkey
-    PRIMARY KEY (schema);
-ALTER TABLE idi_vars
-    ADD CONSTRAINT idi_vars_pkey
-    PRIMARY KEY (schema);
-ALTER TABLE idi_vars
-    ADD CONSTRAINT idi_vars_table_fkey
-    FOREIGN KEY (\"table\")
-    REFERENCES idi_tables (schema);
+ALTER TABLE agencies
+    ADD CONSTRAINT agencies_pkey
+    PRIMARY KEY (agency_id);
+
+ALTER TABLE collections
+    ADD CONSTRAINT collections_pkey
+    PRIMARY KEY (collection_id);
+ALTER TABLE collections
+    ADD CONSTRAINT collection_agency_fkey
+    FOREIGN KEY (agency_id)
+    REFERENCES agencies (agency_id);
+
+ALTER TABLE datasets
+    ADD CONSTRAINT datasets_pkey
+    PRIMARY KEY (dataset_id);
+ALTER TABLE datasets
+    ADD CONSTRAINT dataset_collection_fkey
+    FOREIGN KEY (collection_id)
+    REFERENCES collections (collection_id);
+
+ALTER TABLE variables
+    ADD CONSTRAINT variables_pkey
+    PRIMARY KEY (variable_id, dataset_id);
+ALTER TABLE variables
+    ADD CONSTRAINT variable_dataset_fkey
+    FOREIGN KEY (dataset_id)
+    REFERENCES datasets (dataset_id);
 ")

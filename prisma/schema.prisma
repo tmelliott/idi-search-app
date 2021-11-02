@@ -7,23 +7,39 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Table {
-  schema      String     @id
-  collection  String?
-  name        String?    @map("table")
-  description String?
-  variables   Variable[]
-
-  @@map("idi_tables")
+model agencies {
+  agency_id   String        @id
+  agency_name String?
+  collections collections[]
 }
 
-model Variable {
-  schema       String  @id
-  table_schema String? @map("table")
-  name         String?
-  description  String?
-  information  String?
-  table        Table?  @relation(fields: [table_schema], references: [schema], onDelete: NoAction, onUpdate: NoAction)
+model collections {
+  collection_id   String     @id
+  collection_name String?
+  agency_id       String?
+  database_id     String?
+  description     String?
+  agencies        agencies?  @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
+  datasets        datasets[]
+}
 
-  @@map("idi_vars")
+model datasets {
+  dataset_id       String       @id
+  dataset_name     String?
+  collection_id    String?
+  description      String?
+  reference_period String?
+  collections      collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
+  variables        variables[]
+}
+
+model variables {
+  variable_id String
+  dataset_id  String
+  description String?
+  information String?
+  refreshes   String?
+  datasets    datasets @relation(fields: [dataset_id], references: [dataset_id], onDelete: NoAction, onUpdate: NoAction, map: "variable_dataset_fkey")
+
+  @@id([variable_id, dataset_id])
 }
