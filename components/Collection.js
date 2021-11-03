@@ -1,15 +1,20 @@
 import { CogIcon } from "@heroicons/react/outline"
 import ReactMarkdown from "react-markdown"
+import rehypeRaw from "rehype-raw"
 import Agency from "./Agency"
 import Datasets from "./Datasets"
 import useCollection from "./hooks/useCollection"
 
-function Collection({ id, action }) {
+function Collection({ id, action, highlight }) {
   const { collection, isLoading } = useCollection(id)
 
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
 
-  console.log(collection.description)
+  let description = collection.description
+  if (highlight) {
+    description = description.replace(/(police)/gi, "<mark>$1</mark>")
+  }
+
   return (
     <div className="prose">
       <h2>{collection.collection_name} (Collection)</h2>
@@ -24,7 +29,7 @@ function Collection({ id, action }) {
           {collection.agency.agency_name}
         </span>
       </div>
-      <ReactMarkdown>{collection.description}</ReactMarkdown>
+      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
       <Datasets
         datasets={collection.datasets}
         action={action}

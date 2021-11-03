@@ -32,13 +32,18 @@ export default function Home({
   // the container to display information
   const [info, setInfo] = useState(false)
   const displayRef = useRef()
+  const [toRender, setToRender] = useState(null)
   const renderInfo = (x) => {
+    setToRender(x)
     if (x === null) {
       setInfo(false)
       unmountComponentAtNode(displayRef.current)
       return
     }
-    render(x, displayRef.current)
+    render(
+      { ...x, props: { ...x.props, highlight: filterTerm } },
+      displayRef.current
+    )
     setInfo(true)
   }
 
@@ -60,6 +65,7 @@ export default function Home({
       setDatasets(await newDatasets.json())
     }
     setLoading(false)
+    renderInfo(toRender)
   }, [filterTerm])
 
   return (
