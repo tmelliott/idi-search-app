@@ -1,6 +1,6 @@
 import Head from "next/head"
 import { useRef, useState } from "react"
-import { render } from "react-dom"
+import { render, unmountComponentAtNode } from "react-dom"
 import Agencies from "../components/Agencies"
 import Collections from "../components/Collections"
 
@@ -25,7 +25,7 @@ export default function Home({
   const renderInfo = (x) => {
     if (x === null) {
       setInfo(false)
-      displayRef.current.innerHTML = ""
+      unmountComponentAtNode(displayRef.current)
       return
     }
     render(x, displayRef.current)
@@ -41,8 +41,8 @@ export default function Home({
       {/* New: display expandable groups for various components... */}
       {/* each filtered by a search term, if possible */}
 
-      <div className="h-full flex">
-        <div className="flex-1">
+      <div className="md:h-full flex md:overflow-x-hidden">
+        <div className="flex-1 overflow-y-scroll">
           <Agencies agencies={agencies} action={renderInfo} />
           <Collections collections={collections} action={renderInfo} />
           <Datasets datasets={datasets} action={renderInfo} />
@@ -53,14 +53,20 @@ export default function Home({
         </div>
 
         <div
-          className={`flex-1 p-4 shadow-md bg-gray-50 ${
-            info ? "opacity-100" : "opacity-0"
-          } transition overflow-scroll`}
+          className={`flex-1 p-4 shadow-md bg-gray-50 overflow-x-hidden ${
+            info ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
+          } transition fixed top-0 left-0 w-full md:overflow-y-scroll scrollbar-hide md:scrollbar-default
+          h-full pt-4 md:static md:w-auto md:h-full md:top-auto md:left-auto`}
         >
-          <XCircleIcon
-            className="h-6 fixed right-0 mr-10 cursor-pointer"
-            onClick={() => renderInfo(null)}
-          />
+          <div className="flex flex-row justify-end">
+            <div
+              className="flex flex-row text-xs items-center cursor-pointer hover:opacity-70"
+              onClick={() => renderInfo(null)}
+            >
+              Close
+              <XCircleIcon className="h-6 ml-2" />
+            </div>
+          </div>
           <div ref={displayRef}></div>
         </div>
       </div>
