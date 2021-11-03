@@ -1,11 +1,15 @@
 import Head from "next/head"
-import Link from "next/link"
+import { useRef, useState } from "react"
+import { render } from "react-dom"
+import Agencies from "../components/Agencies"
 import Collections from "../components/Collections"
 
 import getAgencies from "../components/database/agencies"
 import getCollections from "../components/database/collections"
 import getDatasets from "../components/database/datasets"
 import getVariables from "../components/database/variables"
+import { XCircleIcon } from "@heroicons/react/outline"
+import Datasets from "../components/Datasets"
 
 export default function Home({
   agencies,
@@ -15,6 +19,19 @@ export default function Home({
   filterTerm,
   setFilterTerm,
 }) {
+  // the container to display information
+  const [info, setInfo] = useState(false)
+  const displayRef = useRef()
+  const renderInfo = (x) => {
+    if (x === null) {
+      setInfo(false)
+      displayRef.current.innerHTML = ""
+      return
+    }
+    render(x, displayRef.current)
+    setInfo(true)
+  }
+
   return (
     <div className="h-full">
       <Head>
@@ -24,47 +41,29 @@ export default function Home({
       {/* New: display expandable groups for various components... */}
       {/* each filtered by a search term, if possible */}
 
-      <section>
-        <h2>Agencies ({agencies.length})</h2>
-        <ul>
-          {agencies.map((agency) => (
-            <li key={agency.agency_id}>
-              <Link
-                href={{
-                  pathname: "/agencies/[agency_id]",
-                  query: { agency_id: agency.agency_id },
-                }}
-              >
-                <a>{agency.agency_name}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
+      <div className="h-full flex">
+        <div className="flex-1">
+          <Agencies agencies={agencies} action={renderInfo} />
+          <Collections collections={collections} action={renderInfo} />
+          <Datasets datasets={datasets} action={renderInfo} />
 
-      <Collections collections={collections} />
+          <section>
+            <h2>Variables ({n_variables})</h2>
+          </section>
+        </div>
 
-      <section>
-        <h2>Datasets ({datasets.length})</h2>
-        <ul>
-          {datasets.map((dataset) => (
-            <li key={dataset.dataset_id}>
-              <Link
-                href={{
-                  pathname: "/datasets/[dataset_id]",
-                  query: { dataset_id: dataset.dataset_id },
-                }}
-              >
-                <a>{dataset.dataset_name}</a>
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </section>
-
-      <section>
-        <h2>Variables ({n_variables})</h2>
-      </section>
+        <div
+          className={`flex-1 p-4 shadow-md bg-gray-50 ${
+            info ? "opacity-100" : "opacity-0"
+          } transition overflow-scroll`}
+        >
+          <XCircleIcon
+            className="h-6 fixed right-0 mr-10 cursor-pointer"
+            onClick={() => renderInfo(null)}
+          />
+          <div ref={displayRef}></div>
+        </div>
+      </div>
 
       {/* OLD STUFF:: */}
       {/* <div className="h-full flex">

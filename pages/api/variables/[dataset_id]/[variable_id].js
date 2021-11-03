@@ -12,6 +12,26 @@ async function main(d_id, v_id) {
         variable_id: v_id,
       },
     },
+    include: {
+      dataset: {
+        select: {
+          dataset_id: true,
+          dataset_name: true,
+          collection: {
+            select: {
+              collection_id: true,
+              collection_name: true,
+              agency: {
+                select: {
+                  agency_id: true,
+                  agency_name: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    },
   })
   return variable
 }

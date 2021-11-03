@@ -18,7 +18,10 @@
     @apply text-xl mb-4;
   }
   main h2 {
-    @apply font-bold mb-2 mt-4;
+    @apply text-lg font-bold mb-2 mt-4;
+  }
+  main h3 {
+    @apply font-bold mb-0 mt-2;
   }
   main p {
     @apply mb-2;

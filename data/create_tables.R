@@ -123,11 +123,12 @@ datasets <- datasets |>
 # Collection IDs
 
 fix_text <- function(x) {
-    x <- gsub("\r\n", "\n", x)
+    x <- gsub("\r\n", "\n\n", x) # double new lines for markdown
     x <- gsub("\u2022", "-", x)
     x <- gsub("\u8211", "-", x)
     x <- gsub("\u2018|\u2019", "'", x)
     x <- gsub("\u201C|\u201D", "\"", x)
+    x <- gsub("\n\n-", "\n-", x) # bullet lists
     x
 }
 

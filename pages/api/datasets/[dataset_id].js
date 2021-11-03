@@ -10,7 +10,24 @@ async function main(id) {
       dataset_id: id,
     },
     include: {
-      variables: true,
+      collection: {
+        select: {
+          collection_id: true,
+          collection_name: true,
+          agency: {
+            select: {
+              agency_id: true,
+              agency_name: true,
+            },
+          },
+        },
+      },
+      variables: {
+        select: {
+          variable_id: true,
+          dataset_id: true,
+        },
+      },
     },
   })
   return dataset

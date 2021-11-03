@@ -10,7 +10,12 @@ async function main(id) {
       agency_id: id,
     },
     include: {
-      collections: true,
+      collections: {
+        select: {
+          collection_id: true,
+          collection_name: true,
+        },
+      },
     },
   })
   return agency

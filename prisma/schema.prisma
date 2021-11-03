@@ -19,7 +19,7 @@ model collections {
   agency_id       String?
   database_id     String?
   description     String?
-  agencies        agencies?  @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
+  agency          agencies?  @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
   datasets        datasets[]
 }
 
@@ -29,7 +29,7 @@ model datasets {
   collection_id    String?
   description      String?
   reference_period String?
-  collections      collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
+  collection       collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
   variables        variables[]
 }
 
@@ -39,7 +39,7 @@ model variables {
   description String?
   information String?
   refreshes   String?
-  datasets    datasets @relation(fields: [dataset_id], references: [dataset_id], onDelete: NoAction, onUpdate: NoAction, map: "variable_dataset_fkey")
+  dataset     datasets @relation(fields: [dataset_id], references: [dataset_id], onDelete: NoAction, onUpdate: NoAction, map: "variable_dataset_fkey")
 
   @@id([variable_id, dataset_id])
 }

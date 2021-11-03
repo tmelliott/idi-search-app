@@ -1,20 +1,23 @@
-import Link from "next/link"
+import Collection from "./Collection"
 
-function Collections({ collections }) {
+function Collections({ collections, action, title = "Collections" }) {
+  const showCollection = (id) => {
+    action(<Collection id={id} action={action} />)
+  }
   return (
     <section>
-      <h2>Collections ({collections.length})</h2>
+      <h3>
+        {title} ({collections.length})
+      </h3>
       <ul>
         {collections.map((collection) => (
           <li key={collection.collection_id}>
-            <Link
-              href={{
-                pathname: "/collections/[collection_id]",
-                query: { collection_id: collection.collection_id },
-              }}
+            <span
+              className="cursor-pointer"
+              onClick={() => showCollection(collection.collection_id, action)}
             >
-              <a>{collection.collection_name}</a>
-            </Link>
+              {collection.collection_name}
+            </span>
           </li>
         ))}
       </ul>
