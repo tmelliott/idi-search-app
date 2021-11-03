@@ -1,13 +1,14 @@
 import Collection from "./Collection"
+import Loading from "./Loading"
 
-function Collections({ collections, action, title = "Collections" }) {
+function Collections({ collections, action, loading, title = "Collections" }) {
   const showCollection = (id) => {
     action(<Collection id={id} action={action} />)
   }
   return (
     <section>
       <h3>
-        {title} ({collections.length})
+        {title} ({loading ? <Loading /> : collections.length})
       </h3>
       <ul>
         {collections.map((collection) => (

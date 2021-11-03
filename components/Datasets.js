@@ -1,13 +1,14 @@
 import Dataset from "./Dataset"
+import Loading from "./Loading"
 
-function Datasets({ datasets, action, title = "Datasets" }) {
+function Datasets({ datasets, action, loading, title = "Datasets" }) {
   const showDataset = (id) => {
     action(<Dataset id={id} action={action} />)
   }
   return (
     <section>
       <h3>
-        {title} ({datasets.length})
+        {title} ({loading ? <Loading /> : datasets.length})
       </h3>{" "}
       <ul>
         {datasets.map((dataset) => (

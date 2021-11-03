@@ -1,8 +1,11 @@
 import Head from "next/head"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { render, unmountComponentAtNode } from "react-dom"
 import Agencies from "../components/Agencies"
 import Collections from "../components/Collections"
+
+import useSWR from "swr"
+const fetcher = (...args) => fetch(...args).then((res) => res.json())
 
 import getAgencies from "../components/database/agencies"
 import getCollections from "../components/database/collections"
@@ -10,15 +13,22 @@ import getDatasets from "../components/database/datasets"
 import getVariables from "../components/database/variables"
 import { XCircleIcon } from "@heroicons/react/outline"
 import Datasets from "../components/Datasets"
+import Search from "../components/Search"
 
 export default function Home({
-  agencies,
-  collections,
-  datasets,
+  allAgencies,
+  allCollections,
+  allDatasets,
   n_variables,
   filterTerm,
   setFilterTerm,
 }) {
+  const [agencies, setAgencies] = useState(allAgencies)
+  const [collections, setCollections] = useState(allCollections)
+  const [datasets, setDatasets] = useState(allDatasets)
+
+  const [loading, setLoading] = useState(false)
+
   // the container to display information
   const [info, setInfo] = useState(false)
   const displayRef = useRef()
@@ -32,6 +42,26 @@ export default function Home({
     setInfo(true)
   }
 
+  useEffect(async () => {
+    if (filterTerm === "") {
+      setAgencies(allAgencies)
+      setCollections(allCollections)
+      setDatasets(allDatasets)
+    } else {
+      setLoading(true)
+      setAgencies([])
+      setCollections([])
+      setDatasets([])
+      const newAgencies = await fetch(`/api/agencies?q=${filterTerm}`)
+      const newCollections = await fetch(`/api/collections?q=${filterTerm}`)
+      const newDatasets = await fetch(`/api/datasets?q=${filterTerm}`)
+      setAgencies(await newAgencies.json())
+      setCollections(await newCollections.json())
+      setDatasets(await newDatasets.json())
+    }
+    setLoading(false)
+  }, [filterTerm])
+
   return (
     <div className="h-full">
       <Head>
@@ -43,9 +73,18 @@ export default function Home({
 
       <div className="md:h-full flex md:overflow-x-hidden">
         <div className="flex-1 overflow-y-scroll">
-          <Agencies agencies={agencies} action={renderInfo} />
-          <Collections collections={collections} action={renderInfo} />
-          <Datasets datasets={datasets} action={renderInfo} />
+          <Search
+            term={filterTerm}
+            handler={setFilterTerm}
+            disabled={loading}
+          />
+          <Agencies agencies={agencies} action={renderInfo} loading={loading} />
+          <Collections
+            collections={collections}
+            action={renderInfo}
+            loading={loading}
+          />
+          <Datasets datasets={datasets} action={renderInfo} loading={loading} />
 
           <section>
             <h2>Variables ({n_variables})</h2>
@@ -94,9 +133,9 @@ export async function getStaticProps() {
   const variables = await getVariables()
   return {
     props: {
-      agencies,
-      collections,
-      datasets,
+      allAgencies: agencies,
+      allCollections: collections,
+      allDatasets: datasets,
       n_variables: variables.length,
     },
   }

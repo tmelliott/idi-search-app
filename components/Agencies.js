@@ -1,12 +1,16 @@
 import Agency from "./Agency"
+import Loading from "./Loading.js"
 
-function Agencies({ agencies, action }) {
+function Agencies({ agencies, action, loading }) {
   const showAgency = (id) => {
     action(<Agency id={id} action={action} />)
   }
   return (
     <section>
-      <h3>Agencies ({agencies.length})</h3>
+      <h3>
+        Agencies (
+        {loading & (agencies.length === 0) ? <Loading /> : agencies.length})
+      </h3>
       <ul>
         {agencies.map((agency) => (
           <li key={agency.agency_id}>
