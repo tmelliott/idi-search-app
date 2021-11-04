@@ -16,7 +16,6 @@ function Collection({ id, action, highlight }) {
     const regEx = new RegExp(searchMask, "ig")
     const replaceMask = "<mark>$1</mark>"
     description = description.replace(regEx, replaceMask)
-    // description = description.replace(/(${highlight})/gi, "<mark>$1</mark>")
   }
 
   return (

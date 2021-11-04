@@ -1,8 +1,9 @@
 import { FilterIcon } from "@heroicons/react/outline"
 import { useRef, useState } from "react"
 
-function Search({ term, handler, disabled }) {
+function Search({ term, handler }) {
   const [value, setValue] = useState(term)
+  const disabled = false
   const inputRef = useRef()
   return (
     <form
@@ -22,7 +23,7 @@ function Search({ term, handler, disabled }) {
         className={`bg-transparent focus:outline-none w-full ${
           disabled ? "text-gray-600" : "text-black"
         }`}
-        placeholder="Enter search term to filter variables"
+        placeholder="Enter search term to filter results"
         onChange={(e) => setValue(e.target.value)}
         disabled={disabled}
       />

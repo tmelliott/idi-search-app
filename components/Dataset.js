@@ -1,15 +1,24 @@
 import { CogIcon } from "@heroicons/react/outline"
 import ReactMarkdown from "react-markdown"
+import rehypeRaw from "rehype-raw"
 import Agency from "./Agency"
 import Collection from "./Collection"
 // import Variables from "./Variables"
 import useDataset from "./hooks/useDataset"
 import Variables from "./Variables"
 
-function Dataset({ id, action }) {
+function Dataset({ id, action, highlight }) {
   const { dataset, isLoading } = useDataset(id)
 
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
+
+  let description = dataset.description
+  if (highlight) {
+    const searchMask = `(${highlight})`
+    const regEx = new RegExp(searchMask, "ig")
+    const replaceMask = "<mark>$1</mark>"
+    description = description.replace(regEx, replaceMask)
+  }
 
   return (
     <div className="prose">
@@ -46,7 +55,7 @@ function Dataset({ id, action }) {
           {dataset.collection.agency.agency_name}
         </span>
       </div>
-      <ReactMarkdown>{dataset.description}</ReactMarkdown>
+      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
       <Variables
         variables={dataset.variables}
         action={action}

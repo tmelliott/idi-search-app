@@ -14,20 +14,19 @@ import getVariables from "../components/database/variables"
 import { XCircleIcon } from "@heroicons/react/outline"
 import Datasets from "../components/Datasets"
 import Search from "../components/Search"
+import Variables from "../components/Variables"
 
 export default function Home({
   allAgencies,
   allCollections,
   allDatasets,
-  n_variables,
   filterTerm,
   setFilterTerm,
 }) {
-  const [agencies, setAgencies] = useState(allAgencies)
-  const [collections, setCollections] = useState(allCollections)
-  const [datasets, setDatasets] = useState(allDatasets)
-
-  const [loading, setLoading] = useState(false)
+  const [agencies] = useState(allAgencies)
+  const [collections] = useState(allCollections)
+  const [datasets] = useState(allDatasets)
+  const [variables] = useState([])
 
   // the container to display information
   const [info, setInfo] = useState(false)
@@ -46,25 +45,7 @@ export default function Home({
     )
     setInfo(true)
   }
-
-  useEffect(async () => {
-    if (filterTerm === "") {
-      setAgencies(allAgencies)
-      setCollections(allCollections)
-      setDatasets(allDatasets)
-    } else {
-      setLoading(true)
-      setAgencies([])
-      setCollections([])
-      setDatasets([])
-      const newAgencies = await fetch(`/api/agencies?q=${filterTerm}`)
-      const newCollections = await fetch(`/api/collections?q=${filterTerm}`)
-      const newDatasets = await fetch(`/api/datasets?q=${filterTerm}`)
-      setAgencies(await newAgencies.json())
-      setCollections(await newCollections.json())
-      setDatasets(await newDatasets.json())
-    }
-    setLoading(false)
+  useEffect(() => {
     renderInfo(toRender)
   }, [filterTerm])
 
@@ -74,27 +55,34 @@ export default function Home({
         <title>What's in the IDI?</title>
       </Head>
 
-      {/* New: display expandable groups for various components... */}
-      {/* each filtered by a search term, if possible */}
-
       <div className="md:h-full flex md:overflow-x-hidden">
         <div className="flex-1 overflow-y-scroll">
-          <Search
+          <Search term={filterTerm} handler={setFilterTerm} />
+          <Agencies
+            agencies={agencies}
+            action={renderInfo}
             term={filterTerm}
-            handler={setFilterTerm}
-            disabled={loading}
+            limit={2}
           />
-          <Agencies agencies={agencies} action={renderInfo} loading={loading} />
           <Collections
             collections={collections}
             action={renderInfo}
-            loading={loading}
+            term={filterTerm}
+            limit={3}
           />
-          <Datasets datasets={datasets} action={renderInfo} loading={loading} />
+          <Datasets
+            datasets={datasets}
+            action={renderInfo}
+            term={filterTerm}
+            limit={5}
+          />
 
-          <section>
-            <h2>Variables ({n_variables})</h2>
-          </section>
+          <Variables
+            variables={variables}
+            action={renderInfo}
+            term={filterTerm}
+            limit={10}
+          />
         </div>
 
         <div
@@ -115,18 +103,6 @@ export default function Home({
           <div ref={displayRef}></div>
         </div>
       </div>
-
-      {/* OLD STUFF:: */}
-      {/* <div className="h-full flex">
-        <div className="h-full vartable-container">
-          <VariableTable
-            filterTerm={filterTerm}
-            setFilterTerm={setFilterTerm}
-          />
-        </div>
-
-        <div>variable information goes here</div>
-      </div> */}
     </div>
   )
 }
@@ -142,7 +118,6 @@ export async function getStaticProps() {
       allAgencies: agencies,
       allCollections: collections,
       allDatasets: datasets,
-      n_variables: variables.length,
     },
   }
 }
