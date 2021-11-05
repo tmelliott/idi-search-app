@@ -9,8 +9,17 @@
   name: Ministry of Health
   collections:
     - IDI MOH SOCRATES Disability Support Services data
+    - IDI OPC Osteoarthritis Primary Care data
 
 - id: MOJ
   name: Ministry of Justice
   collections:
     - IDI Ministry of Justice Criminal Court Charges data
+
+- id: ACC
+  name: Accident Compensation Corporation
+  collections:
+    - IDI ACC Injury Claims data
+
+- id: U
+  name: Unknown
