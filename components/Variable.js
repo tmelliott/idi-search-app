@@ -63,7 +63,8 @@ function Variable({ d_id, v_id, action }) {
           {variable.database}
         </div>
       )}
-      {variable.refreshes &&
+      {variable.database === "IDI Clean" &&
+        variable.refreshes &&
         (variable.refreshes.length > 0 ? (
           <Refreshes refreshes={variable.refreshes} />
         ) : (
