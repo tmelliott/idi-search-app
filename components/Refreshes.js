@@ -1,0 +1,30 @@
+import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline"
+
+function Refreshes({ refreshes }) {
+  return (
+    <div>
+      <strong>Refresh availability</strong>
+      <div className="flex">
+        {refreshes.map((r) => (
+          <div
+            className={`px-2 mr-2 ${
+              r.available
+                ? "bg-green-50 text-green-600"
+                : "bg-red-50 text-red-600"
+            } border-2 flex items-center text-sm py-1`}
+          >
+            {r.available ? (
+              <CheckCircleIcon className="h-4 mr-2" />
+            ) : (
+              <XCircleIcon className="h-4 mr-1" />
+            )}
+            {r.refresh.substr(6, 2)}/{r.refresh.substr(4, 2)}/
+            {r.refresh.substr(0, 4)}
+          </div>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+export default Refreshes

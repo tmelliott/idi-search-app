@@ -33,7 +33,26 @@ async function main(d_id, v_id) {
       },
     },
   })
-  return variable
+  const current_refreshes = ["20200120", "20200720", "20201020", "20210420"]
+  let refreshes = variable.refreshes
+  if (refreshes && refreshes.length) {
+    refreshes = current_refreshes.map((r) => ({
+      refresh: r,
+      available: refreshes.match(r) !== null,
+    }))
+  } else {
+    refreshes = null
+  }
+
+  return {
+    ...variable,
+    database: variable.refreshes
+      ? variable.refreshes.match("Adhoc")
+        ? "Adhoc"
+        : "IDI Clean"
+      : null,
+    refreshes: refreshes,
+  }
 }
 
 export default async function collectionAPI(req, res) {

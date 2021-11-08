@@ -2,6 +2,7 @@ import { CogIcon } from "@heroicons/react/outline"
 import ReactMarkdown from "react-markdown"
 import Dataset from "./Dataset"
 import useVariable from "./hooks/useVariable"
+import Refreshes from "./Refreshes"
 
 function Variable({ d_id, v_id, action }) {
   const { variable, isLoading, error } = useVariable(d_id, v_id)
@@ -56,18 +57,15 @@ function Variable({ d_id, v_id, action }) {
         </span>
       </div>
       <ReactMarkdown>{variable.description}</ReactMarkdown>
+      {variable.database && (
+        <div>
+          <strong>Database: </strong>
+          {variable.database}
+        </div>
+      )}
       {variable.refreshes &&
-        (variable.refreshes.match(/[0-9]+/) ? (
-          <div>
-            <strong>Refreshes: </strong>
-            <ul>
-              {variable.refreshes.split(",").map((r) => (
-                <li>
-                  {r.substr(6, 2)}/{r.substr(4, 2)}/{r.substr(0, 4)}
-                </li>
-              ))}
-            </ul>
-          </div>
+        (variable.refreshes.length > 0 ? (
+          <Refreshes refreshes={variable.refreshes} />
         ) : (
           <div>
             <strong>Catalog: </strong> {variable.refreshes}
