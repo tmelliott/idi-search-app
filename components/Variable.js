@@ -10,9 +10,11 @@ function Variable({ d_id, v_id, action }) {
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <div>Error</div>
 
+  console.log({ variable })
+
   return (
     <div className="prose">
-      <h2>{variable.variable_id} (Variable)</h2>
+      <h2>{variable.variable_name} (Variable)</h2>
       <div className="text-xs">
         Dataset:{` `}
         <span
@@ -56,22 +58,48 @@ function Variable({ d_id, v_id, action }) {
           {variable.dataset.collection.agency.agency_name}
         </span>
       </div>
+
       <ReactMarkdown>{variable.description}</ReactMarkdown>
-      {variable.database && (
-        <div>
-          <strong>Database: </strong>
-          {variable.database}
-        </div>
-      )}
-      {variable.database === "IDI Clean" &&
-        variable.refreshes &&
-        (variable.refreshes.length > 0 ? (
-          <Refreshes refreshes={variable.refreshes} />
-        ) : (
-          <div>
-            <strong>Catalog: </strong> {variable.refreshes}
-          </div>
-        ))}
+
+      <div className="">
+        <h4>SQL Information</h4>
+
+        <table>
+          <tr>
+            <td className="font-bold">Field Name</td>
+            <td>{variable.variable_id}</td>
+          </tr>
+          <tr>
+            <td className="font-bold">Table Name</td>
+            <td>{variable.dataset_id}</td>
+          </tr>
+          <tr>
+            <td className="font-bold">Type</td>
+            <td>{variable.type}</td>
+          </tr>
+          <tr>
+            <td className="font-bold">Size</td>
+            <td>{variable.size}</td>
+          </tr>
+          <tr>
+            <td className="font-bold">Database</td>
+            <td>{variable.database || "Missing - please let us know"}</td>
+          </tr>
+        </table>
+
+        {variable.database === "IDI Clean" &&
+          variable.refreshes &&
+          (variable.refreshes.length > 0 ? (
+            <Refreshes refreshes={variable.refreshes} />
+          ) : (
+            <div>
+              <strong>Catalog: </strong> {variable.refreshes}
+            </div>
+          ))}
+
+        <h4>Possible matches in other datasets</h4>
+        <p>Coming soon &hellip;</p>
+      </div>
     </div>
   )
 }

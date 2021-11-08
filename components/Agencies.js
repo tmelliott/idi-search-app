@@ -1,8 +1,10 @@
+import { useRouter } from "next/router"
 import Agency from "./Agency"
 import useAgencies from "./hooks/useAgencies"
 import Loading from "./Loading.js"
 
 function Agencies({ agencies, action, term, limit }) {
+  const router = useRouter()
   const { agencies: results, isLoading } = term
     ? useAgencies(term)
     : {
@@ -14,7 +16,8 @@ function Agencies({ agencies, action, term, limit }) {
     action(<Agency id={id} action={action} />)
   }
   const showAgencies = () => {
-    action(<Agencies agencies={agencies} action={action} term={term} />)
+    router.push("/agencies")
+    // action(<Agencies agencies={agencies} action={action} term={term} />)
   }
   if (!limit) limit = results.length
   return (

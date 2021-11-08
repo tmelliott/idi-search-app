@@ -147,6 +147,7 @@ create_tables <- function() {
             primary_key = !is.na(primary_key) & primary_key == "Y",
             schema = str_replace_all(schema, "\\[|\\]", ""),
             variable_id = str_replace_all(variable_id, "\\[|\\]", ""),
+            variable_name = str_replace_all(variable_name, "\\[|\\]", ""),
             dataset_id = str_replace(schema, "IDI_Adhoc\\.", ""),
             database_id = ifelse(str_detect(schema, "IDI_Adhoc"), "IDI_Adhoc", "IDI_Clean")
         ) |>

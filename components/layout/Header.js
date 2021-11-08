@@ -15,7 +15,7 @@ function Header() {
   }
 
   return (
-    <div className="header flex flex-col sm:flex-row">
+    <div className="header flex flex-col sm:flex-row items-center">
       {/* Left panel */}
       <div className="flex">
         <h1 className="text-xl flex-1">What's in the IDI?</h1>

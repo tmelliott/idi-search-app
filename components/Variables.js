@@ -13,6 +13,7 @@ function Variables({ variables, action, term, limit, title = "Variables" }) {
     action(<Variables variables={variables} action={action} term={term} />)
   }
   if (!limit) limit = results ? results.length : 0
+  // if (results) console.log(results[0])
   return (
     <section>
       <h3>
@@ -20,7 +21,7 @@ function Variables({ variables, action, term, limit, title = "Variables" }) {
       </h3>{" "}
       <ul>
         {results?.slice(0, limit).map((variable) => (
-          <li key={variable.id}>
+          <li key={variable.v_id}>
             <span
               className="cursor-pointer"
               onClick={() =>

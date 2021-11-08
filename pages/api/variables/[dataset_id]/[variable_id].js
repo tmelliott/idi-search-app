@@ -7,7 +7,7 @@ const prisma = new PrismaClient()
 async function main(d_id, v_id) {
   const variable = await prisma.variables.findUnique({
     where: {
-      variable_id_dataset_id: {
+      v_id: {
         dataset_id: d_id,
         variable_id: v_id,
       },

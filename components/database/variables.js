@@ -7,6 +7,21 @@ async function main(query) {
     select: {
       variable_id: true,
       dataset_id: true,
+      dataset: {
+        select: {
+          dataset_name: true,
+          collection: {
+            select: {
+              collection_name: true,
+              agency: {
+                select: {
+                  agency_name: true,
+                },
+              },
+            },
+          },
+        },
+      },
     },
   }
   if (query !== undefined) {
@@ -21,7 +36,10 @@ async function main(query) {
     }
   }
   const variables = await prisma.variables.findMany(args)
-  return variables
+  return variables.map((v) => ({
+    ...v,
+    v_id: v.variable_id + "_" + v.dataset_id,
+  }))
 }
 
 export default async function getVariables(query) {

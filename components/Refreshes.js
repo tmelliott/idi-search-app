@@ -3,7 +3,7 @@ import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline"
 function Refreshes({ refreshes }) {
   return (
     <div>
-      <strong>Refresh availability</strong>
+      <h4>Refresh availability</h4>
       <div className="flex">
         {refreshes.map((r) => (
           <div

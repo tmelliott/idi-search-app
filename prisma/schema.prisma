@@ -45,5 +45,5 @@ model variables {
   refreshes     String?
   dataset       datasets @relation(fields: [dataset_id], references: [dataset_id], onDelete: NoAction, onUpdate: NoAction, map: "variable_dataset_fkey")
 
-  @@id([variable_id, dataset_id])
+  @@id([variable_id, dataset_id], name: "v_id")
 }
