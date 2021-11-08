@@ -34,12 +34,16 @@ model datasets {
 }
 
 model variables {
-  variable_id String
-  dataset_id  String
-  description String?
-  information String?
-  refreshes   String?
-  dataset     datasets @relation(fields: [dataset_id], references: [dataset_id], onDelete: NoAction, onUpdate: NoAction, map: "variable_dataset_fkey")
+  variable_id   String
+  variable_name String?
+  dataset_id    String
+  description   String?
+  information   String?
+  primary_key   Boolean?
+  type          String?
+  size          Int?
+  refreshes     String?
+  dataset       datasets @relation(fields: [dataset_id], references: [dataset_id], onDelete: NoAction, onUpdate: NoAction, map: "variable_dataset_fkey")
 
   @@id([variable_id, dataset_id])
 }

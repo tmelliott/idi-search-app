@@ -167,8 +167,10 @@ create_tables <- function() {
 
     variables <- variables |>
         distinct() |>
-        select(-database_id) |>
-        mutate(refreshes = "")
+        select(-database_id)
+
+    source("data/link_refresh_data.R")
+    variables <- link_data(variables)
 
     datasets <- datasets |>
         left_join(collections |> select(collection_name, collection_id)) |>

@@ -7,6 +7,7 @@ async function main(query) {
     select: {
       variable_id: true,
       dataset_id: true,
+      refreshes: true,
     },
   }
   if (query !== undefined) {

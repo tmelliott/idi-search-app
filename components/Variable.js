@@ -9,8 +9,6 @@ function Variable({ d_id, v_id, action }) {
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <div>Error</div>
 
-  console.log(variable)
-
   return (
     <div className="prose">
       <h2>{variable.variable_id} (Variable)</h2>
@@ -58,6 +56,23 @@ function Variable({ d_id, v_id, action }) {
         </span>
       </div>
       <ReactMarkdown>{variable.description}</ReactMarkdown>
+      {variable.refreshes &&
+        (variable.refreshes.match(/[0-9]+/) ? (
+          <div>
+            <strong>Refreshes: </strong>
+            <ul>
+              {variable.refreshes.split(",").map((r) => (
+                <li>
+                  {r.substr(6, 2)}/{r.substr(4, 2)}/{r.substr(0, 4)}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <div>
+            <strong>Catalog: </strong> {variable.refreshes}
+          </div>
+        ))}
     </div>
   )
 }
