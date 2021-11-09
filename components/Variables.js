@@ -13,33 +13,61 @@ function Variables({ variables, action, term, limit, title = "Variables" }) {
     action(<Variables variables={variables} action={action} term={term} />)
   }
   if (!limit) limit = results ? results.length : 0
-  // if (results) console.log(results[0])
+  if (results) console.log(results)
   return (
     <section>
       <h3>
         {title} ({isLoading ? <Loading /> : results.length})
       </h3>{" "}
-      <ul>
-        {results?.slice(0, limit).map((variable) => (
-          <li key={variable.v_id}>
-            <span
-              className="cursor-pointer"
-              onClick={() =>
-                showVariable(variable.dataset_id, variable.variable_id)
-              }
-            >
-              {variable.variable_id}
-            </span>
-          </li>
-        ))}
-        {results && results.length > limit && limit > -1 && (
-          <li>
-            <span className="cursor-pointer" onClick={showVariables}>
-              <em>and {results.length - limit} more ...</em>
-            </span>
-          </li>
-        )}
-      </ul>
+      {!isLoading && (
+        <div className="app-table">
+          <table>
+            <thead>
+              <th scope="col">Name</th>
+              <th scope="col">Dataset</th>
+            </thead>
+            <tbody>
+              {results?.slice(0, limit).map((variable) => (
+                <tr
+                  className="clickable"
+                  onClick={() =>
+                    showVariable(variable.dataset_id, variable.variable_id)
+                  }
+                >
+                  <td>
+                    <div className="flex flex-col items-start">
+                      <div>
+                        {variable.variable_name || variable.variable_id}
+                      </div>
+                      {variable.variable_name !== undefined && (
+                        <div className="text-xxs font-mono">
+                          {variable.variable_id}
+                        </div>
+                      )}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="flex flex-col items-start">
+                      <div>{variable.dataset.dataset_name}</div>
+                      <div className="text-xxs">
+                        {variable.dataset.collection.collection_name},{" "}
+                        {variable.dataset.collection.agency.agency_name}
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+              {results && results.length > limit && limit > -1 && (
+                <tr className="clickable">
+                  <td colSpan="2" onClick={showVariables}>
+                    <em>and {results.length - limit} more ...</em>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </section>
   )
 }

@@ -1,3 +1,4 @@
+import { useRouter } from "next/router"
 import Collection from "./Collection"
 import useCollections from "./hooks/useCollections"
 import Loading from "./Loading"
@@ -9,6 +10,7 @@ function Collections({
   limit,
   title = "Collections",
 }) {
+  const router = useRouter()
   const { collections: results, isLoading } = term
     ? useCollections(term)
     : {
@@ -19,39 +21,49 @@ function Collections({
     action(<Collection id={id} action={action} />)
   }
   const showCollections = () => {
-    action(
-      <Collections collections={collections} action={action} term={term} />
-    )
+    router.push("/collections")
   }
-  if (!limit) limit = results.length
+  if (results && !limit) limit = results.length
   return (
     <section>
       <h3>
         {title} ({isLoading ? <Loading /> : results.length})
       </h3>
 
-      <div className="text-sm">
-        <ul>
-          {results?.slice(0, limit).map((collection) => (
-            <li key={collection.collection_id}>
-              <span
-                className="cursor-pointer"
-                onClick={() => showCollection(collection.collection_id, action)}
-              >
-                {collection.collection_name} (
-                <em>{collection.agency.agency_name}</em>)
-              </span>
-            </li>
-          ))}
-          {results && results.length > limit && limit > -1 && (
-            <li>
-              <span className="cursor-pointer" onClick={showCollections}>
-                <em>and {results.length - limit} more ...</em>
-              </span>
-            </li>
-          )}
-        </ul>
-      </div>
+      {!isLoading && (
+        <div className="app-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Agency</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results?.slice(0, limit).map((row) => (
+                <tr
+                  key={row.collection_id}
+                  onClick={() => showCollection(row.collection_id)}
+                >
+                  <td>{row.collection_name}</td>
+                  <td>{row.agency.agency_name}</td>
+                </tr>
+              ))}
+              {results && results.length > limit && limit > -1 && (
+                <tr className="clickable">
+                  <td
+                    colSpan={2}
+                    onClick={showCollections}
+                    className="text-right"
+                  >
+                    <em>and {results.length - limit} more ...</em>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </section>
   )
 }

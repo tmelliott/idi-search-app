@@ -22,25 +22,35 @@ function Agencies({ agencies, action, term, limit }) {
   return (
     <section>
       <h3>Agencies ({isLoading ? <Loading /> : results.length})</h3>
-      <ul>
-        {results?.slice(0, limit).map((agency) => (
-          <li key={agency.agency_id}>
-            <span
-              className="cursor-pointer"
-              onClick={() => showAgency(agency.agency_id)}
-            >
-              {agency.agency_name}
-            </span>
-          </li>
-        ))}
-        {results && results.length > limit && limit > -1 && (
-          <li>
-            <span className="cursor-pointer" onClick={showAgencies}>
-              <em>and {results.length - limit} more ...</em>
-            </span>
-          </li>
-        )}
-      </ul>
+
+      {!isLoading && (
+        <div className="app-table">
+          <table>
+            <thead>
+              <tr>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {results?.slice(0, limit).map((agency) => (
+                <tr
+                  className="clickable"
+                  onClick={() => showAgency(agency.agency_id)}
+                >
+                  <td>{agency.agency_name}</td>
+                </tr>
+              ))}
+              {results && results.length > limit && limit > -1 && (
+                <tr className="clickable">
+                  <td colSpan="2" onClick={showAgencies}>
+                    <em>and {results.length - limit} more ...</em>
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
     </section>
   )
 }

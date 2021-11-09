@@ -6,6 +6,7 @@ async function main(query) {
   let args = {
     select: {
       variable_id: true,
+      variable_name: true,
       dataset_id: true,
       dataset: {
         select: {
