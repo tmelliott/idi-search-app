@@ -1,3 +1,4 @@
+import { EyeIcon } from "@heroicons/react/outline"
 import Dataset from "./Dataset"
 import useDatasets from "./hooks/useDatasets"
 import Loading from "./Loading"
@@ -17,30 +18,57 @@ function Datasets({ datasets, action, term, limit, title = "Datasets" }) {
     action(<Datasets datasets={datasets} action={action} term={term} />)
   }
   if (!limit) limit = results.length
+
   return (
     <section>
       <h3>
         {title} ({isLoading ? <Loading /> : results.length})
       </h3>{" "}
-      <ul>
-        {results?.slice(0, limit).map((dataset) => (
-          <li key={dataset.dataset_id}>
-            <span
-              className="cursor-pointer"
-              onClick={() => showDataset(dataset.dataset_id)}
-            >
-              {dataset.dataset_name}
-            </span>
-          </li>
-        ))}
-        {results && results.length > limit && limit > -1 && (
-          <li>
-            <span className="cursor-pointer" onClick={showDatasets}>
-              <em>and {results.length - limit} more ...</em>
-            </span>
-          </li>
-        )}
-      </ul>
+      {!isLoading && (
+        <div className="">
+          <div className="text-sm">
+            <table className="divide-y divide-gray-200">
+              <thead className="">
+                <tr>
+                  <th scope="col" className="text-left px-2 py-1">
+                    Agency
+                  </th>
+                  <th className="text-left px-2 py-1">Dataset Name</th>
+                </tr>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {results?.slice(0, limit).map((dataset) => (
+                  <tr
+                    key={dataset.dataset_id}
+                    className=" cursor-pointer hover:bg-gray-50"
+                  >
+                    <td className="px-2 py-1 whitespace-nowrap">
+                      {dataset.collection.agency.agency_name}
+                    </td>
+                    <td
+                      className="px-2 py-1 whitespace-nowrap"
+                      onClick={() => showDataset(dataset.dataset_id)}
+                    >
+                      {dataset.dataset_name}
+                    </td>
+                  </tr>
+                ))}
+                {results && results.length > limit && limit > -1 && (
+                  <tr className="cursor-pointer hover:bg-gray-50 text-xs">
+                    <td
+                      colSpan="2"
+                      className="px-2 py-1 text-right"
+                      onClick={showDatasets}
+                    >
+                      <em>and {results.length - limit} more ...</em>
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
     </section>
   )
 }

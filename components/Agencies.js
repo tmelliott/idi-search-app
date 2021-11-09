@@ -17,7 +17,6 @@ function Agencies({ agencies, action, term, limit }) {
   }
   const showAgencies = () => {
     router.push("/agencies")
-    // action(<Agencies agencies={agencies} action={action} term={term} />)
   }
   if (!limit) limit = results.length
   return (

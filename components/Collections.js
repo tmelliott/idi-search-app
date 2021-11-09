@@ -29,25 +29,29 @@ function Collections({
       <h3>
         {title} ({isLoading ? <Loading /> : results.length})
       </h3>
-      <ul>
-        {results?.slice(0, limit).map((collection) => (
-          <li key={collection.collection_id}>
-            <span
-              className="cursor-pointer"
-              onClick={() => showCollection(collection.collection_id, action)}
-            >
-              {collection.collection_name}
-            </span>
-          </li>
-        ))}
-        {results && results.length > limit && limit > -1 && (
-          <li>
-            <span className="cursor-pointer" onClick={showCollections}>
-              <em>and {results.length - limit} more ...</em>
-            </span>
-          </li>
-        )}
-      </ul>
+
+      <div className="text-sm">
+        <ul>
+          {results?.slice(0, limit).map((collection) => (
+            <li key={collection.collection_id}>
+              <span
+                className="cursor-pointer"
+                onClick={() => showCollection(collection.collection_id, action)}
+              >
+                {collection.collection_name} (
+                <em>{collection.agency.agency_name}</em>)
+              </span>
+            </li>
+          ))}
+          {results && results.length > limit && limit > -1 && (
+            <li>
+              <span className="cursor-pointer" onClick={showCollections}>
+                <em>and {results.length - limit} more ...</em>
+              </span>
+            </li>
+          )}
+        </ul>
+      </div>
     </section>
   )
 }

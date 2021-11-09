@@ -9,6 +9,15 @@ async function main(query) {
       dataset_name: true,
       collection_id: true,
       description: true,
+      collection: {
+        select: {
+          agency: {
+            select: {
+              agency_name: true,
+            },
+          },
+        },
+      },
     },
   }
   if (query !== undefined) {

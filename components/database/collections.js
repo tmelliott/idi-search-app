@@ -7,6 +7,11 @@ async function main(query) {
     select: {
       collection_id: true,
       collection_name: true,
+      agency: {
+        select: {
+          agency_name: true,
+        },
+      },
     },
   }
   if (query !== undefined) {
