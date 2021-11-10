@@ -1,39 +1,38 @@
+import { useRouter } from "next/router"
 import Dataset from "./Dataset"
 import useDatasets from "./hooks/useDatasets"
 import Loading from "./Loading"
 
-function Datasets({ datasets, action, term, limit, title = "Datasets" }) {
-  const { datasets: results, isLoading } = term
-    ? useDatasets(term)
-    : {
-        datasets: datasets,
-        isLoading: false,
-      }
+function Datasets({ items, action, term, limit, title = "Datasets" }) {
+  const router = useRouter()
+  const { datasets, isLoading } = useDatasets(term, items)
 
   const showDataset = (id) => {
     action(<Dataset id={id} action={action} />)
   }
   const showDatasets = () => {
-    action(<Datasets datasets={datasets} action={action} term={term} />)
+    router.push("/datasets")
   }
-  if (!limit) limit = results.length
+  if (!limit) limit = datasets?.length
 
   return (
     <section>
       <h3>
-        {title} ({isLoading ? <Loading /> : results.length})
+        {title} ({isLoading ? <Loading /> : datasets?.length})
       </h3>{" "}
-      {!isLoading && (
+      {datasets?.length > 0 && (
         <div className="app-table">
           <table>
-            <thead>
-              <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Agency</th>
-              </tr>
-            </thead>
+            {datasets[0].collection && (
+              <thead>
+                <tr>
+                  <th scope="col">Name</th>
+                  <th scope="col">Collection</th>
+                </tr>
+              </thead>
+            )}
             <tbody>
-              {results?.slice(0, limit).map((dataset) => (
+              {datasets?.slice(0, limit).map((dataset) => (
                 <tr
                   key={dataset.dataset_id}
                   className="clickable"
@@ -45,20 +44,22 @@ function Datasets({ datasets, action, term, limit, title = "Datasets" }) {
                       {dataset.dataset_id}
                     </div>
                   </td>
-                  <td>
-                    <div className="flex flex-col items-start">
-                      <div>{dataset.dataset_name}</div>
-                      <div className="text-xxs">
-                        {dataset.collection.agency.agency_name}
+                  {dataset.collection && (
+                    <td>
+                      <div className="flex flex-col items-start">
+                        <div>{dataset.dataset_name}</div>
+                        <div className="text-xxs">
+                          {dataset.collection.agency.agency_name}
+                        </div>
                       </div>
-                    </div>
-                  </td>
+                    </td>
+                  )}
                 </tr>
               ))}
-              {results && results.length > limit && limit > -1 && (
+              {datasets && datasets.length > limit && limit > -1 && (
                 <tr className="clickable">
                   <td colSpan="2" onClick={showDatasets}>
-                    <em>and {results.length - limit} more ...</em>
+                    <em>and {datasets.length - limit} more ...</em>
                   </td>
                 </tr>
               )}

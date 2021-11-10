@@ -11,7 +11,7 @@ function Agency({ id, action }) {
     <div className="prose">
       <h2>{agency.agency_name} (Agency)</h2>
       <Collections
-        collections={agency.collections}
+        items={agency.collections}
         action={action}
         title="Collections by this agency"
       />

@@ -3,14 +3,9 @@ import Agency from "./Agency"
 import useAgencies from "./hooks/useAgencies"
 import Loading from "./Loading.js"
 
-function Agencies({ agencies, action, term, limit }) {
+function Agencies({ action, term, limit }) {
   const router = useRouter()
-  const { agencies: results, isLoading } = term
-    ? useAgencies(term)
-    : {
-        agencies: agencies,
-        isLoading: false,
-      }
+  const { agencies, isLoading } = useAgencies(term)
 
   const showAgency = (id) => {
     action(<Agency id={id} action={action} />)
@@ -18,12 +13,13 @@ function Agencies({ agencies, action, term, limit }) {
   const showAgencies = () => {
     router.push("/agencies")
   }
-  if (!limit) limit = results.length
+  if (!limit) limit = agencies?.length
+
   return (
     <section>
-      <h3>Agencies ({isLoading ? <Loading /> : results.length})</h3>
+      <h3>Agencies ({isLoading ? <Loading /> : agencies.length})</h3>
 
-      {!isLoading && (
+      {agencies?.length > 0 && (
         <div className="app-table">
           <table>
             <thead>
@@ -32,18 +28,19 @@ function Agencies({ agencies, action, term, limit }) {
               </tr>
             </thead>
             <tbody>
-              {results?.slice(0, limit).map((agency) => (
+              {agencies?.slice(0, limit).map((agency) => (
                 <tr
+                  key={agency.agency_id}
                   className="clickable"
                   onClick={() => showAgency(agency.agency_id)}
                 >
                   <td>{agency.agency_name}</td>
                 </tr>
               ))}
-              {results && results.length > limit && limit > -1 && (
+              {agencies && agencies.length > limit && limit > -1 && (
                 <tr className="clickable">
                   <td colSpan="2" onClick={showAgencies}>
-                    <em>and {results.length - limit} more ...</em>
+                    <em>and {agencies.length - limit} more ...</em>
                   </td>
                 </tr>
               )}

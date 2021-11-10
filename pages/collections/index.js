@@ -1,20 +1,14 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Head from "next/head"
-import getCollections from "../../components/database/collections"
+
 import Collections from "../../components/Collections"
 import Search from "../../components/Search"
 import { ArrowCircleLeftIcon, XCircleIcon } from "@heroicons/react/outline"
 import { render, unmountComponentAtNode } from "react-dom"
 
 // a list of collections
-export default function CollectionsPage({
-  allCollections,
-  filterTerm,
-  setFilterTerm,
-}) {
-  const [collections] = useState(allCollections)
-
+export default function CollectionsPage({ filterTerm, setFilterTerm }) {
   // the container to display information
   const [info, setInfo] = useState(false)
   const displayRef = useRef()
@@ -52,11 +46,7 @@ export default function CollectionsPage({
             </Link>
           </div>
           <Search term={filterTerm} handler={setFilterTerm} />
-          <Collections
-            collections={collections}
-            action={renderInfo}
-            term={filterTerm}
-          />
+          <Collections action={renderInfo} term={filterTerm} />
         </div>
 
         <div
@@ -79,14 +69,4 @@ export default function CollectionsPage({
       </div>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  // get agencies, collections, and datasets, and variable summary
-  const collections = await getCollections()
-  return {
-    props: {
-      allCollections: collections,
-    },
-  }
 }

@@ -1,24 +1,14 @@
 import { useEffect, useRef, useState } from "react"
 import Link from "next/link"
 import Head from "next/head"
-import getAgencies from "../../components/database/agencies"
+
 import Agencies from "../../components/Agencies"
 import Search from "../../components/Search"
-import {
-  ArrowCircleLeftIcon,
-  ArrowLeftIcon,
-  XCircleIcon,
-} from "@heroicons/react/outline"
+import { ArrowCircleLeftIcon, XCircleIcon } from "@heroicons/react/outline"
 import { render, unmountComponentAtNode } from "react-dom"
 
 // a list of agencies
-export default function AgenciesPage({
-  allAgencies,
-  filterTerm,
-  setFilterTerm,
-}) {
-  const [agencies] = useState(allAgencies)
-
+export default function AgenciesPage({ filterTerm, setFilterTerm }) {
   // the container to display information
   const [info, setInfo] = useState(false)
   const displayRef = useRef()
@@ -56,7 +46,7 @@ export default function AgenciesPage({
             </Link>
           </div>
           <Search term={filterTerm} handler={setFilterTerm} />
-          <Agencies agencies={agencies} action={renderInfo} term={filterTerm} />
+          <Agencies action={renderInfo} term={filterTerm} />
         </div>
 
         <div
@@ -79,14 +69,4 @@ export default function AgenciesPage({
       </div>
     </div>
   )
-}
-
-export async function getStaticProps() {
-  // get agencies, collections, and datasets, and variable summary
-  const agencies = await getAgencies()
-  return {
-    props: {
-      allAgencies: agencies,
-    },
-  }
 }

@@ -25,13 +25,13 @@ async function main(query) {
       },
     },
   }
-  if (query !== undefined) {
+  if (query && query.length > 0) {
     args = {
       ...args,
       where: {
         OR: [
-          { variable_id: { contains: query, mode: "insensitive" } },
-          { description: { contains: query, mode: "insensitive" } },
+          { variable_id: { search: query } },
+          { description: { search: query } },
         ],
       },
     }

@@ -7,6 +7,7 @@ function Refreshes({ refreshes }) {
       <div className="flex">
         {refreshes.map((r) => (
           <div
+            key={r}
             className={`px-2 mr-2 ${
               r.available
                 ? "bg-green-50 text-green-600"

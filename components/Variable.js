@@ -10,8 +10,6 @@ function Variable({ d_id, v_id, action }) {
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <div>Error</div>
 
-  console.log({ variable })
-
   return (
     <div className="prose">
       <h2>{variable.variable_name} (Variable)</h2>
@@ -65,26 +63,28 @@ function Variable({ d_id, v_id, action }) {
         <h4>SQL Information</h4>
 
         <table>
-          <tr>
-            <td className="font-bold">Field Name</td>
-            <td>{variable.variable_id}</td>
-          </tr>
-          <tr>
-            <td className="font-bold">Table Name</td>
-            <td>{variable.dataset_id}</td>
-          </tr>
-          <tr>
-            <td className="font-bold">Type</td>
-            <td>{variable.type}</td>
-          </tr>
-          <tr>
-            <td className="font-bold">Size</td>
-            <td>{variable.size}</td>
-          </tr>
-          <tr>
-            <td className="font-bold">Database</td>
-            <td>{variable.database || "Missing - please let us know"}</td>
-          </tr>
+          <tbody>
+            <tr>
+              <td className="font-bold">Field Name</td>
+              <td>{variable.variable_id}</td>
+            </tr>
+            <tr>
+              <td className="font-bold">Table Name</td>
+              <td>{variable.dataset_id}</td>
+            </tr>
+            <tr>
+              <td className="font-bold">Type</td>
+              <td>{variable.type}</td>
+            </tr>
+            <tr>
+              <td className="font-bold">Size</td>
+              <td>{variable.size}</td>
+            </tr>
+            <tr>
+              <td className="font-bold">Database</td>
+              <td>{variable.database || "Missing - please let us know"}</td>
+            </tr>
+          </tbody>
         </table>
 
         {variable.database === "IDI Clean" &&

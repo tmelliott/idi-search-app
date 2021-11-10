@@ -34,7 +34,7 @@ function Collection({ id, action, highlight }) {
       </div>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
       <Datasets
-        datasets={collection.datasets}
+        items={collection.datasets}
         action={action}
         title="Datasets in this collection"
       />

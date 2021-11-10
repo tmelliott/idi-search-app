@@ -57,7 +57,7 @@ function Dataset({ id, action, highlight }) {
       </div>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
       <Variables
-        variables={dataset.variables}
+        items={dataset.variables}
         action={action}
         title="Variables in this dataset"
       />

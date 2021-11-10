@@ -1,15 +1,14 @@
-import Head from "next/head"
 import { useEffect, useRef, useState } from "react"
+import Link from "next/link"
+import Head from "next/head"
+
+import Variables from "../../components/Variables"
+import Search from "../../components/Search"
+import { ArrowCircleLeftIcon, XCircleIcon } from "@heroicons/react/outline"
 import { render, unmountComponentAtNode } from "react-dom"
-import Agencies from "../components/Agencies"
-import Collections from "../components/Collections"
 
-import { XCircleIcon } from "@heroicons/react/outline"
-import Datasets from "../components/Datasets"
-import Search from "../components/Search"
-import Variables from "../components/Variables"
-
-export default function Home({ filterTerm, setFilterTerm }) {
+// a list of variables
+export default function VariablesPage({ filterTerm, setFilterTerm }) {
   // the container to display information
   const [info, setInfo] = useState(false)
   const displayRef = useRef()
@@ -34,17 +33,20 @@ export default function Home({ filterTerm, setFilterTerm }) {
   return (
     <div className="h-full">
       <Head>
-        <title>What's in the IDI?</title>
+        <title>What's in the IDI? | Variables</title>
       </Head>
 
       <div className="md:h-full flex md:overflow-x-hidden">
         <div className="flex-1 overflow-y-scroll">
+          <div className="inline-block">
+            <Link href="/">
+              <a className="flex gap-1 items-center mb-1 text-xs cursor-pointer">
+                <ArrowCircleLeftIcon className="h-4" /> Back
+              </a>
+            </Link>
+          </div>
           <Search term={filterTerm} handler={setFilterTerm} />
-          <Agencies action={renderInfo} term={filterTerm} limit={2} />
-          <Collections action={renderInfo} term={filterTerm} limit={3} />
-          <Datasets action={renderInfo} term={filterTerm} limit={5} />
-
-          <Variables action={renderInfo} term={filterTerm} limit={10} />
+          <Variables action={renderInfo} term={filterTerm} />
         </div>
 
         <div
