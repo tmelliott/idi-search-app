@@ -8,7 +8,9 @@ function Variables({ items, action, term, limit, title = "Variables" }) {
   const { variables, isLoading } = useVariables(term, items)
 
   const showVariable = (d_id, v_id) => {
-    action(<Variable d_id={d_id} v_id={v_id} action={action} />)
+    action(
+      <Variable d_id={d_id} v_id={v_id} action={action} highlight={term} />
+    )
   }
   const showVariables = () => {
     router.push("/variables")

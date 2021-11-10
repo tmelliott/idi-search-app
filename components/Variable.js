@@ -1,14 +1,24 @@
 import { CogIcon } from "@heroicons/react/outline"
 import ReactMarkdown from "react-markdown"
+import rehypeRaw from "rehype-raw"
+
 import Dataset from "./Dataset"
 import useVariable from "./hooks/useVariable"
 import Refreshes from "./Refreshes"
 
-function Variable({ d_id, v_id, action }) {
+function Variable({ d_id, v_id, action, highlight }) {
   const { variable, isLoading, error } = useVariable(d_id, v_id)
 
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <div>Error</div>
+
+  let description = variable.description
+  if (highlight) {
+    const searchMask = `(${highlight})`
+    const regEx = new RegExp(searchMask, "ig")
+    const replaceMask = "<mark>$1</mark>"
+    description = description.replace(regEx, replaceMask)
+  }
 
   return (
     <div className="prose">
@@ -57,7 +67,7 @@ function Variable({ d_id, v_id, action }) {
         </span>
       </div>
 
-      <ReactMarkdown>{variable.description}</ReactMarkdown>
+      <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
 
       <div className="">
         <h4>SQL Information</h4>
