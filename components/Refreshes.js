@@ -4,7 +4,8 @@ function Refreshes({ refreshes }) {
   return (
     <div>
       <h4>Refresh availability</h4>
-      <div className="flex">
+      {/* <div className="flex flex-wrap gap-y-2"> */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-y-2">
         {refreshes.map((r) => (
           <div
             key={r}

@@ -10,6 +10,8 @@
   collections:
     - IDI MOH SOCRATES Disability Support Services data
     - IDI OPC Osteoarthritis Primary Care data
+    - IDI MOH interRai data
+    - New Zealand Health Survey
 
 - id: MOJ
   name: Ministry of Justice
@@ -20,6 +22,54 @@
   name: Accident Compensation Corporation
   collections:
     - IDI ACC Injury Claims data
+
+- id: SNZ
+  name: Statistics New Zealand
+  collections:
+    - IDI Experimental Adminstrative Population Census data
+    - IDI Census of Population and Dwellings data 2013
+    - IDI Census of Population and Dwellings data 2018
+    - IDI Disability Survey data
+    - IDI HES Net Worth Supplement
+    - IDI HLFS Supplements
+    - IDI HLFS Wellbeing Supp
+    - IDI Iwi Affiliation Census 2018
+
+- id: Customs
+  name: New Zealand Customs Service
+  collections:
+    - IDI Customs International Travel and Migration data
+
+- id: MSD
+  name: Ministry of Social Development
+  collections:
+    - IDI Early Start Project data
+    - IDI MSD COVID Income Relief Payment
+    - IDI MSD COVID Wage Subsidy (CWS)
+    - IDI MSD Fixed Forecasting and Costing data
+    - IDI Youth Service Interventions (YST) data
+
+- id: HNZ
+  name: Kāinga Ora / Housing New Zealand
+  collections:
+    - IDI Housing NZ / Kāinga Ora Social Housing data
+
+- id: IRD
+  name: Inland Revenue
+  collections:
+    - IDI IR Employment Information - Employee data
+    - IDI IR Tax Autocalc Information
+
+- id: MBIE
+  name: Ministry of Business, Innovation, and Employment
+  collections:
+    - IDI MBIE Immigration data
+    - IDI MBIE Tenancy Bond data
+
+- id: NZTA
+  name: New Zealand Transport Authority
+  collections:
+    - IDI NZ Transport Authority Drivers Licence and Motor Vehicles Registers data
 
 - id: U
   name: Unknown

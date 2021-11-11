@@ -9,11 +9,12 @@ create_tables <- function() {
     library(dotenv)
 
     drive_auth(Sys.getenv("GOOGLE_EMAIL"))
-    g_files <- drive_ls(Sys.getenv("GOOGLE_PATH")) |>
+    g_files <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"), "Dictionaries")) |>
         filter(str_detect(name, "data_dictionary"))
 
     td <- tempdir()
     fdir <- file.path(td, "tables")
+    if (dir.exists(fdir)) unlink(fdir, TRUE, TRUE)
     dir.create(fdir)
     on.exit(unlink(fdir, TRUE, TRUE))
 
@@ -28,12 +29,6 @@ create_tables <- function() {
     }
     close(pb)
     files <- list.files(fdir, full.names = TRUE)
-
-    #list.files(file.path("data", "dictionaries"), full.names = TRUE)
-
-    # readxl::excel_sheets(files[1])
-
-    # - refresh period too
 
     agency_collection <- yaml::read_yaml("data/agencies.yaml") |>
         lapply(\(x) {
@@ -61,11 +56,16 @@ create_tables <- function() {
                 cn <- cn[!is.na(cn) & cn != "NA"]
                 colnames(tables) <- cn
                 col <- x[[2]][grep("Title", x$Index)]
+                schema <- x[[2]][grep("schema", tolower(x$Index))]
+                schema <- strsplit(schema, "].[", fixed = TRUE)[[1]]
+                schema <- gsub("\\[|\\]", "", schema)
                 tables <- tables[!is.na(tables[[3]]), ]
                 colnames(tables) <- tolower(make.names(colnames(tables)))
                 list(
                     collection = tibble(
+                        collection_schema = schema[2],
                         collection_name = col,
+                        database_id = schema[1],
                         description = x[[2]][grep("Introduction", x$Index)],
                     ),
                     tables = tables |>
@@ -81,8 +81,15 @@ create_tables <- function() {
     collections <- map(collection_tables, "collection") |>
         bind_rows() |>
         left_join(agency_collection) |>
-        select(collection_name, agency_id, description) |>
+        select(collection_schema, collection_name, agency_id, description) |>
         mutate(agency_id = ifelse(is.na(agency_id), "U", agency_id))
+
+    if (any(collections$agency_id == "U")) {
+        cat("The following collections have yet to be assigned agencies (in agencies.yaml)\n")
+        collections |> filter(agency_id == "U") |>
+            select(collection_name) |>
+            as.data.frame() |> print()
+    }
 
     # temporary:
     if (any(table(collections$collection_name) > 1L)) {
@@ -203,6 +210,8 @@ create_tables <- function() {
     collections$description <- fix_text(collections$description)
     datasets$description <- fix_text(datasets$description)
     variables$description <- fix_text(variables$description)
+
+    agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
 
     # create new table..
     library(RPostgreSQL)

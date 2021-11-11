@@ -2,30 +2,69 @@
 
 link_data <- function(variables) {
 
+    if (getRversion() < numeric_version('4.1.0'))
+        stop("Script required R >= 4.1.0.")
+
+    # create tables to load into POSTGRES database ... limit (for now) of 10k rows
     library(tidyverse)
+    library(googledrive)
+    library(dotenv)
+
+    drive_auth(Sys.getenv("GOOGLE_EMAIL"))
+    g_files <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"), "Variable Lists")) |>
+        filter(str_detect(name, "varlist"))
+
+    td <- tempdir()
+    fdir <- file.path(td, "refreshes")
+    if (dir.exists(fdir)) unlink(fdir, TRUE, TRUE)
+    dir.create(fdir)
+    on.exit(unlink(fdir, TRUE, TRUE))
+
+    options(
+        googledrive_quiet = TRUE
+    )
+
+    pb <- txtProgressBar(0, nrow(g_files), style = 3L, title = "Downloading refresh information from Google Drive")
+    for (i in seq_len(nrow(g_files))) {
+        drive_download(g_files$id[i], path = file.path(fdir, g_files$name[i]))
+        setTxtProgressBar(pb, i)
+    }
+    close(pb)
+    files <- list.files(fdir, full.names = TRUE)
+
 
     ## Read vars from varlists:
-    files <- list.files(file.path("data", "refreshes"), full.names = TRUE)
+    files <- list.files(fdir, full.names = TRUE)
 
-    all_vars <-
-        lapply(files, readxl::read_excel) |>
-        bind_rows() |>
-        mutate(
-            dataset_id = paste(TABLE_SCHEMA, TABLE_NAME, sep = ".")
-        ) |>
-        rename(
-            catalog = TABLE_CATALOG,
-            variable_id = COLUMN_NAME
-        ) |>
-        select(catalog, dataset_id, variable_id) |>
-        mutate(
-            catalog = gsub("IDI(_Clean)?_", "", catalog)
-        )
+    suppressMessages({
+        all_vars <-
+            lapply(files, \(x) {
+                sheets <- readxl::excel_sheets(x)
+                sheets <- sheets[!grepl("disclaimer", tolower(sheets))]
+                lapply(sheets, \(z) {
+                    readxl::read_excel(x, sheet = z) |>
+                        select(TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME)
+                }) |>
+                    bind_rows()
+            }) |>
+            bind_rows() |>
+            mutate(
+                dataset_id = paste(TABLE_SCHEMA, TABLE_NAME, sep = ".")
+            ) |>
+            rename(
+                database = TABLE_CATALOG,
+                variable_id = COLUMN_NAME
+            ) |>
+            select(database, dataset_id, variable_id) |>
+            mutate(
+                database = gsub("IDI(_Clean)?_", "", database)
+            ) |>
+            distinct()
+    })
 
     refresh_vars <- all_vars |>
-        # filter(str_detect(catalog, "[0-9]+")) |>
-        mutate(refresh = catalog) |>
-        pivot_wider(names_from = catalog, values_from = refresh, values_fill = NA)
+        mutate(refresh = database) |>
+        pivot_wider(names_from = database, values_from = refresh, values_fill = NA)
 
     refresh_vars <- refresh_vars |>
         mutate(

@@ -33,7 +33,14 @@ async function main(d_id, v_id) {
       },
     },
   })
-  const current_refreshes = ["20200120", "20200720", "20201020", "20210420"]
+  const current_refreshes = [
+    "20200120",
+    "20200720",
+    "20201020",
+    "20210420",
+    "20210720",
+    "20211020",
+  ]
   let refreshes = variable.refreshes
   if (refreshes && refreshes.length) {
     refreshes = current_refreshes.map((r) => ({
