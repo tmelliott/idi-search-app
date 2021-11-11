@@ -25,6 +25,7 @@ async function main(id) {
       variables: {
         select: {
           variable_id: true,
+          variable_name: true,
           dataset_id: true,
         },
       },

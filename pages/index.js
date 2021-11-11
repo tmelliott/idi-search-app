@@ -22,7 +22,10 @@ export default function Home({ filterTerm, setFilterTerm }) {
       return
     }
     render(
-      { ...x, props: { ...x.props, highlight: filterTerm } },
+      {
+        ...x,
+        props: { ...x.props, highlight: filterTerm, setFilterTerm },
+      },
       displayRef.current
     )
     setInfo(true)

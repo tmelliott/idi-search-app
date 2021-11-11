@@ -30,8 +30,8 @@ async function main(query) {
       ...args,
       where: {
         OR: [
-          { variable_id: { search: query } },
-          { description: { search: query } },
+          { variable_id: { contains: query } },
+          { description: { contains: query } },
         ],
       },
     }
