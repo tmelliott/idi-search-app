@@ -112,6 +112,11 @@ create_tables <- function() {
         ) |>
         select(dataset_id, dataset_name, collection_name, description, reference_period)
 
+    if (any(grepl("\n", datasets$dataset_id))) {
+        datasets <- datasets |>
+            mutate(dataset_id = gsub("\n", "__", dataset_id))
+    }
+
     repair_colnames <- function(x, expr, name) {
         if (any(grepl(expr, x))) x[grep(expr, x)] <- name
         x
@@ -156,6 +161,7 @@ create_tables <- function() {
             variable_id = str_replace_all(variable_id, "\\[|\\]", ""),
             variable_name = str_replace_all(variable_name, "\\[|\\]", ""),
             dataset_id = str_replace(schema, "IDI_Adhoc\\.", ""),
+            dataset_id = str_replace(dataset_id, "\n", "__"),
             database_id = ifelse(str_detect(schema, "IDI_Adhoc"), "IDI_Adhoc", "IDI_Clean")
         ) |>
         select(variable_id, variable_name, dataset_id, database_id, description, information,
