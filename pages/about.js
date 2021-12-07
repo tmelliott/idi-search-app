@@ -20,8 +20,10 @@ function about() {
 
         <p>
           IDI Search has been developed by{" "}
-          <a href="https://terourou.org">Te Rourou Tātaritanga</a>, funded by
-          MBIE Endevaour Grant (ref 62506 ENDRP).
+          <a href="https://terourou.org?utm_medium=web&utm_source=idisearch&utm_content=about">
+            Te Rourou Tātaritanga
+          </a>
+          , funded by MBIE Endevaour Grant (ref 62506 ENDRP).
         </p>
       </section>
 
@@ -55,9 +57,18 @@ function about() {
         <p>
           We are also open to collboration, so if you or your team would like to
           contribute to IDI Search in some way, please get in touch with{` `}
-          <a href="https://terourou.org/team/tom/">Tom</a>,{" "}
-          <a href="https://terourou.org/team/barry/">Barry</a>, or{" "}
-          <a href="https://terourou.org/team/eileen/">Eileen</a>.
+          <a href="https://terourou.org/team/tom/?utm_medium=web&utm_source=idisearch&utm_content=about">
+            Tom
+          </a>
+          ,{" "}
+          <a href="https://terourou.org/team/barry/?utm_medium=web&utm_source=idisearch&utm_content=about">
+            Barry
+          </a>
+          , or{" "}
+          <a href="https://terourou.org/team/eileen/?utm_medium=web&utm_source=idisearch&utm_content=about">
+            Eileen
+          </a>
+          .
         </p>
       </section>
 
