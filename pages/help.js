@@ -11,12 +11,11 @@ function help() {
 
       <h2>Searching IDI variables</h2>
       <p>
-        Use the search box to look for variables in the IDI. There are two
-        databases: IDI refreshes containing routinely cleaned data, and Adhoc
-        containing additional datasets. You can switch between searching these
-        two databases using the drop down on the right hand side of the search.
+        Use the search box to look for variables in the IDI. This will list all
+        agencies, collections, datasets, or variables containing the term in any
+        of the information associated with it.
       </p>
-      <p>
+      {/* <p>
         To search for multiple terms, use commas for OR search, and plus for AND
         search.
       </p>
@@ -24,7 +23,7 @@ function help() {
         For example, searching "sex, gender" will show variables matching "sex"
         OR "gender". Searching for "income + tax" will show variables matching
         both "income" AND "tax".
-      </p>
+      </p> */}
 
       <h2>Exploring variables</h2>
       <p>
