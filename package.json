@@ -1,5 +1,7 @@
 {
-  "private": true,
+  "name": "idi-search",
+  "version": "0.1.0",
+  "description": "Explore the datasets available in New Zealand's IDI",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -12,6 +14,8 @@
     "@mui/x-data-grid": "^4.0.0",
     "@prisma/client": "^3.6.0",
     "@tailwindcss/typography": "^0.4.1",
+    "fs": "^0.0.1-security",
+    "gray-matter": "^4.0.3",
     "next": "latest",
     "prisma": "^3.6.0",
     "react": "^17.0.2",

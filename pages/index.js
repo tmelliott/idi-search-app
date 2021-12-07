@@ -37,7 +37,7 @@ export default function Home({ filterTerm, setFilterTerm }) {
   return (
     <div className="h-full">
       <Head>
-        <title>What's in the IDI?</title>
+        <title>IDI Search | What's in the IDI?</title>
       </Head>
 
       <div className="md:h-full flex md:overflow-x-hidden">

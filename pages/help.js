@@ -2,9 +2,9 @@ import Head from "next/head"
 
 function help() {
   return (
-    <div>
+    <div className="prose prose-sm mx-auto">
       <Head>
-        <title>Help | What's in the IDI?</title>
+        <title>Help | IDI Search</title>
       </Head>
 
       <h1>User Guide</h1>

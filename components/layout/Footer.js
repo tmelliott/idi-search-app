@@ -2,9 +2,12 @@ function Footer() {
   return (
     <div className="footer">
       <p>
-        Elliott, Milne, and Li (2021).{` `}
-        <em>What's in the IDI?</em>
-        {` `}A web app for searching IDI variable information.{` `}
+        Elliott, Milne, Li, Simpson, and Sporle (2021).{` `}
+        <em>
+          IDI Search:
+          {` `}A web app for searching New Zealand's IDI.
+        </em>
+        {` `}
         <a href="idisearch.terourou.org">idisearch.terourou.org</a>.
       </p>
       <p>

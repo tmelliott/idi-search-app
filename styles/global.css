@@ -2,7 +2,7 @@
 
 @layer base {
   .header {
-    @apply flex justify-between drop-shadow-sm bg-white px-4 py-2;
+    @apply flex justify-between drop-shadow-sm bg-white px-4 py-1;
   }
   .header > div {
     @apply gap-x-1;
@@ -14,21 +14,22 @@
     @apply h-5 mr-1;
   }
 
-  main h1 {
+  /* main :not(.prose) h1 {
     @apply text-xl mb-4;
   }
-  main h2 {
+  main :not(.prose) h2 {
     @apply text-lg font-bold mb-2 mt-4;
-  }
-  main h3 {
+  }*/
+  main :not(.prose) h3 {
     @apply font-bold mb-0 mt-2;
   }
-  main p {
+  /*
+  main :not(.prose) p {
     @apply mb-2;
   }
   main p > a {
     @apply text-blue-800 hover:text-blue-600;
-  }
+  } */
 
   .vartable-container {
     min-width: 800px;

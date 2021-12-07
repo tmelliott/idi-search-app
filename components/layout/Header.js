@@ -7,6 +7,8 @@ import {
 } from "@heroicons/react/outline"
 import { useState } from "react"
 
+import packageJson from "../../package.json"
+
 function Header() {
   const [menuHidden, setMenuHidden] = useState(true)
 
@@ -18,7 +20,14 @@ function Header() {
     <div className="header flex flex-col sm:flex-row items-center">
       {/* Left panel */}
       <div className="flex">
-        <h1 className="text-xl flex-1">What's in the IDI?</h1>
+        <div className="flex-1 flex items-baseline gap-5">
+          <h1 className="text-xl p-0 m-0">
+            <a href="/">IDI Search</a>
+          </h1>
+          <div className="text-xs text-gray-500 font-light hover:text-gray-700">
+            <a href="/changes">version {packageJson.version}</a>
+          </div>
+        </div>
         <MenuIcon
           className={`h-6 sm:hidden cursor-pointer ${
             menuHidden ? "" : "rotate-90"
