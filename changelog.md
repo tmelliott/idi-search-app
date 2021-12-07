@@ -1,8 +1,8 @@
-# version 0.1.0
+# version 0.1.0 (beta release)
 
 **Released 7 December 2021**
 
-Initial release of IDI Search - developmental build.
+Initial release of IDI Search - beta developmental build.
 
 Highlighted features for this release are:
 
