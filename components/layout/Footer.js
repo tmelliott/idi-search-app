@@ -5,7 +5,7 @@ function Footer() {
         Elliott, Milne, and Li (2021).{` `}
         <em>What's in the IDI?</em>
         {` `}A web app for searching IDI variable information.{` `}
-        <a href="terourou.org/idisearch">terourou.org/idisearch</a>.
+        <a href="idisearch.terourou.org">idisearch.terourou.org</a>.
       </p>
       <p>
         A collaboration by <a href="terourou.org">Te Rourou Tātaritanga</a>,
