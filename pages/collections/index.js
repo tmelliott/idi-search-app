@@ -33,7 +33,7 @@ export default function CollectionsPage({ filterTerm, setFilterTerm }) {
   return (
     <div className="h-full">
       <Head>
-        <title>What's in the IDI? | Collections</title>
+        <title>Collections | IDI Search</title>
       </Head>
 
       <div className="md:h-full flex md:overflow-x-hidden">

@@ -33,7 +33,7 @@ export default function VariablesPage({ filterTerm, setFilterTerm }) {
   return (
     <div className="h-full">
       <Head>
-        <title>What's in the IDI? | Variables</title>
+        <title>Variables | IDI Search</title>
       </Head>
 
       <div className="md:h-full flex md:overflow-x-hidden">

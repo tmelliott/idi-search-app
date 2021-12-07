@@ -33,7 +33,7 @@ export default function DatasetsPage({ filterTerm, setFilterTerm }) {
   return (
     <div className="h-full">
       <Head>
-        <title>What's in the IDI? | Datasets</title>
+        <title>Datasets | IDI Search</title>
       </Head>
 
       <div className="md:h-full flex md:overflow-x-hidden">
