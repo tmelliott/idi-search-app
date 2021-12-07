@@ -22,10 +22,14 @@ function Header() {
       <div className="flex">
         <div className="flex-1 flex items-baseline gap-5">
           <h1 className="text-xl p-0 m-0">
-            <a href="/">IDI Search</a>
+            <Link href="/">
+              <a>IDI Search</a>
+            </Link>
           </h1>
           <div className="text-xs text-gray-500 font-light hover:text-gray-700">
-            <a href="/changes">version {packageJson.version}</a>
+            <Link href="/changes">
+              <a>version {packageJson.version}</a>
+            </Link>
           </div>
         </div>
         <MenuIcon

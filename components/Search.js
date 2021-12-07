@@ -1,5 +1,6 @@
 import { FilterIcon } from "@heroicons/react/outline"
 import { useRef, useState } from "react"
+import { event } from "../lib/gtag"
 
 function Search({ term, handler }) {
   const [value, setValue] = useState(term)
@@ -12,6 +13,11 @@ function Search({ term, handler }) {
       }`}
       onSubmit={(e) => {
         e.preventDefault()
+        event({
+          action: "search_app",
+          category: "Search",
+          label: inputRef.current.value,
+        })
         handler(inputRef.current.value)
       }}
     >

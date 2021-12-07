@@ -3,7 +3,8 @@ import "../styles/global.css"
 import Layout from "../components/layout/Layout"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
-import { pageview } from "../components/ga"
+import Script from "next/script"
+import * as gtag from "../lib/gtag"
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
@@ -11,7 +12,7 @@ function MyApp({ Component, pageProps }) {
 
   useEffect(() => {
     const handleRouteChange = (url) => {
-      pageview(url)
+      gtag.pageview(url)
     }
     //When the component is mounted, subscribe to router changes
     //and log those page views
@@ -25,13 +26,33 @@ function MyApp({ Component, pageProps }) {
   }, [router.events])
 
   return (
-    <Layout>
-      <Component
-        {...pageProps}
-        filterTerm={filterTerm}
-        setFilterTerm={setFilterTerm}
+    <>
+      <Script
+        strategy="afterInteractive"
+        src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
       />
-    </Layout>
+      <Script
+        id="gtag-init"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+            gtag('config', '${gtag.GA_TRACKING_ID}', {
+              page_path: window.location.pathname,
+            });
+          `,
+        }}
+      />
+      <Layout>
+        <Component
+          {...pageProps}
+          filterTerm={filterTerm}
+          setFilterTerm={setFilterTerm}
+        />
+      </Layout>
+    </>
   )
 }
 
