@@ -1,3 +1,9 @@
+# version 0.1.1
+
+**Updated 25 January 2022**
+
+Minor patch to fix handling of variables and datasets without collections, in preparation for including all variables in the IDI, and not just those we have extracted from data dictionaries. These variables are missing descriptions and collection information, so are of limited use at this stage but will be updated as we can add more dictionaries.
+
 # version 0.1.0 (beta release)
 
 **Released 7 December 2021**

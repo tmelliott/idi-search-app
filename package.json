@@ -1,6 +1,6 @@
 {
   "name": "idi-search",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Explore the datasets available in New Zealand's IDI",
   "scripts": {
     "dev": "next dev",

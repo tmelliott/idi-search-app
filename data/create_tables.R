@@ -202,16 +202,23 @@ create_tables <- function() {
         left_join(collections |> select(collection_name, collection_id)) |>
         select(dataset_id, dataset_name, collection_id, description, reference_period)
 
+    # add datasets from all_variables missing:
+    datasets <- datasets |>
+        full_join(all_variables |> select(dataset_id) |> distinct()) |>
+        mutate(
+            dataset_name = ifelse(is.na(dataset_name), dataset_id, dataset_name)
+        )
+
     tbl <- table(with(all_variables, paste(variable_id, dataset_id)))
     if (any(tbl > 1L)) {
         stop("DUPLICATED VARIABLES")
     }
 
     isin <- all_variables$dataset_id %in% datasets$dataset_id
-    if (!all(isin)) {
-        print(all_variables[!isin, c("variable_id", "dataset_id")] |> as.data.frame())
-        warning("NOT ALL VARS IN DATABASE")
-    }
+    # if (!all(isin)) {
+    #     print(all_variables[!isin, c("variable_id", "dataset_id")] |> as.data.frame())
+    #     warning("NOT ALL VARS IN DATABASE")
+    # }
 
     # Collection IDs
 
@@ -234,7 +241,9 @@ create_tables <- function() {
     all_variables <- all_variables |> select(-type_dict)
 
     ## NOW JUST SOME:
-    all_variables <- all_variables |> filter(!is.na(description))
+    # all_variables <- all_variables |> filter(!is.na(description))
+    all_variables <- all_variables[1:9500,]
+    datasets <- datasets |> filter(dataset_id %in% unique(all_variables$dataset_id))
 
     # create new table..
     library(RPostgreSQL)
@@ -276,7 +285,7 @@ create_tables <- function() {
     dbWriteTable(con, "agencies", agencies, row.names = FALSE)
     dbWriteTable(con, "collections", collections, row.names = FALSE)
     dbWriteTable(con, "datasets", datasets, row.names = FALSE)
-    dbWriteTable(con, "variables", variables, row.names = FALSE)
+    dbWriteTable(con, "variables", all_variables, row.names = FALSE)
 
     dbExecute(con, "
     ALTER TABLE agencies

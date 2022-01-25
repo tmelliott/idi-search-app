@@ -31,38 +31,42 @@ function Dataset({ id, action, highlight, setFilterTerm }) {
   return (
     <div className="prose">
       <h2>{dataset.dataset_name} (Dataset)</h2>
-      <div className="text-xs">
-        In collection:{` `}
-        <span
-          className="underline cursor-pointer"
-          onClick={() =>
-            action(
-              <Collection
-                id={dataset.collection.collection_id}
-                action={action}
-              />
-            )
-          }
-        >
-          {dataset.collection.collection_name}
-        </span>
-      </div>
-      <div className="text-xs">
-        Agency:{` `}
-        <span
-          className="underline cursor-pointer"
-          onClick={() =>
-            action(
-              <Agency
-                id={dataset.collection.agency.agency_id}
-                action={action}
-              />
-            )
-          }
-        >
-          {dataset.collection.agency.agency_name}
-        </span>
-      </div>
+      {dataset.collection && (
+        <div className="text-xs">
+          In collection:{` `}
+          <span
+            className="underline cursor-pointer"
+            onClick={() =>
+              action(
+                <Collection
+                  id={dataset.collection.collection_id}
+                  action={action}
+                />
+              )
+            }
+          >
+            {dataset.collection.collection_name}
+          </span>
+        </div>
+      )}
+      {dataset.collection && dataset.collection.agency && (
+        <div className="text-xs">
+          Agency:{` `}
+          <span
+            className="underline cursor-pointer"
+            onClick={() =>
+              action(
+                <Agency
+                  id={dataset.collection.agency.agency_id}
+                  action={action}
+                />
+              )
+            }
+          >
+            {dataset.collection.agency.agency_name}
+          </span>
+        </div>
+      )}
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
 
       {linkingVars.length > 0 && (

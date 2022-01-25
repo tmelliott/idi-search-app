@@ -22,7 +22,7 @@ function Variable({ d_id, v_id, action, highlight }) {
 
   return (
     <div className="prose">
-      <h2>{variable.variable_name} (Variable)</h2>
+      <h2>{variable.variable_name || variable.variable_id} (Variable)</h2>
       <div className="text-xs">
         Dataset:{` `}
         <span
@@ -34,38 +34,43 @@ function Variable({ d_id, v_id, action, highlight }) {
           {variable.dataset.dataset_name}
         </span>
       </div>
-      <div className="text-xs">
-        In collection:{` `}
-        <span
-          className="underline cursor-pointer"
-          onClick={() =>
-            action(
-              <Collection
-                id={variable.dataset.collection.collection_id}
-                action={action}
-              />
-            )
-          }
-        >
-          {variable.dataset.collection.collection_name}
-        </span>
-      </div>
-      <div className="text-xs">
-        Agency:{` `}
-        <span
-          className="underline cursor-pointer"
-          onClick={() =>
-            action(
-              <Agency
-                id={variable.dataset.collection.agency.agency_id}
-                action={action}
-              />
-            )
-          }
-        >
-          {variable.dataset.collection.agency.agency_name}
-        </span>
-      </div>
+      {variable.dataset.collection && (
+        <div className="text-xs">
+          In collection:{` `}
+          <span
+            className="underline cursor-pointer"
+            onClick={() =>
+              action(
+                <Collection
+                  id={variable.dataset.collection.collection_id}
+                  action={action}
+                />
+              )
+            }
+          >
+            {variable.dataset.collection.collection_name}
+          </span>
+        </div>
+      )}
+
+      {variable.dataset.collection && variable.dataset.collection.agency && (
+        <div className="text-xs">
+          Agency:{` `}
+          <span
+            className="underline cursor-pointer"
+            onClick={() =>
+              action(
+                <Agency
+                  id={variable.dataset.collection.agency.agency_id}
+                  action={action}
+                />
+              )
+            }
+          >
+            {variable.dataset.collection.agency.agency_name}
+          </span>
+        </div>
+      )}
 
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
 
@@ -86,10 +91,12 @@ function Variable({ d_id, v_id, action, highlight }) {
               <td className="font-bold">Type</td>
               <td>{variable.type}</td>
             </tr>
-            <tr>
-              <td className="font-bold">Size</td>
-              <td>{variable.size}</td>
-            </tr>
+            {variable.size && (
+              <tr>
+                <td className="font-bold">Size</td>
+                <td>{variable.size}</td>
+              </tr>
+            )}
             <tr>
               <td className="font-bold">Database</td>
               <td>{variable.database || "Missing - please let us know"}</td>
@@ -107,8 +114,8 @@ function Variable({ d_id, v_id, action, highlight }) {
             </div>
           ))}
 
-        <h4>Possible matches in other datasets</h4>
-        <p>Coming soon &hellip;</p>
+        {/* <h4>Possible matches in other datasets</h4>
+        <p>Coming soon &hellip;</p> */}
       </div>
     </div>
   )

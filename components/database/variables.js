@@ -33,6 +33,9 @@ async function main(query) {
           { variable_id: { contains: query } },
           { description: { contains: query } },
         ],
+        NOT: {
+          description: null,
+        },
       },
     }
   }
