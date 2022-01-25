@@ -1,6 +1,6 @@
 # links refresh information from IDI VarList
 
-link_data <- function(variables) {
+get_refresh_vars <- function() {
 
     if (getRversion() < numeric_version('4.1.0'))
         stop("Script required R >= 4.1.0.")
@@ -43,7 +43,9 @@ link_data <- function(variables) {
                 sheets <- sheets[!grepl("disclaimer", tolower(sheets))]
                 lapply(sheets, \(z) {
                     readxl::read_excel(x, sheet = z) |>
-                        select(TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME, COLUMN_NAME)
+                        select(TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
+                            COLUMN_NAME, DATA_TYPE
+                        )
                 }) |>
                     bind_rows()
             }) |>
@@ -53,14 +55,22 @@ link_data <- function(variables) {
             ) |>
             rename(
                 database = TABLE_CATALOG,
-                variable_id = COLUMN_NAME
+                variable_id = COLUMN_NAME,
+                type = DATA_TYPE
             ) |>
-            select(database, dataset_id, variable_id) |>
+            select(database, dataset_id, variable_id, type) |>
             mutate(
                 database = gsub("IDI(_Clean)?_", "", database)
             ) |>
             distinct()
     })
+
+    ## fix up duplicates
+    all_vars <- all_vars |>
+        group_by(dataset_id, variable_id) |>
+        mutate(type = first(type)) |>
+        ungroup() |>
+        distinct()
 
     refresh_vars <- all_vars |>
         mutate(refresh = database) |>
@@ -69,13 +79,15 @@ link_data <- function(variables) {
     refresh_vars <- refresh_vars |>
         mutate(
             refreshes = refresh_vars |>
-                select(-(1:2)) |>
+                select(-(1:3)) |>
                 apply(1L, \(x) paste(x[!is.na(x)], collapse = ","))
         ) |>
-        select(dataset_id, variable_id, refreshes)
+        select(dataset_id, variable_id, type, refreshes)
 
-    variables |>
-        left_join(refresh_vars, by = c("variable_id", "dataset_id"))
+    refresh_vars
+
+    # variables |>
+    #     left_join(refresh_vars, by = c("variable_id", "dataset_id"))
 
     # MISSING_REFRESHES <- matched_vars |> filter(is.na(refreshes))
 

@@ -181,24 +181,36 @@ create_tables <- function() {
 
     variables <- variables |>
         distinct() |>
-        select(-database_id)
+        select(-database_id) |>
+        rename(type_dict = type)
 
     source("data/link_refresh_data.R")
-    variables <- link_data(variables)
+    refresh_vars <- get_refresh_vars()
+
+    all_variables <- variables |>
+        full_join(refresh_vars, by = c("variable_id", "dataset_id"))
+
+    # # variables in dictionaries not in IDI:
+    # variables |>
+    #     anti_join(refresh_vars, by = c("variable_id", "dataset_id"))
+
+    # # variables in IDI not in dictionaries:
+    # refresh_vars |>
+    #     anti_join(variables, by = c("variable_id", "dataset_id"))
 
     datasets <- datasets |>
         left_join(collections |> select(collection_name, collection_id)) |>
         select(dataset_id, dataset_name, collection_id, description, reference_period)
 
-    tbl <- table(with(variables, paste(variable_id, dataset_id)))
+    tbl <- table(with(all_variables, paste(variable_id, dataset_id)))
     if (any(tbl > 1L)) {
         stop("DUPLICATED VARIABLES")
     }
 
-    isin <- variables$dataset_id %in% datasets$dataset_id
+    isin <- all_variables$dataset_id %in% datasets$dataset_id
     if (!all(isin)) {
-        print(variables[!isin, c("variable_id", "dataset_id")] |> as.data.frame())
-        stop("NOT ALL VARS IN DATABASE")
+        print(all_variables[!isin, c("variable_id", "dataset_id")] |> as.data.frame())
+        warning("NOT ALL VARS IN DATABASE")
     }
 
     # Collection IDs
@@ -215,9 +227,14 @@ create_tables <- function() {
 
     collections$description <- fix_text(collections$description)
     datasets$description <- fix_text(datasets$description)
-    variables$description <- fix_text(variables$description)
+    all_variables$description <- fix_text(all_variables$description)
 
     agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
+
+    all_variables <- all_variables |> select(-type_dict)
+
+    ## NOW JUST SOME:
+    all_variables <- all_variables |> filter(!is.na(description))
 
     # create new table..
     library(RPostgreSQL)
