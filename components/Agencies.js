@@ -1,4 +1,5 @@
 import { useRouter } from "next/router"
+import Link from "next/link"
 import Agency from "./Agency"
 import useAgencies from "./hooks/useAgencies"
 import Loading from "./Loading.js"
@@ -29,13 +30,15 @@ function Agencies({ action, term, limit }) {
             </thead>
             <tbody>
               {agencies?.slice(0, limit).map((agency) => (
-                <tr
-                  key={agency.agency_id}
-                  className="clickable"
-                  onClick={() => showAgency(agency.agency_id)}
-                >
-                  <td>{agency.agency_name}</td>
-                </tr>
+                <Link href={`/agencies/${agency.agency_id}`}>
+                  <tr
+                    key={agency.agency_id}
+                    className="clickable"
+                    // onClick={() => showAgency(agency.agency_id)}
+                  >
+                    <td>{agency.agency_name}</td>
+                  </tr>
+                </Link>
               ))}
               {agencies && agencies.length > limit && limit > -1 && (
                 <tr className="clickable">

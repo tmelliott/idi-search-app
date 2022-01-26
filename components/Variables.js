@@ -58,10 +58,12 @@ function Variables({ items, action, term, limit, title = "Variables" }) {
                     <td>
                       <div className="flex flex-col items-start">
                         <div>{variable.dataset.dataset_name}</div>
-                        <div className="text-xxs">
-                          {variable.dataset.collection.collection_name},{" "}
-                          {variable.dataset.collection.agency.agency_name}
-                        </div>
+                        {variable.dataset.collection && (
+                          <div className="text-xxs">
+                            {variable.dataset.collection.collection_name},{" "}
+                            {variable.dataset.collection.agency.agency_name}
+                          </div>
+                        )}
                       </div>
                     </td>
                   )}

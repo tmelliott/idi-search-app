@@ -12,3 +12,5 @@ function Layout({ children }) {
 }
 
 export default Layout
+
+// see https://simplernerd.com/nextjs-multiple-layouts/

@@ -1,4 +1,5 @@
 import { CogIcon } from "@heroicons/react/outline"
+import { useRouter } from "next/router"
 import Collections from "./Collections"
 import useAgency from "./hooks/useAgency"
 
@@ -14,6 +15,7 @@ function Agency({ id, action }) {
         items={agency.collections}
         action={action}
         title="Collections by this agency"
+        link={`/agencies/${id}`}
       />
     </div>
   )

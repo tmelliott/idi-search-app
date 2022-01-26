@@ -1,9 +1,17 @@
+import Link from "next/link"
 import { useRouter } from "next/router"
 import Collection from "./Collection"
 import useCollections from "./hooks/useCollections"
 import Loading from "./Loading"
 
-function Collections({ items, action, term, limit, title = "Collections" }) {
+function Collections({
+  items,
+  action,
+  term,
+  limit,
+  title = "Collections",
+  link = null,
+}) {
   const router = useRouter()
   const { collections, isLoading } = useCollections(term, items)
 
@@ -33,16 +41,28 @@ function Collections({ items, action, term, limit, title = "Collections" }) {
               </thead>
             )}
             <tbody>
-              {collections?.slice(0, limit).map((row) => (
-                <tr
-                  key={row.collection_id}
-                  className="clickable"
-                  onClick={() => showCollection(row.collection_id)}
-                >
-                  <td>{row.collection_name}</td>
-                  {row.agency && <td>{row.agency.agency_name}</td>}
-                </tr>
-              ))}
+              {collections?.slice(0, limit).map((row) => {
+                if (link) {
+                  return (
+                    <Link href={link} key={row.collection_id}>
+                      <tr className="clickable">
+                        <td>{row.collection_name}</td>
+                        {row.agency && <td>{row.agency.agency_name}</td>}
+                      </tr>
+                    </Link>
+                  )
+                }
+                return (
+                  <tr
+                    key={row.collection_id}
+                    className="clickable"
+                    onClick={() => showCollection(row.collection_id)}
+                  >
+                    <td>{row.collection_name}</td>
+                    {row.agency && <td>{row.agency.agency_name}</td>}
+                  </tr>
+                )
+              })}
               {collections && collections.length > limit && limit > -1 && (
                 <tr className="clickable">
                   <td
