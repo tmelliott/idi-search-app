@@ -9,14 +9,6 @@ async function main(id) {
     where: {
       agency_id: id,
     },
-    include: {
-      collections: {
-        select: {
-          collection_id: true,
-          collection_name: true,
-        },
-      },
-    },
   })
   return agency
 }

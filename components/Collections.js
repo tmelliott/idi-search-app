@@ -4,11 +4,9 @@ import Collection from "./Collection"
 import useCollections from "./hooks/useCollections"
 import Loading from "./Loading"
 
-function Collections({ items, term, limit, title = "Collections" }) {
+function Collections({ term, agencyId, limit, title = "Collections" }) {
   const router = useRouter()
-  const { collections, isLoading } = useCollections(term, items)
-
-  console.log(term)
+  const { collections, isLoading } = useCollections(term, agencyId)
 
   const showCollection = (id) => {
     router.push(

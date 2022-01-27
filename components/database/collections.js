@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-async function main(query) {
+async function main(query, agencyId) {
   let args = {
     select: {
       collection_id: true,
@@ -14,7 +14,7 @@ async function main(query) {
       },
     },
   }
-  if (query !== undefined) {
+  if (query !== undefined && query !== "") {
     args = {
       ...args,
       where: {
@@ -25,12 +25,21 @@ async function main(query) {
       },
     }
   }
+  if (agencyId !== "") {
+    args = {
+      ...args,
+      where: {
+        ...(args.where || null),
+        agency_id: agencyId,
+      },
+    }
+  }
   const collections = await prisma.collections.findMany(args)
   return collections
 }
 
-export default async function getCollections(query) {
-  const collections = await main(query)
+export default async function getCollections(query, agencyId) {
+  const collections = await main(query, agencyId)
     .catch((e) => {
       throw e
     })

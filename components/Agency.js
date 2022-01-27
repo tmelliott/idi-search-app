@@ -5,7 +5,7 @@ import Collections from "./Collections"
 import useAgency from "./hooks/useAgency"
 
 function Agency({ id, term }) {
-  const { agency, isLoading } = useAgency(id, term)
+  const { agency, isLoading } = useAgency(id)
 
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
 
@@ -16,7 +16,8 @@ function Agency({ id, term }) {
       </Link>
 
       <Collections
-        items={agency.collections}
+        term={term}
+        agencyId={id}
         title="Collections by this agency"
       />
     </div>

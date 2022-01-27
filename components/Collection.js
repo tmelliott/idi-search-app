@@ -39,9 +39,16 @@ function Collection({ id }) {
         Agency:{` `}
         <span
           className="underline cursor-pointer"
-          // onClick={() =>
-          //   action(<Agency id={collection.agency.agency_id} action={action} />)
-          // }
+          onClick={() =>
+            router.push({
+              pathname: router.pathname,
+              query: {
+                ...router.query,
+                v: "agency",
+                id: collection.agency.agency_id,
+              },
+            })
+          }
         >
           {collection.agency.agency_name}
         </span>
