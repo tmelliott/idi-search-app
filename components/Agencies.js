@@ -4,12 +4,23 @@ import Agency from "./Agency"
 import useAgencies from "./hooks/useAgencies"
 import Loading from "./Loading.js"
 
-function Agencies({ action, term, limit }) {
+function Agencies({ term, limit }) {
   const router = useRouter()
   const { agencies, isLoading } = useAgencies(term)
 
   const showAgency = (id) => {
-    action(<Agency id={id} action={action} />)
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          v: "agency",
+          id: id,
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
   }
   const showAgencies = () => {
     router.push("/agencies")
@@ -30,19 +41,17 @@ function Agencies({ action, term, limit }) {
             </thead>
             <tbody>
               {agencies?.slice(0, limit).map((agency) => (
-                <Link href={`/agencies/${agency.agency_id}`}>
-                  <tr
-                    key={agency.agency_id}
-                    className="clickable"
-                    // onClick={() => showAgency(agency.agency_id)}
-                  >
-                    <td>{agency.agency_name}</td>
-                  </tr>
-                </Link>
+                <tr
+                  key={agency.agency_id}
+                  className="clickable"
+                  onClick={() => showAgency(agency.agency_id)}
+                >
+                  <td>{agency.agency_name}</td>
+                </tr>
               ))}
               {agencies && agencies.length > limit && limit > -1 && (
                 <tr className="clickable">
-                  <td colSpan="2" onClick={showAgencies}>
+                  <td onClick={showAgencies}>
                     <em>and {agencies.length - limit} more ...</em>
                   </td>
                 </tr>

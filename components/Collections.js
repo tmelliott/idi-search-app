@@ -4,19 +4,25 @@ import Collection from "./Collection"
 import useCollections from "./hooks/useCollections"
 import Loading from "./Loading"
 
-function Collections({
-  items,
-  action,
-  term,
-  limit,
-  title = "Collections",
-  link = null,
-}) {
+function Collections({ items, term, limit, title = "Collections" }) {
   const router = useRouter()
   const { collections, isLoading } = useCollections(term, items)
 
+  console.log(term)
+
   const showCollection = (id) => {
-    action(<Collection id={id} action={action} />)
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          v: "collection",
+          id: id,
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
   }
   const showCollections = () => {
     router.push("/collections")
@@ -42,16 +48,6 @@ function Collections({
             )}
             <tbody>
               {collections?.slice(0, limit).map((row) => {
-                if (link) {
-                  return (
-                    <Link href={link} key={row.collection_id}>
-                      <tr className="clickable">
-                        <td>{row.collection_name}</td>
-                        {row.agency && <td>{row.agency.agency_name}</td>}
-                      </tr>
-                    </Link>
-                  )
-                }
                 return (
                   <tr
                     key={row.collection_id}

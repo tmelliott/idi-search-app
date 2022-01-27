@@ -1,11 +1,31 @@
 import { FilterIcon } from "@heroicons/react/outline"
-import { useRef, useState } from "react"
-import { event } from "../lib/gtag"
+import { useRouter } from "next/router"
+import { useEffect, useRef, useState } from "react"
 
-function Search({ term, handler }) {
-  const [value, setValue] = useState(term)
+function Search() {
+  const router = useRouter()
+  const [value, setValue] = useState("")
   const disabled = false
   const inputRef = useRef()
+
+  useEffect(() => {
+    setValue(router.query.s || "")
+  }, [router.query])
+
+  const updateQuery = () => {
+    const { s, ...rest } = router.query
+    let q = { ...router.query, s: value }
+    if (value === "") q = rest
+    router.push(
+      {
+        pathname: router.pathname,
+        query: q,
+      },
+      undefined,
+      { shallow: true }
+    )
+  }
+
   return (
     <form
       className={`flex items-center p-2 mb-2 border border-gray-400 rounded group ${
@@ -13,12 +33,7 @@ function Search({ term, handler }) {
       }`}
       onSubmit={(e) => {
         e.preventDefault()
-        event({
-          action: "search_app",
-          category: "Search",
-          label: inputRef.current.value,
-        })
-        handler(inputRef.current.value)
+        updateQuery()
       }}
     >
       <FilterIcon className="h-5 mr-2 text-gray-400 group-focus-within:text-black" />
@@ -41,10 +56,10 @@ function Search({ term, handler }) {
         Search
       </button>
       <button
+        type="submit"
         className="border rounded border-gray-800 pl-2 pr-2 ml-2"
         onClick={() => {
           setValue("")
-          handler("")
         }}
       >
         Clear
