@@ -6,6 +6,7 @@ import Search from "../../components/Search"
 import { XCircleIcon } from "@heroicons/react/outline"
 import { useRouter } from "next/router"
 import Agency from "../../components/Agency"
+import Collection from "../../components/Collection"
 
 // a list of agencies
 export default function AgenciesPage() {
@@ -65,6 +66,7 @@ export default function AgenciesPage() {
                 </div>
               </div>
               {type === "agency" && <Agency id={typeId} />}
+              {type === "collection" && <Collection id={typeId} />}
             </>
           )}
         </div>

@@ -37,21 +37,23 @@ function Collection({ id }) {
       </Link>
       <div className="text-xs">
         Agency:{` `}
-        <span
-          className="underline cursor-pointer"
-          onClick={() =>
-            router.push({
-              pathname: router.pathname,
-              query: {
-                ...router.query,
-                v: "agency",
-                id: collection.agency.agency_id,
-              },
-            })
-          }
-        >
-          {collection.agency.agency_name}
-        </span>
+        <Link href={`/agencies/${collection.agency.agency_id}`}>
+          <a
+            className="underline cursor-pointer"
+            // onClick={() =>
+            //   router.push({
+            //     pathname: router.pathname,
+            //     query: {
+            //       ...router.query,
+            //       v: "agency",
+            //       id: collection.agency.agency_id,
+            //     },
+            //   })
+            // }
+          >
+            {collection.agency.agency_name}
+          </a>
+        </Link>
       </div>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
       {/* <Datasets
