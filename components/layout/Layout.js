@@ -1,7 +1,7 @@
 import Footer from "./Footer"
 import Header from "./Header"
 
-function Layout({ children }) {
+function MainLayout({ children }) {
   return (
     <div className="md:h-screen flex flex-col">
       <Header />
@@ -11,6 +11,6 @@ function Layout({ children }) {
   )
 }
 
-export default Layout
+export default MainLayout
 
 // see https://simplernerd.com/nextjs-multiple-layouts/

@@ -4,11 +4,10 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
-import Agency from "./Agency"
 import Datasets from "./Datasets"
 import useCollection from "./hooks/useCollection"
 
-function Collection({ id }) {
+function Collection({ id, term }) {
   const router = useRouter()
   const { collection, isLoading } = useCollection(id)
 
@@ -38,29 +37,17 @@ function Collection({ id }) {
       <div className="text-xs">
         Agency:{` `}
         <Link href={`/agencies/${collection.agency.agency_id}`}>
-          <a
-            className="underline cursor-pointer"
-            // onClick={() =>
-            //   router.push({
-            //     pathname: router.pathname,
-            //     query: {
-            //       ...router.query,
-            //       v: "agency",
-            //       id: collection.agency.agency_id,
-            //     },
-            //   })
-            // }
-          >
+          <a className="underline cursor-pointer">
             {collection.agency.agency_name}
           </a>
         </Link>
       </div>
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
-      {/* <Datasets
-        items={collection.datasets}
-        action={action}
+      <Datasets
+        term={term}
+        collectionId={id}
         title="Datasets in this collection"
-      /> */}
+      />
     </div>
   )
 }

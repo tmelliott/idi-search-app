@@ -3,12 +3,23 @@ import Dataset from "./Dataset"
 import useDatasets from "./hooks/useDatasets"
 import Loading from "./Loading"
 
-function Datasets({ items, action, term, limit, title = "Datasets" }) {
+function Datasets({ term, collectionId, limit, title = "Datasets" }) {
   const router = useRouter()
-  const { datasets, isLoading } = useDatasets(term, items)
+  const { datasets, isLoading } = useDatasets(term, collectionId)
 
   const showDataset = (id) => {
-    action(<Dataset id={id} action={action} />)
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          v: "dataset",
+          id: id,
+        },
+      },
+      undefined,
+      { shallow: true }
+    )
   }
   const showDatasets = () => {
     router.push("/datasets")

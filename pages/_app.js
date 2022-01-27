@@ -1,10 +1,11 @@
 import "tailwindcss/tailwind.css"
 import "../styles/global.css"
-import Layout from "../components/layout/Layout"
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Script from "next/script"
 import * as gtag from "../lib/gtag"
+
+import MainLayout from "../components/layout/Layout"
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
@@ -24,6 +25,8 @@ function MyApp({ Component, pageProps }) {
       router.events.off("routeChangeComplete", handleRouteChange)
     }
   }, [router.events])
+
+  const Layout = Component.Layout || MainLayout
 
   return (
     <>

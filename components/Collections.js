@@ -1,6 +1,4 @@
-import Link from "next/link"
 import { useRouter } from "next/router"
-import Collection from "./Collection"
 import useCollections from "./hooks/useCollections"
 import Loading from "./Loading"
 
