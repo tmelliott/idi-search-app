@@ -1,8 +1,10 @@
 import useVariables from "./hooks/useVariables"
 import Loading from "./Loading"
 import { useRouter } from "next/router"
+import Paginator from "./Paginator"
+import { useEffect, useState } from "react"
 
-function Variables({ term, datasetId, limit, title = "Variables" }) {
+function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
   const router = useRouter()
   const { variables, isLoading } = useVariables(term, datasetId)
 
@@ -25,6 +27,30 @@ function Variables({ term, datasetId, limit, title = "Variables" }) {
     router.push("/variables")
   }
   if (!limit) limit = variables?.length
+  if (paginate) limit = paginate
+
+  const [pagination, setPagination] = useState({})
+  const [pA, setPA] = useState(0)
+  const [pB, setPB] = useState(limit)
+
+  useEffect(() => {
+    console.log(pA, pB)
+  }, [pA, pB])
+
+  useEffect(() => {
+    if (!paginate) return
+    setPagination({
+      page: 0,
+      nPerPage: limit,
+      nPage: Math.ceil(variables?.length / limit) || 0,
+    })
+  }, [variables])
+
+  useEffect(() => {
+    if (paginate === undefined) return
+    setPA(pagination.page * pagination.nPerPage)
+    setPB((pagination.page + 1) * pagination.nPerPage)
+  }, [pagination])
 
   return (
     <section>
@@ -43,7 +69,7 @@ function Variables({ term, datasetId, limit, title = "Variables" }) {
               </thead>
             )}
             <tbody>
-              {variables?.slice(0, limit).map((variable) => (
+              {variables?.slice(pA, pB).map((variable) => (
                 <tr
                   key={variable.variable_id + variable.dataset_id}
                   className="clickable"
@@ -78,7 +104,19 @@ function Variables({ term, datasetId, limit, title = "Variables" }) {
                   )}
                 </tr>
               ))}
-              {variables && variables.length > limit && limit > -1 && (
+              {variables &&
+              variables.length > limit &&
+              limit > -1 &&
+              paginate ? (
+                <tr>
+                  <td colSpan="2">
+                    <Paginator
+                      pagination={pagination}
+                      handler={setPagination}
+                    />
+                  </td>
+                </tr>
+              ) : (
                 <tr className="clickable">
                   <td colSpan="2" onClick={showVariables}>
                     <em>and {variables.length - limit} more ...</em>

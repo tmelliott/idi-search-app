@@ -81,6 +81,7 @@ function Dataset({ id, term }) {
         term={term}
         datasetId={dataset.dataset_id}
         title="Variables in this dataset"
+        paginate={5}
       />
     </div>
   )

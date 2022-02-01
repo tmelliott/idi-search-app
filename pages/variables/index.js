@@ -15,7 +15,7 @@ function VariablesPage() {
         <title>Variables | IDI Search</title>
       </Head>
 
-      <Variables term={filterTerm} />
+      <Variables term={filterTerm} paginate={15} />
     </>
   )
 }
