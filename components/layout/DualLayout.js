@@ -3,7 +3,9 @@ import { useRouter } from "next/router"
 import { useEffect, useState } from "react"
 import Agency from "../Agency"
 import Collection from "../Collection"
+import Dataset from "../Dataset"
 import Search from "../Search"
+import Variable from "../Variable"
 import Layout from "./Layout"
 
 function DualLayout({ children }) {
@@ -11,16 +13,18 @@ function DualLayout({ children }) {
   const [info, setInfo] = useState(false)
   const [type, setType] = useState(null)
   const [typeId, setTypeId] = useState(null)
+  const [dId, setDId] = useState(null)
 
   useEffect(() => {
-    const { v, id } = router.query
+    const { v, id, dId } = router.query
     setInfo(["agency", "collection", "dataset", "variable"].includes(v))
     setType(v)
     setTypeId(id)
+    setDId(v === "variable" ? dId : null)
   }, [router.query])
 
   const clearPanel = () => {
-    const { v, id, ...rest } = router.query
+    const { v, id, d, ...rest } = router.query
     router.push(
       {
         pathname: router.query.pathname,
@@ -59,6 +63,10 @@ function DualLayout({ children }) {
                 </div>
                 {type === "agency" && <Agency id={typeId} />}
                 {type === "collection" && <Collection id={typeId} />}
+                {type === "dataset" && <Dataset id={typeId} />}
+                {type === "variable" && (
+                  <Variable d_id={router.query.d} v_id={typeId} />
+                )}
               </>
             )}
           </div>

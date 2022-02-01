@@ -1,15 +1,24 @@
-import Variable from "./Variable"
 import useVariables from "./hooks/useVariables"
 import Loading from "./Loading"
 import { useRouter } from "next/router"
 
-function Variables({ items, action, term, limit, title = "Variables" }) {
+function Variables({ term, datasetId, limit, title = "Variables" }) {
   const router = useRouter()
-  const { variables, isLoading } = useVariables(term, items)
+  const { variables, isLoading } = useVariables(term, datasetId)
 
   const showVariable = (d_id, v_id) => {
-    action(
-      <Variable d_id={d_id} v_id={v_id} action={action} highlight={term} />
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          v: "variable",
+          d: d_id,
+          id: v_id,
+        },
+      },
+      undefined,
+      { shallow: true }
     )
   }
   const showVariables = () => {

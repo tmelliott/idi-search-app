@@ -1,16 +1,23 @@
 import { CogIcon } from "@heroicons/react/outline"
+import { useRouter } from "next/router"
+import Link from "next/link"
+import { useEffect, useState } from "react"
 import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
-import Agency from "./Agency"
-import Collection from "./Collection"
-// import Variables from "./Variables"
 import useDataset from "./hooks/useDataset"
 import Variables from "./Variables"
 
-function Dataset({ id, action, highlight, setFilterTerm }) {
-  const { dataset, isLoading } = useDataset(id)
+function Dataset({ id, term }) {
+  const router = useRouter()
+  const { dataset, isLoading, error } = useDataset(id)
+  const [highlight, setHighlight] = useState("")
+
+  useEffect(() => {
+    setHighlight(router.query.s || "")
+  }, [router.query])
 
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
+  if (error) return <>Error ...</>
 
   let description = dataset.description
   if (highlight) {
@@ -24,47 +31,31 @@ function Dataset({ id, action, highlight, setFilterTerm }) {
     v.variable_id.includes("uid")
   )
 
-  const searchVar = (v) => {
-    setFilterTerm && setFilterTerm(v)
-  }
-
   return (
     <div className="prose">
-      <h2>{dataset.dataset_name} (Dataset)</h2>
+      <Link href={`/datasets/${dataset.dataset_id}`}>
+        <h2 className="underline cursor-pointer">
+          {dataset.dataset_name} (Dataset)
+        </h2>
+      </Link>
       {dataset.collection && (
         <div className="text-xs">
           In collection:{` `}
-          <span
-            className="underline cursor-pointer"
-            onClick={() =>
-              action(
-                <Collection
-                  id={dataset.collection.collection_id}
-                  action={action}
-                />
-              )
-            }
-          >
-            {dataset.collection.collection_name}
-          </span>
+          <Link href={`/collections/${dataset.collection.collection_id}`}>
+            <a className="underline cursor-pointer">
+              {dataset.collection.collection_name}
+            </a>
+          </Link>
         </div>
       )}
       {dataset.collection && dataset.collection.agency && (
         <div className="text-xs">
           Agency:{` `}
-          <span
-            className="underline cursor-pointer"
-            onClick={() =>
-              action(
-                <Agency
-                  id={dataset.collection.agency.agency_id}
-                  action={action}
-                />
-              )
-            }
-          >
-            {dataset.collection.agency.agency_name}
-          </span>
+          <Link href={`/agencies/${dataset.collection.agency.agency_id}`}>
+            <a className="underline cursor-pointer">
+              {dataset.collection.agency.agency_name}
+            </a>
+          </Link>
         </div>
       )}
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
@@ -75,21 +66,20 @@ function Dataset({ id, action, highlight, setFilterTerm }) {
           <p>These variables can be used to link to other datasets.</p>
           <ul>
             {linkingVars.map((v) => (
-              <li
+              <Link
                 key={v.variable_id}
-                className="cursor-pointer"
-                onClick={() => searchVar(v.variable_id)}
+                href={`/variables?s=${v.variable_id}&v=dataset&id=${dataset.dataset_id}`}
               >
-                {v.variable_id}
-              </li>
+                <li className="cursor-pointer">{v.variable_id}</li>
+              </Link>
             ))}
           </ul>
         </div>
       )}
 
       <Variables
-        items={dataset.variables}
-        action={action}
+        term={term}
+        datasetId={dataset.dataset_id}
         title="Variables in this dataset"
       />
     </div>

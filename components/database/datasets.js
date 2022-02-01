@@ -20,7 +20,7 @@ async function main(query, collectionId) {
       },
     },
   }
-  if (query !== undefined) {
+  if (query !== undefined && query !== "") {
     args = {
       ...args,
       where: {

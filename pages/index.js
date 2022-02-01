@@ -21,8 +21,7 @@ function Home() {
       <Agencies term={filterTerm} limit={2} />
       <Collections term={filterTerm} limit={3} />
       <Datasets term={filterTerm} limit={5} />
-
-      {/* <Variables action={renderInfo} term={filterTerm} limit={10} /> */}
+      <Variables term={filterTerm} limit={10} />
     </>
   )
 }

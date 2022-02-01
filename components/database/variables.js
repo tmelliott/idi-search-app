@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-async function main(query) {
+async function main(query, datasetId) {
   let args = {
     select: {
       variable_id: true,
@@ -25,7 +25,7 @@ async function main(query) {
       },
     },
   }
-  if (query && query.length > 0) {
+  if (query !== undefined && query !== "") {
     args = {
       ...args,
       where: {
@@ -39,6 +39,15 @@ async function main(query) {
       },
     }
   }
+  if (datasetId !== "") {
+    args = {
+      ...args,
+      where: {
+        ...(args.where || null),
+        dataset_id: datasetId,
+      },
+    }
+  }
   const variables = await prisma.variables.findMany(args)
   return variables.map((v) => ({
     ...v,
@@ -46,8 +55,8 @@ async function main(query) {
   }))
 }
 
-export default async function getVariables(query) {
-  const variables = await main(query)
+export default async function getVariables(query, datasetId) {
+  const variables = await main(query, datasetId)
     .catch((e) => {
       throw e
     })
