@@ -10,7 +10,7 @@ function Paginator({ pagination, handler }) {
   const { page, nPerPage, nPage } = pagination
   //   const size =
   const iconClass =
-    "inline-block px-1 py-1 h-5 mx-1 bg-gray-800 text-white rounded-full"
+    "inline-block px-1 py-1 h-5 mx-1 bg-gray-800 text-white rounded-full cursor-pointer hover:bg-gray-900"
 
   const toStart = () => {
     if (page === 0) return
