@@ -240,11 +240,6 @@ create_tables <- function() {
 
     all_variables <- all_variables |> select(-type_dict)
 
-    ## NOW JUST SOME:
-    # all_variables <- all_variables |> filter(!is.na(description))
-    all_variables <- all_variables[1:9800,]
-    datasets <- datasets |> filter(dataset_id %in% unique(all_variables$dataset_id))
-
     # create new table..
     library(RPostgreSQL)
     library(dbplyr)
