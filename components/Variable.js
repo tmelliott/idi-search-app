@@ -23,7 +23,7 @@ function Variable({ d_id, v_id }) {
 
   console.log(variable)
 
-  let description = variable.description
+  let description = variable.description || ""
   if (highlight) {
     const searchMask = `(${highlight})`
     const regEx = new RegExp(searchMask, "ig")

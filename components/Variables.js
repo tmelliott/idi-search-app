@@ -34,10 +34,6 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
   const [pB, setPB] = useState(limit)
 
   useEffect(() => {
-    console.log(pA, pB)
-  }, [pA, pB])
-
-  useEffect(() => {
     if (!paginate) return
     setPagination({
       page: 0,

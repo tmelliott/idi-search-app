@@ -19,7 +19,7 @@ function Dataset({ id, term }) {
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <>Error ...</>
 
-  let description = dataset.description
+  let description = dataset.description || ""
   if (highlight) {
     const searchMask = `(${highlight})`
     const regEx = new RegExp(searchMask, "ig")

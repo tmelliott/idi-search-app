@@ -41,7 +41,7 @@ async function main(d_id, v_id) {
     "20210720",
     "20211020",
   ]
-  let refreshes = variable.refreshes
+  let refreshes = variable.refreshes || null
   if (refreshes && refreshes.length) {
     refreshes = current_refreshes.map((r) => ({
       refresh: r,
@@ -54,8 +54,8 @@ async function main(d_id, v_id) {
   return {
     ...variable,
     database: variable.refreshes
-      ? variable.refreshes.match("Adhoc")
-        ? "Adhoc"
+      ? variable.refreshes.match("Adhoc|RnD|Metadata")
+        ? variable.refreshes
         : "IDI Clean"
       : null,
     refreshes: refreshes,

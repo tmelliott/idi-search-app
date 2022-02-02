@@ -1,6 +1,7 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline"
 
 function Refreshes({ refreshes }) {
+  console.log(refreshes)
   return (
     <div>
       <h4>Refresh availability</h4>
@@ -8,7 +9,7 @@ function Refreshes({ refreshes }) {
       <div className="grid grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-y-2">
         {refreshes.map((r) => (
           <div
-            key={r}
+            key={r.refresh}
             className={`px-2 mr-2 ${
               r.available
                 ? "bg-green-50 text-green-600"
