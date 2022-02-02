@@ -55,7 +55,7 @@ async function main(query, datasetId) {
   }))
 }
 
-export default async function getVariables(query, datasetId) {
+export default async function getVariables(query = "", datasetId = "") {
   const variables = await main(query, datasetId)
     .catch((e) => {
       throw e

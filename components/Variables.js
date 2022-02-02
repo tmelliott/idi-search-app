@@ -26,7 +26,7 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
   const showVariables = () => {
     router.push("/variables")
   }
-  if (!limit) limit = variables?.length
+  if (!limit) limit = variables?.vars.length
   if (paginate) limit = paginate
 
   const [pagination, setPagination] = useState({})
@@ -38,7 +38,7 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
     setPagination({
       page: 0,
       nPerPage: limit,
-      nPage: Math.ceil(variables?.length / limit) || 0,
+      nPage: Math.ceil(variables?.vars.length / limit) || 0,
     })
   }, [variables])
 
@@ -51,21 +51,19 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
   return (
     <section>
       <h3>
-        {title} ({isLoading ? <Loading /> : variables.length})
+        {title} ({isLoading ? <Loading /> : variables.n})
       </h3>{" "}
-      {variables?.length > 0 && (
+      {variables?.vars.length > 0 && (
         <div className="app-table">
           <table>
-            {variables[0].agency && (
-              <thead>
-                <tr>
-                  <th scope="col">Name</th>
-                  <th scope="col">Dataset</th>
-                </tr>
-              </thead>
-            )}
+            <thead>
+              <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Dataset</th>
+              </tr>
+            </thead>
             <tbody>
-              {variables?.slice(pA, pB).map((variable) => (
+              {variables?.vars.slice(pA, pB).map((variable) => (
                 <tr
                   key={variable.variable_id + variable.dataset_id}
                   className="clickable"
@@ -101,7 +99,8 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
                 </tr>
               ))}
               {variables &&
-              variables.length > limit &&
+              variables.vars &&
+              variables.vars.length > limit &&
               limit > -1 &&
               paginate ? (
                 <tr>
@@ -115,7 +114,7 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
               ) : (
                 <tr className="clickable">
                   <td colSpan="2" onClick={showVariables}>
-                    <em>and {variables.length - limit} more ...</em>
+                    <em>and {variables.vars.length - limit} more ...</em>
                   </td>
                 </tr>
               )}
