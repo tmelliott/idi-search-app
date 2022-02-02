@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-async function main(query, datasetId) {
+async function main(query, datasetId, page, size) {
   let args = {
     select: {
       variable_id: true,
@@ -48,15 +48,31 @@ async function main(query, datasetId) {
       },
     }
   }
-  const variables = await prisma.variables.findMany(args)
-  return variables.map((v) => ({
-    ...v,
-    v_id: v.variable_id + "_" + v.dataset_id,
-  }))
+
+  const { where } = args
+  const n = await prisma.variables.count({ where })
+  const variables = await prisma.variables.findMany({
+    ...args,
+    take: parseInt(size),
+    skip: parseInt(size) * (parseInt(page) - 1),
+  })
+
+  return {
+    vars: variables.map((v) => ({
+      ...v,
+      v_id: v.variable_id + "_" + v.dataset_id,
+    })),
+    n,
+  }
 }
 
-export default async function getVariables(query = "", datasetId = "") {
-  const variables = await main(query, datasetId)
+export default async function getVariables(
+  query = "",
+  datasetId = "",
+  page = 1,
+  size = 10000
+) {
+  const variables = await main(query, datasetId, page, size)
     .catch((e) => {
       throw e
     })

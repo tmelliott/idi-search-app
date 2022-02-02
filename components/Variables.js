@@ -6,7 +6,8 @@ import { useEffect, useState } from "react"
 
 function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
   const router = useRouter()
-  const { variables, isLoading } = useVariables(term, datasetId)
+  const [page, setPage] = useState(1)
+  const { variables, isLoading, isError } = useVariables(term, datasetId, page)
 
   const showVariable = (d_id, v_id) => {
     router.push(
@@ -47,6 +48,8 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
     setPA(pagination.page * pagination.nPerPage)
     setPB((pagination.page + 1) * pagination.nPerPage)
   }, [pagination])
+
+  if (isError) return <>Unable to get results</>
 
   return (
     <section>
