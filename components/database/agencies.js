@@ -3,7 +3,9 @@ import { PrismaClient } from "@prisma/client"
 const prisma = new PrismaClient()
 
 async function main(query) {
-  let args = {}
+  let args = {
+    orderBy: [{ agency_name: "asc" }],
+  }
   if (query !== undefined) {
     args = {
       ...args,

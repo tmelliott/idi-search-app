@@ -13,6 +13,7 @@ async function main(query, agencyId) {
         },
       },
     },
+    orderBy: [{ collection_name: "asc" }],
   }
   if (query !== undefined && query !== "") {
     args = {

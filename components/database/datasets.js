@@ -19,6 +19,7 @@ async function main(query, collectionId) {
         },
       },
     },
+    orderBy: [{ dataset_name: "asc" }],
   }
   if (query !== undefined && query !== "") {
     args = {

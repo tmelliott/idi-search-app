@@ -24,6 +24,7 @@ async function main(query, datasetId, page, size) {
         },
       },
     },
+    orderBy: [{ variable_name: "asc" }],
   }
   if (query !== undefined && query !== "") {
     args = {
