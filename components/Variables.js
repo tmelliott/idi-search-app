@@ -1,13 +1,27 @@
 import useVariables from "./hooks/useVariables"
 import Loading from "./Loading"
+import Link from "next/link"
 import { useRouter } from "next/router"
 import Paginator from "./Paginator"
 import { useEffect, useState } from "react"
+import { EyeIcon } from "@heroicons/react/outline"
 
-function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
+function Variables({
+  term,
+  datasetId,
+  title = "Variables",
+  paginate = 30,
+  linkTo,
+}) {
   const router = useRouter()
   const [page, setPage] = useState(1)
-  const { variables, isLoading, isError } = useVariables(term, datasetId, page)
+  const [pageSize] = useState(paginate)
+  const { variables, isLoading, isError } = useVariables(
+    term,
+    datasetId,
+    page,
+    pageSize
+  )
 
   const showVariable = (d_id, v_id) => {
     router.push(
@@ -27,26 +41,25 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
   const showVariables = () => {
     router.push("/variables")
   }
-  if (!limit) limit = variables?.vars.length
-  if (paginate) limit = paginate
 
   const [pagination, setPagination] = useState({})
-  const [pA, setPA] = useState(0)
-  const [pB, setPB] = useState(limit)
+  const [allVars, setAllVars] = useState(null)
 
   useEffect(() => {
-    if (!paginate) return
-    setPagination({
-      page: 0,
-      nPerPage: limit,
-      nPage: Math.ceil(variables?.vars.length / limit) || 0,
-    })
+    if (variables) setAllVars(variables)
   }, [variables])
 
   useEffect(() => {
+    setPagination({
+      page: page,
+      nPerPage: pageSize,
+      nPage: Math.ceil(allVars?.n / pageSize) || 0,
+    })
+  }, [allVars])
+
+  useEffect(() => {
     if (paginate === undefined) return
-    setPA(pagination.page * pagination.nPerPage)
-    setPB((pagination.page + 1) * pagination.nPerPage)
+    setPage(pagination.page)
   }, [pagination])
 
   if (isError) return <>Unable to get results</>
@@ -54,10 +67,17 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
   return (
     <section>
       <h3>
-        {title} ({isLoading ? <Loading /> : variables.n})
+        {title} ({isLoading && !allVars ? <Loading /> : allVars?.n})
+        {linkTo && (
+          <Link href={linkTo}>
+            <a>
+              <EyeIcon className="cursor-pointer inline ml-3" height={20} />
+            </a>
+          </Link>
+        )}
       </h3>{" "}
-      {variables?.vars.length > 0 && (
-        <div className="app-table">
+      {allVars?.vars.length > 0 && (
+        <div className="app-table relative">
           <table>
             <thead>
               <tr>
@@ -66,10 +86,10 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
               </tr>
             </thead>
             <tbody>
-              {variables?.vars.slice(pA, pB).map((variable) => (
+              {allVars?.vars.map((variable) => (
                 <tr
                   key={variable.variable_id + variable.dataset_id}
-                  className="clickable"
+                  className={`clickable ${isLoading && "text-gray-400"}`}
                   onClick={() =>
                     showVariable(variable.dataset_id, variable.variable_id)
                   }
@@ -101,11 +121,7 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
                   )}
                 </tr>
               ))}
-              {variables &&
-              variables.vars &&
-              variables.vars.length > limit &&
-              limit > -1 &&
-              paginate ? (
+              {allVars && allVars.vars && allVars.n > paginate && paginate ? (
                 <tr>
                   <td colSpan="2">
                     <Paginator
@@ -117,7 +133,7 @@ function Variables({ term, datasetId, limit, title = "Variables", paginate }) {
               ) : (
                 <tr className="clickable">
                   <td colSpan="2" onClick={showVariables}>
-                    <em>and {variables.vars.length - limit} more ...</em>
+                    <em>and {allVars.n - paginate} more ...</em>
                   </td>
                 </tr>
               )}
