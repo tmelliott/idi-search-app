@@ -1,3 +1,11 @@
+# version 0.1.2
+
+**Updated 14 February 2022**
+
+- Improves display of variables (using pagination)
+- Sorts all lists alphabetically
+- Adds all variables in the IDI (including many that are missing from available data dictionaries)
+
 # version 0.1.1
 
 **Updated 25 January 2022**
