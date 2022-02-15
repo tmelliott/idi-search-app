@@ -7,7 +7,6 @@ export default function useVariables(
   page = 1,
   size = 10
 ) {
-  if (page === NaN) page = 1
   const { data, error } = useSWR(
     `/api/variables?q=${term}&datasetId=${datasetId}&page=${page}&size=${size}`,
     fetcher

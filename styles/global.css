@@ -67,6 +67,9 @@
   .app-table tr td {
     @apply overflow-ellipsis whitespace-nowrap overflow-hidden;
   }
+  .app-table tr td div {
+    @apply overflow-ellipsis whitespace-nowrap overflow-hidden;
+  }
 
   .blur-xs {
     --tw-blur: blur(1px);

@@ -39,6 +39,10 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl }) {
     return rows
   }
 
+  // useEffect(() => {
+  //   console.log(viewSet)
+  // }, [viewSet])
+
   return (
     <div className="app-table">
       <table>

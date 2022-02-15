@@ -85,7 +85,7 @@ function about() {
             researchers can update code for new refreshes
           </li>
           <li>allow for multiple search terms (AND, OR, etc.)</li>
-          <li>
+          <li className="text-green-600 italic line-through">
             include variables with missing data dictionaries: these variables
             will not have descriptions and other such information, but will
             otherwise show up where expected (but with limited search capacity)

@@ -1,82 +1,130 @@
-import useVariables from "./hooks/useVariables"
-import Loading from "./Loading"
 import Link from "next/link"
+import Loading from "./Loading"
 import { useRouter } from "next/router"
-import Paginator from "./Paginator"
 import { useEffect, useState } from "react"
-import { EyeIcon } from "@heroicons/react/outline"
+import PagedTable from "./PagedTable"
+import { LinkIcon } from "@heroicons/react/outline"
 
-function Variables({
-  term,
-  datasetId,
-  title = "Variables",
-  paginate = 30,
-  linkTo,
-}) {
-  const router = useRouter()
-  const [page, setPage] = useState(1)
-  const [pageSize] = useState(paginate)
-  const { variables, isLoading, isError } = useVariables(
-    term,
-    datasetId,
-    page,
-    pageSize
+const loadAllVariables = async (term = "", datasetId = "") => {
+  let p = 1
+  let res = await fetch(
+    `/api/variables?q=${term}&datasetId=${datasetId}&page=${p}&size=10000`
   )
+  let data = await res.json()
 
-  const showVariable = (d_id, v_id) => {
+  const n = data.n
+  let variables = []
+  variables = variables.concat(data.vars)
+  while (variables.length < n) {
+    p++
+    res = await fetch(
+      `/api/variables?q=${term}&datasetId=${datasetId}&page=${p}&size=10000`
+    )
+    data = await res.json()
+    variables = variables.concat(data.vars)
+  }
+
+  return {
+    variables: variables,
+  }
+}
+
+function Variables({ term, datasetId, limit, title = "Variables" }) {
+  const router = useRouter()
+
+  const [isLoading, setLoading] = useState(true)
+  const [variables, setVars] = useState([])
+
+  useEffect(() => {
+    setLoading(true)
+    setVars([])
+    const setAllVars = async () => {
+      const vs = await loadAllVariables(term, datasetId)
+      setVars(vs.variables)
+      setLoading(false)
+    }
+    setAllVars()
+  }, [term, datasetId])
+
+  const showVariable = (variable) => {
     router.push(
       {
         pathname: router.pathname,
         query: {
           ...router.query,
           v: "variable",
-          d: d_id,
-          id: v_id,
+          d: variable.dataset_id,
+          id: variable.variable_id,
         },
       },
       undefined,
       { shallow: true }
     )
   }
-  const showVariables = () => {
-    router.push("/variables")
-  }
 
-  const [pagination, setPagination] = useState({})
-  const [allVars, setAllVars] = useState(null)
+  if (!limit) limit = variables?.length
 
-  useEffect(() => {
-    if (variables) setAllVars(variables)
-  }, [variables])
-
-  useEffect(() => {
-    setPagination({
-      page: page,
-      nPerPage: pageSize,
-      nPage: Math.ceil(allVars?.n / pageSize) || 0,
-    })
-  }, [allVars])
-
-  useEffect(() => {
-    if (paginate === undefined) return
-    setPage(pagination.page)
-  }, [pagination])
-
-  if (isError) return <>Unable to get results</>
+  const tblCols = [
+    {
+      name: "variable_name",
+      label: "Name",
+      value: (v) => (
+        <>
+          <div>{v.variable_name}</div>
+          <div className="text-xxs font-mono">{v.variable_id}</div>
+        </>
+      ),
+    },
+    {
+      name: "dataset_name",
+      label: "Dataset / Collection",
+      value: (r) => {
+        return r.dataset ? (
+          <>
+            <div>{r.dataset.dataset_name}</div>
+            <div className="text-xxs">
+              {r.dataset.collection?.collection_name}
+            </div>
+          </>
+        ) : (
+          <div className="text-gray-400 italic text-xxs">Not available</div>
+        )
+      },
+    },
+  ]
 
   return (
     <section>
       <h3>
-        {title} ({isLoading && !allVars ? <Loading /> : allVars?.n})
-        {linkTo && (
-          <Link href={linkTo}>
-            <a>
-              <EyeIcon className="cursor-pointer inline ml-3" height={20} />
+        {router.asPath === "/datasets" ? (
+          <>Variables ({isLoading ? <Loading /> : variables.length})</>
+        ) : (
+          <Link href="/variables">
+            <a className="flex flex-row items-center gap-2 group">
+              Variables ({isLoading ? <Loading /> : variables.length})
+              <LinkIcon
+                height={15}
+                className="inline text-blue-600 opacity-0 group-hover:opacity-100"
+              />
             </a>
           </Link>
         )}
-      </h3>{" "}
-      {allVars?.vars.length > 0 && (
+      </h3>
+
+      {variables.length > 0 && (
+        <PagedTable
+          cols={tblCols}
+          rows={variables.map((v) => ({
+            ...v,
+            dataset_name: v.dataset?.dataset_name,
+            id: v.variable_id + "__" + v.dataset_id,
+          }))}
+          n={limit}
+          rowHandler={showVariable}
+        />
+      )}
+
+      {/* {allVars?.vars.length > 0 && (
         <div className="app-table relative">
           <table>
             <thead>
@@ -140,7 +188,7 @@ function Variables({
             </tbody>
           </table>
         </div>
-      )}
+      )} */}
     </section>
   )
 }
