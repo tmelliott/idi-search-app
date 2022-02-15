@@ -19,7 +19,7 @@ function Header() {
   return (
     <div className="header flex flex-col sm:flex-row items-center">
       {/* Left panel */}
-      <div className="flex">
+      <div className="flex flex-row items-center w-full sm:w-auto">
         <div className="flex-1 flex items-baseline gap-5">
           <h1 className="text-xl p-0 m-0">
             <Link href="/">

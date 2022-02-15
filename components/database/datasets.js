@@ -11,6 +11,7 @@ async function main(query, collectionId) {
       description: true,
       collection: {
         select: {
+          collection_name: true,
           agency: {
             select: {
               agency_name: true,

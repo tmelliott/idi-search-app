@@ -1,64 +1,57 @@
 import { useRouter } from "next/router"
 import Link from "next/link"
-import Agency from "./Agency"
 import useAgencies from "./hooks/useAgencies"
 import Loading from "./Loading.js"
+import PagedTable from "./PagedTable"
+import { LinkIcon } from "@heroicons/react/outline"
 
 function Agencies({ term, limit }) {
   const router = useRouter()
   const { agencies, isLoading } = useAgencies(term)
 
-  const showAgency = (id) => {
+  const showAgency = (agency) => {
     router.push(
       {
         pathname: router.pathname,
         query: {
           ...router.query,
           v: "agency",
-          id: id,
+          id: agency.agency_id,
         },
       },
       undefined,
       { shallow: true }
     )
   }
-  const showAgencies = () => {
-    router.push("/agencies")
-  }
   if (!limit) limit = agencies?.length
+
+  const tblCols = [{ name: "agency_name", label: "Name" }]
 
   return (
     <section>
-      <h3>Agencies ({isLoading ? <Loading /> : agencies.length})</h3>
+      <h3>
+        {router.asPath === "/agencies" ? (
+          <>Agencies ({isLoading ? <Loading /> : agencies.length})</>
+        ) : (
+          <Link href="/agencies">
+            <a className="flex flex-row items-center gap-2 group">
+              Agencies ({isLoading ? <Loading /> : agencies.length})
+              <LinkIcon
+                height={15}
+                className="inline text-blue-600 opacity-0 group-hover:opacity-100"
+              />
+            </a>
+          </Link>
+        )}
+      </h3>
 
       {agencies?.length > 0 && (
-        <div className="app-table">
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-              </tr>
-            </thead>
-            <tbody>
-              {agencies?.slice(0, limit).map((agency) => (
-                <tr
-                  key={agency.agency_id}
-                  className="clickable"
-                  onClick={() => showAgency(agency.agency_id)}
-                >
-                  <td>{agency.agency_name}</td>
-                </tr>
-              ))}
-              {agencies && agencies.length > limit && limit > -1 && (
-                <tr className="clickable">
-                  <td onClick={showAgencies}>
-                    <em>and {agencies.length - limit} more ...</em>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <PagedTable
+          cols={tblCols}
+          rows={agencies.map((a) => ({ ...a, id: a.agency_id }))}
+          n={limit}
+          rowHandler={showAgency}
+        />
       )}
     </section>
   )

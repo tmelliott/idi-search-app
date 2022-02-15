@@ -64,6 +64,9 @@
   .app-table tr.clickable {
     @apply cursor-pointer hover:bg-gray-50 text-xs;
   }
+  .app-table tr td {
+    @apply overflow-ellipsis whitespace-nowrap overflow-hidden;
+  }
 
   .blur-xs {
     --tw-blur: blur(1px);

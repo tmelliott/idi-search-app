@@ -1,74 +1,67 @@
 import { useRouter } from "next/router"
+import Link from "next/link"
 import useCollections from "./hooks/useCollections"
 import Loading from "./Loading"
+import PagedTable from "./PagedTable"
+import { LinkIcon } from "@heroicons/react/outline"
 
 function Collections({ term, agencyId, limit, title = "Collections" }) {
   const router = useRouter()
   const { collections, isLoading } = useCollections(term, agencyId)
 
-  const showCollection = (id) => {
+  const showCollection = (collection) => {
     router.push(
       {
         pathname: router.pathname,
         query: {
           ...router.query,
           v: "collection",
-          id: id,
+          id: collection.collection_id,
         },
       },
       undefined,
       { shallow: true }
     )
   }
-  const showCollections = () => {
-    router.push("/collections")
-  }
   if (!limit) limit = collections?.length
+
+  const tblCols = [
+    {
+      name: "collection_name",
+      label: "Collection",
+    },
+    { name: "agency_name", label: "Agency" },
+  ]
 
   return (
     <section>
       <h3>
-        {title} ({isLoading ? <Loading /> : collections?.length})
+        {router.asPath === "/collections" ? (
+          <>Collections ({isLoading ? <Loading /> : collections.length})</>
+        ) : (
+          <Link href="/collections">
+            <a className="flex flex-row items-center gap-2 group">
+              Collections ({isLoading ? <Loading /> : collections.length})
+              <LinkIcon
+                height={15}
+                className="inline text-blue-600 opacity-0 group-hover:opacity-100"
+              />
+            </a>
+          </Link>
+        )}
       </h3>
 
       {collections?.length > 0 && (
-        <div className="app-table">
-          <table>
-            {collections[0].agency && (
-              <thead>
-                <tr>
-                  <th>Name</th>
-                  <th>Agency</th>
-                </tr>
-              </thead>
-            )}
-            <tbody>
-              {collections?.slice(0, limit).map((row) => {
-                return (
-                  <tr
-                    key={row.collection_id}
-                    className="clickable"
-                    onClick={() => showCollection(row.collection_id)}
-                  >
-                    <td>{row.collection_name}</td>
-                    {row.agency && <td>{row.agency.agency_name}</td>}
-                  </tr>
-                )
-              })}
-              {collections && collections.length > limit && limit > -1 && (
-                <tr className="clickable">
-                  <td
-                    colSpan={2}
-                    onClick={showCollections}
-                    className="text-right"
-                  >
-                    <em>and {collections.length - limit} more ...</em>
-                  </td>
-                </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <PagedTable
+          cols={tblCols}
+          rows={collections.map((c) => ({
+            ...c,
+            agency_name: c.agency.agency_name,
+            id: c.collection_id,
+          }))}
+          n={limit}
+          rowHandler={showCollection}
+        />
       )}
     </section>
   )
