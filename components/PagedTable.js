@@ -11,20 +11,32 @@ import {
 } from "@heroicons/react/outline"
 
 // table with pagination if items.length > n
-function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl }) {
+function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl, lazy }) {
   const limit = n || rows.length
   const [viewSet, setViewSet] = useState([])
 
-  const [page, setPage] = useState(0)
-  const nPage = Math.ceil(rows.length / limit)
+  const [page, setPage] = useState(lazy ? lazy.page : 0)
+  const total = lazy ? lazy.n : rows.length
+  const nPage = Math.ceil(total / limit)
 
   useEffect(() => {
+    if (lazy) {
+      lazy.setPage(page)
+      return
+    }
     if (page > nPage - 1) {
       setPage(nPage - 1)
       return
     }
     setViewSet(rows.slice(limit * page, limit * page + limit))
-  }, [rows, page])
+  }, [page])
+
+  useEffect(() => {
+    console.log(rows)
+    if (rows.length === 0) return
+    if (lazy) setViewSet(rows)
+    else setViewSet(rows.slice(limit * page, limit * page + limit))
+  }, [rows])
 
   const iconClass =
     "inline-block px-1 py-1 h-5 mx-1 bg-gray-800 text-white rounded-full cursor-pointer hover:bg-gray-900"
@@ -39,9 +51,9 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl }) {
     return rows
   }
 
-  // useEffect(() => {
-  //   console.log(viewSet)
-  // }, [viewSet])
+  useEffect(() => {
+    console.log(viewSet)
+  }, [viewSet])
 
   return (
     <div className="app-table">
@@ -58,7 +70,11 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl }) {
             viewSet.map((r) => (
               <tr
                 key={r.id}
-                className="clickable"
+                className={`clickable ${
+                  lazy &&
+                  lazy.loading &&
+                  "text-gray-200 pointer-events-none cursor-not-allowed"
+                }`}
                 onClick={() => rowHandler(r)}
               >
                 {cols.map((c) => (
@@ -67,7 +83,9 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl }) {
               </tr>
             ))
           ) : (
-            <p>No results to show.</p>
+            <tr>
+              <td>No results to show</td>
+            </tr>
           )}
           {/* if number of items on this page is less than n, pad table */}
           {viewSet.length > 0 &&
@@ -83,7 +101,7 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl }) {
             ))}
         </tbody>
       </table>
-      {limit < rows.length && (
+      {limit < total && (
         <div className="flex items-center bg-gray-100 rounded-full py-1">
           <ChevronDoubleLeftIcon
             className={iconClass + (page === 0 ? " opacity-0" : "")}
