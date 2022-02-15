@@ -32,7 +32,6 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl, lazy }) {
   }, [page])
 
   useEffect(() => {
-    console.log(rows)
     if (rows.length === 0) return
     if (lazy) setViewSet(rows)
     else setViewSet(rows.slice(limit * page, limit * page + limit))
@@ -51,9 +50,9 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl, lazy }) {
     return rows
   }
 
-  useEffect(() => {
-    console.log(viewSet)
-  }, [viewSet])
+  // useEffect(() => {
+  //   console.log(viewSet)
+  // }, [viewSet])
 
   return (
     <div className="app-table">

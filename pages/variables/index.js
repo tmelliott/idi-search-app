@@ -23,6 +23,7 @@ function VariablesPage() {
         <div className="mr-2">Results per page:</div>
         {limitOptions.map((lo) => (
           <div
+            key={lo}
             className={`cursor-pointer ${
               lo === limit ? "bg-gray-300 font-bold" : "bg-gray-100"
             } mx-1 p-1 w-8 text-center rounded`}

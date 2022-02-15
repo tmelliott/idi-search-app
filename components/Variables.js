@@ -6,30 +6,6 @@ import PagedTable from "./PagedTable"
 import { LinkIcon } from "@heroicons/react/outline"
 import useVariables from "./hooks/useVariables"
 
-// const loadAllVariables = async (term = "", datasetId = "") => {
-//   let p = 1
-//   let res = await fetch(
-//     `/api/variables?q=${term}&datasetId=${datasetId}&page=${p}&size=10000`
-//   )
-//   let data = await res.json()
-
-//   const n = data.n
-//   let variables = []
-//   variables = variables.concat(data.vars)
-//   while (variables.length < n) {
-//     p++
-//     res = await fetch(
-//       `/api/variables?q=${term}&datasetId=${datasetId}&page=${p}&size=10000`
-//     )
-//     data = await res.json()
-//     variables = variables.concat(data.vars)
-//   }
-
-//   return {
-//     variables: variables,
-//   }
-// }
-
 function Variables({ term, datasetId, limit = 10, title = "Variables" }) {
   const router = useRouter()
 
@@ -41,11 +17,15 @@ function Variables({ term, datasetId, limit = 10, title = "Variables" }) {
     page + 1,
     size
   )
+  const [allVars, setAllVars] = useState({})
 
   useEffect(() => {
     setSize(limit)
   }, [limit])
-  const [allVars, setAllVars] = useState([])
+
+  useEffect(() => {
+    setAllVars({})
+  }, [limit, term, datasetId])
 
   const showVariable = (variable) => {
     router.push(
@@ -122,7 +102,7 @@ function Variables({ term, datasetId, limit = 10, title = "Variables" }) {
             dataset_name: v.dataset?.dataset_name,
             id: v.variable_id + "__" + v.dataset_id,
           }))}
-          n={limit}
+          n={Math.min(limit, allVars.n)}
           rowHandler={showVariable}
           lazy={{
             n: allVars.n,
