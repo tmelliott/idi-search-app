@@ -1,6 +1,6 @@
 # version 0.1.2
 
-**Updated 14 February 2022**
+**Updated 22 February 2022**
 
 - Improves display of variables (using pagination)
 - Sorts all lists alphabetically
