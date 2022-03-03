@@ -240,6 +240,32 @@ create_tables <- function() {
 
     all_variables <- all_variables |> select(-type_dict)
 
+    ### --- renamed variables/tables information
+    match_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
+        filter(name == "Renamed variables and tables")
+    drive_download(match_file$id[1], path = file.path(fdir, "matches.xlsx"))
+    match_tables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
+        sheet = "Tables") |>
+        rename(
+            table_id = 'Table Name',
+            alt_table_id = 'Alternative Name',
+            notes = 'Notes'
+        ) |>
+        mutate(
+            notes = as.character(notes)
+        )
+    match_variables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
+        sheet = "Variables") |>
+        rename(
+            table_id = "Table",
+            variable_id = "Variable Name",
+            alt_variable_id = "Alternative Name",
+            notes = "Notes"
+        ) |>
+        mutate(
+            notes = as.character(notes)
+        )
+
     # create new table..
     library(RPostgreSQL)
     library(dbplyr)
@@ -260,6 +286,8 @@ create_tables <- function() {
     DROP TABLE IF EXISTS datasets;
     DROP TABLE IF EXISTS collections;
     DROP TABLE IF EXISTS agencies;
+    DROP TABLE IF EXISTS variable_matches;
+    DROP TABLE IF EXISTS table_matches;
     ")
 
     # CREATE TABLE idi_tables (
@@ -281,6 +309,8 @@ create_tables <- function() {
     dbWriteTable(con, "collections", collections, row.names = FALSE)
     dbWriteTable(con, "datasets", datasets, row.names = FALSE)
     dbWriteTable(con, "variables", all_variables, row.names = FALSE)
+    dbWriteTable(con, "variable_matches", match_variables, row.names = FALSE)
+    dbWriteTable(con, "table_matches", match_tables, row.names = FALSE)
 
     dbExecute(con, "
     ALTER TABLE agencies
