@@ -21,8 +21,6 @@ function Variable({ d_id, v_id }) {
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <div>Error</div>
 
-  console.log(variable)
-
   let description = variable.description || ""
   if (highlight) {
     const searchMask = `(${highlight})`

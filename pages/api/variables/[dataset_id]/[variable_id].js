@@ -31,6 +31,16 @@ async function main(d_id, v_id) {
           },
         },
       },
+      alternate: {
+        select: {
+          match: true,
+        },
+      },
+      matches: {
+        select: {
+          variable: true,
+        },
+      },
     },
   })
   const current_refreshes = [
@@ -51,8 +61,13 @@ async function main(d_id, v_id) {
     refreshes = null
   }
 
+  const { matches, alternate, ...vble } = variable
+
   return {
-    ...variable,
+    ...vble,
+    matches: matches
+      .map((m) => m.variable)
+      .concat(alternate.map((a) => a.match)),
     database: variable.refreshes
       ? variable.refreshes.match("Adhoc|RnD|Metadata")
         ? variable.refreshes

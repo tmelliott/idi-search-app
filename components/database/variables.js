@@ -52,10 +52,15 @@ async function main(query, datasetId, page, size) {
 
   const { where } = args
   const n = await prisma.variables.count({ where })
+  if (n > parseInt(size)) {
+    args = {
+      ...args,
+      take: parseInt(size),
+      skip: parseInt(size) * (parseInt(page) - 1),
+    }
+  }
   const variables = await prisma.variables.findMany({
     ...args,
-    take: parseInt(size),
-    skip: parseInt(size) * (parseInt(page) - 1),
   })
 
   return {

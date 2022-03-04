@@ -1,7 +1,6 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline"
 
 function Refreshes({ refreshes }) {
-  console.log(refreshes)
   return (
     <div>
       <h4>Refresh availability</h4>

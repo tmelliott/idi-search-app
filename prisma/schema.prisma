@@ -49,6 +49,9 @@ model variables {
   refreshes     String?
   dataset       datasets @relation(fields: [dataset_id], references: [dataset_id], onDelete: NoAction, onUpdate: NoAction, map: "variable_dataset_fkey")
 
+  alternate variable_matches[] @relation("alt_variable")
+  matches   variable_matches[] @relation("match_variable")
+
   @@id([variable_id, dataset_id], name: "v_id")
 }
 
@@ -57,6 +60,18 @@ model table_matches {
   table_id     String
   match        datasets @relation("match_table", fields: [alt_table_id], references: [dataset_id])
   alt_table_id String
+  notes        String?
 
   @@id([table_id, alt_table_id])
+}
+
+model variable_matches {
+  table_id        String
+  variable        variables @relation("alt_variable", fields: [table_id, variable_id], references: [dataset_id, variable_id])
+  variable_id     String
+  match           variables @relation("match_variable", fields: [table_id, alt_variable_id], references: [dataset_id, variable_id])
+  alt_variable_id String
+  notes           String?
+
+  @@id([table_id, variable_id, alt_variable_id])
 }
