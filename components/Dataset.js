@@ -77,6 +77,27 @@ function Dataset({ id, term }) {
         </div>
       )}
 
+      {dataset.matches.length > 0 && (
+        <div>
+          <h4>Alternative names</h4>
+          <p>
+            These are other datasets the may be the same, with a different name.
+          </p>
+          <ul>
+            {dataset.matches.map((d) => (
+              <Link
+                key={d.dataset_id}
+                href={`/datasets/${dataset.dataset_id}?v=dataset&id=${d.dataset_id}`}
+              >
+                <li className="cursor-pointer">
+                  {d.dataset_name || d.dataset_id}
+                </li>
+              </Link>
+            ))}
+          </ul>
+        </div>
+      )}
+
       <Variables
         term={term}
         datasetId={dataset.dataset_id}

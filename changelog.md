@@ -1,3 +1,9 @@
+# version 0.1.3
+
+**Updated 4 March 2022**
+
+- Display tables identified (manually) as potentially being the same (across refreshes), for example historic tables or those that have been renamed
+
 # version 0.1.2
 
 **Updated 22 February 2022**

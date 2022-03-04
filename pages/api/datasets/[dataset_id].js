@@ -29,9 +29,24 @@ async function main(id) {
           dataset_id: true,
         },
       },
+      alternate: {
+        select: {
+          match: true,
+        },
+      },
+      matches: {
+        select: {
+          table: true,
+        },
+      },
     },
   })
-  return dataset
+
+  const { matches, alternate, ...ds } = dataset
+  return {
+    ...ds,
+    matches: matches.map((m) => m.table).concat(alternate.map((a) => a.match)),
+  }
 }
 
 export default async function collectionAPI(req, res) {
