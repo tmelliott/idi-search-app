@@ -19,6 +19,8 @@ async function main(query, collectionId) {
           },
         },
       },
+      alternate: true,
+      matches: true,
     },
     orderBy: [{ dataset_name: "asc" }],
   }
