@@ -191,12 +191,24 @@ create_tables <- function() {
         full_join(refresh_vars, by = c("variable_id", "dataset_id"))
 
     # # variables in dictionaries not in IDI:
-    # variables |>
-    #     anti_join(refresh_vars, by = c("variable_id", "dataset_id"))
+    miss_idi <- variables |>
+        anti_join(refresh_vars, by = c("variable_id", "dataset_id"))
+
+    write.csv(miss_idi,
+        file = "data/missing_in_idi.csv",
+        quote = TRUE,
+        row.names = FALSE
+    )
 
     # # variables in IDI not in dictionaries:
-    # refresh_vars |>
-    #     anti_join(variables, by = c("variable_id", "dataset_id"))
+    miss_dd <- refresh_vars |>
+        anti_join(variables, by = c("variable_id", "dataset_id"))
+
+    write.csv(miss_dd,
+        file = "data/missing_in_dictionaries.csv",
+        quote = TRUE,
+        row.names = FALSE
+    )
 
     datasets <- datasets |>
         left_join(collections |> select(collection_name, collection_id)) |>
