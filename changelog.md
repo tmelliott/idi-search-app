@@ -1,3 +1,9 @@
+# version 0.1.4
+
+**Updated 18 July 2022**
+
+- Fixes a small bug preventing variables matching search term but missing data dictionary information from displaying in search results
+
 # version 0.1.3
 
 **Updated 4 March 2022**
