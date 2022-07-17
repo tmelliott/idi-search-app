@@ -34,9 +34,9 @@ async function main(query, datasetId, page, size) {
           { variable_id: { contains: query } },
           { description: { contains: query } },
         ],
-        NOT: {
-          description: null,
-        },
+        // NOT: {
+        //   description: null,
+        // },
       },
     }
   }
