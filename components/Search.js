@@ -1,6 +1,7 @@
 import { FilterIcon } from "@heroicons/react/outline"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
+import { event } from "../lib/gtag"
 
 function Search() {
   const router = useRouter()
@@ -16,6 +17,7 @@ function Search() {
     const { s, ...rest } = router.query
     let q = { ...router.query, s: value }
     if (value === "") q = rest
+    if (value !== "") event("search", "general", value)
     router.push(
       {
         pathname: router.pathname,
