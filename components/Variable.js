@@ -108,8 +108,30 @@ function Variable({ d_id, v_id }) {
             </div>
           ))}
 
-        {/* <h4>Possible matches in other datasets</h4>
-        <p>Coming soon &hellip;</p> */}
+        {variable.matches.length > 0 && (
+          <>
+            <h4>This variable may have a different name in other refreshes:</h4>
+            <p>Coming soon &hellip;</p>
+          </>
+        )}
+
+        {variable.dataset.matches.length > 0 && (
+          <>
+            <h4>
+              This variable may be available in other refreshes in a difference
+              dataset:
+            </h4>
+            <ul>
+              {variable.dataset.matches.map((d) => (
+                <li>
+                  <Link key={d.dataset_id} href={`/datasets/${d.dataset_id}`}>
+                    <a>{d.dataset_name}</a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
       </div>
     </div>
   )

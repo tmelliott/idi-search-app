@@ -29,6 +29,16 @@ async function main(d_id, v_id) {
               },
             },
           },
+          alternate: {
+            select: {
+              match: true,
+            },
+          },
+          matches: {
+            select: {
+              table: true,
+            },
+          },
         },
       },
       alternate: {
@@ -51,6 +61,8 @@ async function main(d_id, v_id) {
     "20210720",
     "20211020",
   ]
+  if (!variable) return null
+
   let refreshes = variable.refreshes || null
   if (refreshes && refreshes.length) {
     refreshes = current_refreshes.map((r) => ({
@@ -61,10 +73,15 @@ async function main(d_id, v_id) {
     refreshes = null
   }
 
-  const { matches, alternate, ...vble } = variable
+  const { matches, alternate, dataset, ...vble } = variable
+  const { matches: tmatch, alternate: talt, ...tbl } = variable.dataset
 
   return {
     ...vble,
+    dataset: {
+      ...tbl,
+      matches: tmatch.map((m) => m.table).concat(talt.map((a) => a.match)),
+    },
     matches: matches
       .map((m) => m.variable)
       .concat(alternate.map((a) => a.match)),
@@ -87,5 +104,6 @@ export default async function collectionAPI(req, res) {
       await prisma.$disconnect()
     })
 
-  res.status(200).json(variable)
+  if (variable) res.status(200).json(variable)
+  res.status(400).end()
 }
