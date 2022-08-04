@@ -47,6 +47,7 @@
     - IDI MSD COVID Income Relief Payment
     - IDI MSD COVID Wage Subsidy (CWS)
     - IDI MSD Fixed Forecasting and Costing data
+    - IDI MSD Income Support Debt to Government data
     - IDI Youth Service Interventions (YST) data
 
 - id: HNZ
@@ -59,6 +60,8 @@
   collections:
     - IDI IR Employment Information - Employee data
     - IDI IR Tax Autocalc Information
+    - IDI SLA IRD Consolidated Data Extract data
+    - IDI SLA IRD Unit Record Monthly Data Extract data
 
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
@@ -70,6 +73,11 @@
   name: New Zealand Transport Authority
   collections:
     - IDI NZ Transport Authority Drivers Licence and Motor Vehicles Registers data
+
+- id: OT
+  name: Oranga Tamariki
+  collections:
+    - IDI Oranga Tamariki Child, Youth and Family (CYF) data
 
 - id: U
   name: Unknown

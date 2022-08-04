@@ -44,10 +44,12 @@ create_tables <- function() {
         select(agency_id, agency_name) |>
         distinct()
 
+    cat("\n **** Starting dictionary processing ...\n")
     suppressMessages({
         collection_tables <- files |>
-            lapply(readxl::read_excel, sheet = "Index") |>
             lapply(\(x) {
+                cat("\r* Processing dictionary", x, "...")
+                x <- readxl::read_excel(x, sheet = "Index")
                 di <- grep("Dataset Name", x$Index)
                 dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
                 tables <- x[(di + 1):dj, ]
@@ -57,8 +59,12 @@ create_tables <- function() {
                 colnames(tables) <- cn
                 col <- x[[2]][grep("Title", x$Index)]
                 schema <- x[[2]][grep("schema", tolower(x$Index))]
-                schema <- strsplit(schema, "].[", fixed = TRUE)[[1]]
-                schema <- gsub("\\[|\\]", "", schema)
+                if (length(schema) == 0) {
+                    schema <- c("UNKNOWN", tolower(make.names(col)))
+                } else {
+                    schema <- strsplit(schema, "].[", fixed = TRUE)[[1]]
+                    schema <- gsub("\\[|\\]", "", schema)
+                }
                 tables <- tables[!is.na(tables[[3]]), ]
                 colnames(tables) <- tolower(make.names(colnames(tables)))
                 list(
@@ -77,6 +83,7 @@ create_tables <- function() {
                 )
             })
     })
+    cat("\r* Processing complete!\n")
 
     collections <- map(collection_tables, "collection") |>
         bind_rows() |>
@@ -171,6 +178,7 @@ create_tables <- function() {
         right_join(
             variables |> select(dataset_id, database_id) |> distinct()
         ) |>
+        filter(!is.na(collection_name)) |>
         select(collection_name, database_id) |>
         distinct() |>
         left_join(collections) |>
@@ -192,22 +200,19 @@ create_tables <- function() {
 
     # # variables in dictionaries not in IDI:
     miss_idi <- variables |>
-        anti_join(refresh_vars, by = c("variable_id", "dataset_id"))
+        anti_join(refresh_vars, by = c("variable_id", "dataset_id")) |>
+        mutate(variable_name = gsub("\n", "", variable_name))
 
-    write.csv(miss_idi,
-        file = "data/missing_in_idi.csv",
-        quote = TRUE,
-        row.names = FALSE
+    write_csv(miss_idi |> select(variable_id, variable_name, dataset_id),
+        file = "data/missing_in_idi.csv"
     )
 
     # # variables in IDI not in dictionaries:
     miss_dd <- refresh_vars |>
         anti_join(variables, by = c("variable_id", "dataset_id"))
 
-    write.csv(miss_dd,
-        file = "data/missing_in_dictionaries.csv",
-        quote = TRUE,
-        row.names = FALSE
+    write_csv(miss_dd,
+        file = "data/missing_in_dictionaries.csv"
     )
 
     datasets <- datasets |>
@@ -247,6 +252,7 @@ create_tables <- function() {
     collections$description <- fix_text(collections$description)
     datasets$description <- fix_text(datasets$description)
     all_variables$description <- fix_text(all_variables$description)
+    all_variables$variable_name <- gsub("\n", "", all_variables$variable_name)
 
     agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
 
@@ -277,6 +283,11 @@ create_tables <- function() {
         mutate(
             notes = as.character(notes)
         )
+
+    if (isTRUE(Sys.getenv("DEPLOY") != "yes")) {
+        message("Building complete - to confirm run, specify environment variable DEPLOY=yes")
+        return()
+    }
 
     # create new table..
     library(RPostgreSQL)
