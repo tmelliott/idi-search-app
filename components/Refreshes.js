@@ -1,4 +1,5 @@
 import { CheckCircleIcon, XCircleIcon } from "@heroicons/react/outline"
+import moment from "moment"
 
 function Refreshes({ refreshes }) {
   return (
@@ -20,8 +21,7 @@ function Refreshes({ refreshes }) {
             ) : (
               <XCircleIcon className="h-4 mr-1" />
             )}
-            {r.refresh.substr(6, 2)}/{r.refresh.substr(4, 2)}/
-            {r.refresh.substr(0, 4)}
+            {moment(r.refresh, "YYYYMMDD").format("MMM YYYY")}
           </div>
         ))}
       </div>

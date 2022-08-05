@@ -50,6 +50,8 @@ async function main(d_id, v_id) {
     "20210420",
     "20210720",
     "20211020",
+    "202203",
+    "202206",
   ]
   let refreshes = variable.refreshes || null
   if (refreshes && refreshes.length) {
