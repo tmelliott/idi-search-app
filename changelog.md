@@ -1,3 +1,11 @@
+# version 0.1.5
+
+**Updated 5 August 2022**
+
+- Added several additional data dictinoaries
+- Added two most recent refreshes
+- Refresh now shows month-year (instead of day/month/year)
+
 # version 0.1.4
 
 **Updated 18 July 2022**
