@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client"
 
 const prisma = new PrismaClient()
 
-async function main(query, datasetId, page, size) {
+async function main(query, include, datasetId, page, size) {
   let args = {
     select: {
       variable_id: true,
@@ -48,6 +48,44 @@ async function main(query, datasetId, page, size) {
         dataset_id: datasetId,
       },
     }
+  }
+
+  const current_refreshes = [
+    "20200120",
+    "20200720",
+    "20201020",
+    "20210420",
+    "20210720",
+    "20211020",
+    "202203",
+    "202206",
+  ]
+
+  if (include !== "all") {
+    const inc = include.split("_")
+    const incs = inc.map((d) => {
+      switch (d) {
+        case "refreshes":
+          return current_refreshes
+        case "adhoc":
+          return "Adhoc"
+        case "meta":
+          return "Metadata"
+        case "rnd":
+          return "RnD"
+      }
+    })
+    const incsWhere = incs.flat().map((inc) => ({
+      refreshes: {
+        contains: inc,
+      },
+    }))
+
+    const newwhere = {
+      AND: { ...(args.where || null) },
+      OR: incsWhere,
+    }
+    args.where = newwhere
   }
 
   const { where } = args

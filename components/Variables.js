@@ -6,13 +6,20 @@ import PagedTable from "./PagedTable"
 import { LinkIcon } from "@heroicons/react/outline"
 import useVariables from "./hooks/useVariables"
 
-function Variables({ term, datasetId, limit = 10, title = "Variables" }) {
+function Variables({
+  term,
+  include,
+  datasetId,
+  limit = 10,
+  title = "Variables",
+}) {
   const router = useRouter()
 
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(limit)
   const { variables, isError, isLoading } = useVariables(
     term,
+    include,
     datasetId,
     page + 1,
     size
@@ -25,7 +32,7 @@ function Variables({ term, datasetId, limit = 10, title = "Variables" }) {
 
   useEffect(() => {
     setAllVars({})
-  }, [limit, term, datasetId])
+  }, [limit, term, include, datasetId])
 
   const showVariable = (variable) => {
     router.push(
