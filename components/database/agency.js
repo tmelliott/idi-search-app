@@ -1,8 +1,5 @@
 // return info about a single agency, and it's collections
-
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+import { prisma } from "../../lib/db"
 
 async function main(id) {
   const agency = await prisma.agencies.findUnique({

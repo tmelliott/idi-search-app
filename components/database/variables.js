@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+import { prisma } from "../../lib/db"
 
 async function main(query, include, datasetId, page, size) {
   let args = {
@@ -112,11 +110,12 @@ async function main(query, include, datasetId, page, size) {
 
 export default async function getVariables(
   query = "",
+  include = "all",
   datasetId = "",
   page = 1,
   size = 10000
 ) {
-  const variables = await main(query, datasetId, page, size)
+  const variables = await main(query, include, datasetId, page, size)
     .catch((e) => {
       throw e
     })

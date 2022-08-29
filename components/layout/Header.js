@@ -1,5 +1,6 @@
 import Link from "next/link"
 import {
+  ChartBarIcon,
   HomeIcon,
   InformationCircleIcon,
   MenuIcon,
@@ -56,6 +57,12 @@ function Header() {
           <a className="link">
             <InformationCircleIcon className="" />
             About
+          </a>
+        </Link>
+        <Link href="/stats">
+          <a className="link">
+            <ChartBarIcon className="" />
+            Quick Stats
           </a>
         </Link>
         <Link href="/help">

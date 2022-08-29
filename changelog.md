@@ -1,3 +1,10 @@
+# version 0.x
+
+**TBA**
+
+- Added database filtering (to only show variables in a selected database)
+- Added 'Quick Stats' page
+
 # version 0.1.5
 
 **Updated 5 August 2022**
