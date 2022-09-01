@@ -1,54 +1,21 @@
-- id: NZPOL
-  name: New Zealand Police
-  collections:
-    - IDI NZ Police data
-    - IDI NZ Police data NIA Links Data
-    - IDI POL Recorded Crime Offenders data
-
-- id: MOH
-  name: Ministry of Health
-  collections:
-    - IDI MOH SOCRATES Disability Support Services data
-    - IDI OPC Osteoarthritis Primary Care data
-    - IDI MOH interRai data
-    - New Zealand Health Survey
-
-- id: MOJ
-  name: Ministry of Justice
-  collections:
-    - IDI Ministry of Justice Criminal Court Charges data
-
 - id: ACC
   name: Accident Compensation Corporation
   collections:
     - IDI ACC Injury Claims data
 
-- id: SNZ
-  name: Statistics New Zealand
-  collections:
-    - IDI Experimental Adminstrative Population Census data
-    - IDI Census of Population and Dwellings data 2013
-    - IDI Census of Population and Dwellings data 2018
-    - IDI Disability Survey data
-    - IDI HES Net Worth Supplement
-    - IDI HLFS Supplements
-    - IDI HLFS Wellbeing Supp
-    - IDI Iwi Affiliation Census 2018
+- id: ACM
+  name: Auckland City Mission
+
+- id: Corrections
+  name: Corrections
 
 - id: Customs
   name: New Zealand Customs Service
   collections:
     - IDI Customs International Travel and Migration data
 
-- id: MSD
-  name: Ministry of Social Development
-  collections:
-    - IDI Early Start Project data
-    - IDI MSD COVID Income Relief Payment
-    - IDI MSD COVID Wage Subsidy (CWS)
-    - IDI MSD Fixed Forecasting and Costing data
-    - IDI MSD Income Support Debt to Government data
-    - IDI Youth Service Interventions (YST) data
+- id: DIA
+  name: Department of Internal Affairs
 
 - id: HNZ
   name: Kāinga Ora / Housing New Zealand
@@ -63,11 +30,50 @@
     - IDI SLA IRD Consolidated Data Extract data
     - IDI SLA IRD Unit Record Monthly Data Extract data
 
+- id: KO
+  name: Kainga Ora
+
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
   collections:
     - IDI MBIE Immigration data
     - IDI MBIE Tenancy Bond data
+
+- id: MOE
+  name: Ministry of Education
+
+- id: MOH
+  name: Ministry of Health
+  collections:
+    - IDI MOH SOCRATES Disability Support Services data
+    - IDI OPC Osteoarthritis Primary Care data
+    - IDI MOH interRai data
+    - New Zealand Health Survey
+
+- id: MOJ
+  name: Ministry of Justice
+  collections:
+    - IDI Ministry of Justice Criminal Court Charges data
+
+- id: MSD
+  name: Ministry of Social Development
+  collections:
+    - IDI Early Start Project data
+    - IDI MSD COVID Income Relief Payment
+    - IDI MSD COVID Wage Subsidy (CWS)
+    - IDI MSD Fixed Forecasting and Costing data
+    - IDI MSD Income Support Debt to Government data
+    - IDI Youth Service Interventions (YST) data
+
+- id: NZPOL
+  name: New Zealand Police
+  collections:
+    - IDI NZ Police data
+    - IDI NZ Police data NIA Links Data
+    - IDI POL Recorded Crime Offenders data
+
+- id: NZR
+  name: NZ Rugby
 
 - id: NZTA
   name: New Zealand Transport Authority
@@ -78,6 +84,27 @@
   name: Oranga Tamariki
   collections:
     - IDI Oranga Tamariki Child, Youth and Family (CYF) data
+
+- id: SNZ
+  name: Statistics New Zealand
+  collections:
+    - IDI Experimental Adminstrative Population Census data
+    - IDI Census of Population and Dwellings data 2013
+    - IDI Census of Population and Dwellings data 2018
+    - IDI Disability Survey data
+    - IDI HES Net Worth Supplement
+    - IDI HLFS Supplements
+    - IDI HLFS Wellbeing Supp
+    - IDI Iwi Affiliation Census 2018
+
+- id: SportNZ
+  name: Sport NZ
+
+- id: WiseGroup
+  name: WiseGroup
+
+- id: M
+  name: Multiple
 
 - id: U
   name: Unknown

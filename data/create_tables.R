@@ -258,6 +258,30 @@ create_tables <- function() {
 
     all_variables <- all_variables |> select(-type_dict)
 
+    collection_schemas <- readxl::read_excel('data/collection_schemas.xlsx') |>
+        setNames(c("collection_name", "agency_name", "schema"))
+
+    ## add in dataset IDs
+    missing_collection_datasets <- datasets |>
+        filter(is.na(collection_id)) |>
+        pull(dataset_id) |>
+        stringr::str_replace("IDI_Adhoc.", "") |>
+        purrr::map_dfr(\(x) {
+            x <- stringi::stri_split(x, regex = "\\.")[[1]]
+            tibble(schema = x[1], dataset_id = paste(x[-1], collapse = "."))
+        }) |>
+        left_join(collection_schemas) |>
+        filter(!is.na(collection_name)) |>
+        mutate(collection_id = schema) |>
+        select(-schema) |>
+        left_join(datasets)
+
+    datasets |> filter(!is.na(collection_id)) |>
+        bind_rows(missing_collection_datasets) |>
+        View()
+
+
+
     ### --- renamed variables/tables information
     match_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
         filter(name == "Renamed variables and tables")
