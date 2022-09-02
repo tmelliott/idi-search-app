@@ -254,7 +254,7 @@ create_tables <- function() {
     all_variables$description <- fix_text(all_variables$description)
     all_variables$variable_name <- gsub("\n", "", all_variables$variable_name)
 
-    agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
+    # agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
 
     all_variables <- all_variables |> select(-type_dict)
 
@@ -265,22 +265,32 @@ create_tables <- function() {
     missing_collection_datasets <- datasets |>
         filter(is.na(collection_id)) |>
         pull(dataset_id) |>
-        stringr::str_replace("IDI_Adhoc.", "") |>
         purrr::map_dfr(\(x) {
-            x <- stringi::stri_split(x, regex = "\\.")[[1]]
-            tibble(schema = x[1], dataset_id = paste(x[-1], collapse = "."))
+            y <- stringr::str_replace(x, "IDI_Adhoc.", "")
+            y <- stringi::stri_split(y, regex = "\\.")[[1]]
+            tibble(schema = y[1], dataset_id = x) #paste(y[-1], collapse = "."))
         }) |>
         left_join(collection_schemas) |>
-        filter(!is.na(collection_name)) |>
         mutate(collection_id = schema) |>
         select(-schema) |>
         left_join(datasets)
 
-    datasets |> filter(!is.na(collection_id)) |>
-        bind_rows(missing_collection_datasets) |>
-        View()
+    datasets <- datasets |>
+        filter(!dataset_id %in% missing_collection_datasets$dataset_id) |>
+        bind_rows(missing_collection_datasets)
 
+    collections <- collection_schemas |>
+        filter(schema %in% missing_collection_datasets$collection_id) |>
+        mutate(
+            collection_id = schema,
+            agency_id = agency_name,
+            database_id = "",
+            description = ""
+        ) |>
+        select(-schema, -agency_name) |>
+        bind_rows(collections)
 
+    agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
 
     ### --- renamed variables/tables information
     match_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
@@ -308,86 +318,101 @@ create_tables <- function() {
             notes = as.character(notes)
         )
 
-    if (isTRUE(Sys.getenv("DEPLOY") != "yes")) {
-        message("Building complete - to confirm run, specify environment variable DEPLOY=yes")
-        return()
-    }
+    readr::write_csv(variables, "data/out/variables.csv")
+    readr::write_csv(datasets, "data/out/datasets.csv")
+    readr::write_csv(collections, "data/out/collections.csv")
+    readr::write_csv(agencies, "data/out/agencies.csv")
+    readr::write_csv(match_variables, "data/out/variable_matches.csv")
+    readr::write_csv(match_tables, "data/out/table_matches.csv")
 
-    # create new table..
-    library(RPostgreSQL)
-    library(dbplyr)
+    # if (isTRUE(Sys.getenv("DEPLOY") != "yes")) {
+    #     message("Building complete - to confirm run, specify environment variable DEPLOY=yes")
+    #     return()
+    # }
 
-    dotenv::load_dot_env()
+    # stop("NOT WORKING")
 
-    con <- dbConnect(
-        PostgreSQL(),
-        user = Sys.getenv("PG_USER"),
-        password = Sys.getenv("PG_PASSWORD"),
-        host = Sys.getenv("PG_HOST"),
-        port = Sys.getenv("PG_PORT"),
-        dbname = Sys.getenv("PG_DATABASE")
-    )
+    # # create new table..
+    # # TODO: pscale deployment request, etc ...
 
-    dbExecute(con, "
-    DROP TABLE IF EXISTS variables;
-    DROP TABLE IF EXISTS datasets;
-    DROP TABLE IF EXISTS collections;
-    DROP TABLE IF EXISTS agencies;
-    DROP TABLE IF EXISTS variable_matches;
-    DROP TABLE IF EXISTS table_matches;
-    ")
+    # library(RMySQL)
+    # library(dbplyr)
 
-    # CREATE TABLE idi_tables (
-    #     schema TEXT PRIMARY KEY,
-    #     collection TEXT,
-    #     \"table\" TEXT,
-    #     description TEXT
-    # );
-    # CREATE TABLE idi_vars (
-    #     schema TEXT PRIMARY KEY,
-    #     \"table\" TEXT REFERENCES idi_tables (schema),
-    #     name TEXT,
-    #     description TEXT,
-    #     information TEXT
-    # );
+    # dotenv::load_dot_env()
+
+    # con <- dbConnect(
+    #     MySQL(),
+    #     user = "root",
+    #     host = "127.0.0.1",
+    #     port = 3309,
+    #     dbname = "idisearchapp"
+    #     # user = Sys.getenv("PG_USER"),
+    #     # password = Sys.getenv("PG_PASSWORD"),
+    #     # host = Sys.getenv("PG_HOST"),
+    #     # port = Sys.getenv("PG_PORT"),
+    #     # dbname = Sys.getenv("PG_DATABASE")
+    # )
+
+    # # dbExecute(con, "DROP TABLE IF EXISTS variables;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS datasets;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS collections;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS agencies;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS variable_matches;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS table_matches;")
+
+    # # CREATE TABLE idi_tables (
+    # #     schema TEXT PRIMARY KEY,
+    # #     collection TEXT,
+    # #     \"table\" TEXT,
+    # #     description TEXT
+    # # );
+    # # CREATE TABLE idi_vars (
+    # #     schema TEXT PRIMARY KEY,
+    # #     \"table\" TEXT REFERENCES idi_tables (schema),
+    # #     name TEXT,
+    # #     description TEXT,
+    # #     information TEXT
+    # # );
+    # # ")
+
+    # db_insert_into(con, "agencies", agencies)
+
+    # dbWriteTable(con, "agencies", agencies, row.names = FALSE)
+    # dbWriteTable(con, "collections", collections, row.names = FALSE)
+    # dbWriteTable(con, "datasets", datasets, row.names = FALSE)
+    # dbWriteTable(con, "variables", all_variables, row.names = FALSE)
+    # dbWriteTable(con, "variable_matches", match_variables, row.names = FALSE)
+    # dbWriteTable(con, "table_matches", match_tables, row.names = FALSE)
+
+    # dbExecute(con, "
+    # ALTER TABLE agencies
+    #     ADD CONSTRAINT agencies_pkey
+    #     PRIMARY KEY (agency_id);
+
+    # ALTER TABLE collections
+    #     ADD CONSTRAINT collections_pkey
+    #     PRIMARY KEY (collection_id);
+    # ALTER TABLE collections
+    #     ADD CONSTRAINT collection_agency_fkey
+    #     FOREIGN KEY (agency_id)
+    #     REFERENCES agencies (agency_id);
+
+    # ALTER TABLE datasets
+    #     ADD CONSTRAINT datasets_pkey
+    #     PRIMARY KEY (dataset_id);
+    # ALTER TABLE datasets
+    #     ADD CONSTRAINT dataset_collection_fkey
+    #     FOREIGN KEY (collection_id)
+    #     REFERENCES collections (collection_id);
+
+    # ALTER TABLE variables
+    #     ADD CONSTRAINT variables_pkey
+    #     PRIMARY KEY (variable_id, dataset_id);
+    # ALTER TABLE variables
+    #     ADD CONSTRAINT variable_dataset_fkey
+    #     FOREIGN KEY (dataset_id)
+    #     REFERENCES datasets (dataset_id);
     # ")
-
-    dbWriteTable(con, "agencies", agencies, row.names = FALSE)
-    dbWriteTable(con, "collections", collections, row.names = FALSE)
-    dbWriteTable(con, "datasets", datasets, row.names = FALSE)
-    dbWriteTable(con, "variables", all_variables, row.names = FALSE)
-    dbWriteTable(con, "variable_matches", match_variables, row.names = FALSE)
-    dbWriteTable(con, "table_matches", match_tables, row.names = FALSE)
-
-    dbExecute(con, "
-    ALTER TABLE agencies
-        ADD CONSTRAINT agencies_pkey
-        PRIMARY KEY (agency_id);
-
-    ALTER TABLE collections
-        ADD CONSTRAINT collections_pkey
-        PRIMARY KEY (collection_id);
-    ALTER TABLE collections
-        ADD CONSTRAINT collection_agency_fkey
-        FOREIGN KEY (agency_id)
-        REFERENCES agencies (agency_id);
-
-    ALTER TABLE datasets
-        ADD CONSTRAINT datasets_pkey
-        PRIMARY KEY (dataset_id);
-    ALTER TABLE datasets
-        ADD CONSTRAINT dataset_collection_fkey
-        FOREIGN KEY (collection_id)
-        REFERENCES collections (collection_id);
-
-    ALTER TABLE variables
-        ADD CONSTRAINT variables_pkey
-        PRIMARY KEY (variable_id, dataset_id);
-    ALTER TABLE variables
-        ADD CONSTRAINT variable_dataset_fkey
-        FOREIGN KEY (dataset_id)
-        REFERENCES datasets (dataset_id);
-    ")
 
 }
 
