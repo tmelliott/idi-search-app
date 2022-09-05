@@ -30,6 +30,9 @@ create_tables <- function() {
     close(pb)
     files <- list.files(fdir, full.names = TRUE)
 
+    # saveRDS(files, "data/cache/files.rda")
+    # files <- readRDS("data/cache/files.rda")
+
     agency_collection <- yaml::read_yaml("data/agencies.yaml") |>
         lapply(\(x) {
             tibble(
@@ -71,7 +74,7 @@ create_tables <- function() {
                     collection = tibble(
                         collection_schema = schema[2],
                         collection_name = col,
-                        database_id = schema[1],
+                        database_id = stringr::str_trim(tolower(schema[1])),
                         description = x[[2]][grep("Introduction", x$Index)],
                     ),
                     tables = tables |>
@@ -115,13 +118,19 @@ create_tables <- function() {
         ) |>
         mutate(
             dataset_id = gsub("*", "", dataset_id, fixed = TRUE),
-            dataset_name = gsub("*", "", dataset_name, fixed = TRUE)
+            dataset_name = gsub("*", "", dataset_name, fixed = TRUE),
+            dataset_id = gsub("^\\[?IDI\\_Adhoc\\]?\\.", "", dataset_id)
         ) |>
-        select(dataset_id, dataset_name, collection_name, description, reference_period)
+        select(dataset_id, dataset_name, collection_name, description, reference_period) |>
+        mutate(dataset_id = stringr::str_trim(tolower(dataset_id)))
 
     if (any(grepl("\n", datasets$dataset_id))) {
         datasets <- datasets |>
             mutate(dataset_id = gsub("\n", "__", dataset_id))
+    }
+
+    if (any((datasets$dataset_id |> tolower() |> table()) > 1L)) {
+        stop("Duplicate dataset IDs")
     }
 
     repair_colnames <- function(x, expr, name) {
@@ -172,7 +181,16 @@ create_tables <- function() {
             database_id = ifelse(str_detect(schema, "IDI_Adhoc"), "IDI_Adhoc", "IDI_Clean")
         ) |>
         select(variable_id, variable_name, dataset_id, database_id, description, information,
-            primary_key, type, size)
+            primary_key, type, size) |>
+        mutate(
+            variable_id = stringr::str_trim(tolower(variable_id)),
+            dataset_id = stringr::str_trim(tolower(dataset_id))
+        ) |>
+        distinct()
+
+    if (any((with(variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1L)) {
+        stop("Duplicate variable-dataset IDs")
+    }
 
     collections <- datasets |>
         right_join(
@@ -188,15 +206,27 @@ create_tables <- function() {
         select(collection_id, collection_name, agency_id, database_id, description)
 
     variables <- variables |>
-        distinct() |>
         select(-database_id) |>
         rename(type_dict = type)
 
     source("data/link_refresh_data.R")
     refresh_vars <- get_refresh_vars()
 
+    # saveRDS(refresh_vars, "data/cache/refresh_vars.rda")
+    # refresh_vars <- readRDS("data/cache/refresh_vars.rda")
+
+    if (any((with(refresh_vars, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
+        stop("Duplicate refresh_vars")
+    }
+
     all_variables <- variables |>
-        full_join(refresh_vars, by = c("variable_id", "dataset_id"))
+        full_join(refresh_vars |> mutate(dataset_id = stringr::str_trim(tolower(dataset_id))),
+            by = c("variable_id", "dataset_id")
+        )
+
+    if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
+        stop("Duplicate variables (after join)")
+    }
 
     # # variables in dictionaries not in IDI:
     miss_idi <- variables |>
@@ -231,7 +261,7 @@ create_tables <- function() {
         stop("DUPLICATED VARIABLES")
     }
 
-    isin <- all_variables$dataset_id %in% datasets$dataset_id
+    # isin <- all_variables$dataset_id %in% datasets$dataset_id
     # if (!all(isin)) {
     #     print(all_variables[!isin, c("variable_id", "dataset_id")] |> as.data.frame())
     #     warning("NOT ALL VARS IN DATABASE")
@@ -261,6 +291,10 @@ create_tables <- function() {
     collection_schemas <- readxl::read_excel('data/collection_schemas.xlsx') |>
         setNames(c("collection_name", "agency_name", "schema"))
 
+    # # duplicate dataset IDs (with different case)
+    # datasets$dataset_id <- tolower(datasets$dataset_id)
+    # all_variables$dataset_id <- tolower(all_variables$dataset_id)
+
     ## add in dataset IDs
     missing_collection_datasets <- datasets |>
         filter(is.na(collection_id)) |>
@@ -270,13 +304,29 @@ create_tables <- function() {
             y <- stringi::stri_split(y, regex = "\\.")[[1]]
             tibble(schema = y[1], dataset_id = x) #paste(y[-1], collapse = "."))
         }) |>
-        left_join(collection_schemas) |>
-        mutate(collection_id = schema) |>
-        select(-schema) |>
-        left_join(datasets)
+        # left_join(collection_schemas) |>
+        fuzzyjoin::fuzzy_left_join(collection_schemas, by = "schema",
+            \(x, y) tolower(x) == tolower(y)
+        ) |>
+        mutate(collection_id = schema.x) |>
+        select(-schema.x, -schema.y) |>
+        # left_join(datasets)
+        mutate(
+            dataset_id = gsub("}", "\\}", gsub("{", "\\{", dataset_id, fixed = TRUE), fixed = TRUE)
+        ) |>
+        fuzzyjoin::fuzzy_left_join(datasets,
+            by = c("dataset_id", "collection_id"),
+            \(x, y) tolower(x) == tolower(y)
+        ) |>
+        mutate(
+            dataset_id = dataset_id.x,
+            collection_id = collection_id.x
+        ) |>
+        select(dataset_id, dataset_name, collection_id, description, reference_period)
 
-    datasets <- datasets |>
-        filter(!dataset_id %in% missing_collection_datasets$dataset_id) |>
+    all_datasets <- datasets |>
+        filter(!is.na(collection_id)) |>
+        # filter(!tolower(dataset_id) %in% tolower(missing_collection_datasets$dataset_id)) |>
         bind_rows(missing_collection_datasets)
 
     collections <- collection_schemas |>
@@ -290,7 +340,22 @@ create_tables <- function() {
         select(-schema, -agency_name) |>
         bind_rows(collections)
 
+    # datasets <- datasets |> select(-collection_name, -agency_name)
+
     agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
+
+    ## fix up variable dataset_ids
+    # variables <- all_variables |>
+    #     fuzzyjoin::fuzzy_left_join(datasets,
+    #         by = "dataset_id",
+    #         \(x, y) tolower(x) == tolower(y)
+    #     ) |>
+    #     mutate(
+    #         dataset_id = ifelse(is.null(dataset_id.y), dataset_id.x, dataset_id.y),
+    #         description = description.x
+    #     ) |>
+    #     select(-dataset_id.x, -dataset_id.y, -description.x, -description.y)
+
 
     ### --- renamed variables/tables information
     match_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
@@ -318,7 +383,7 @@ create_tables <- function() {
             notes = as.character(notes)
         )
 
-    readr::write_csv(variables, "data/out/variables.csv")
+    readr::write_csv(all_variables, "data/out/variables.csv")
     readr::write_csv(datasets, "data/out/datasets.csv")
     readr::write_csv(collections, "data/out/collections.csv")
     readr::write_csv(agencies, "data/out/agencies.csv")

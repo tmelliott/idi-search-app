@@ -43,7 +43,7 @@ model variables {
   variable_name String?
   dataset_id    String
   description   String?  @db.LongText
-  information   String?
+  information   String?  @db.LongText
   primary_key   Boolean?
   type          String?
   size          Int?
