@@ -57,22 +57,25 @@ write_tables <- function() {
             )
         )
 
-        variables <- readr::read_csv('data/out/variables.csv')
-        dbExecute(con, "DELETE FROM variables;")
-        dbExecute(
-            con,
-            paste(
-                "INSERT INTO variables VALUES",
-                glue::glue_sql_collapse(
-                    with(variables,
-                        glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
-                    ),
-                    ", "
-                )
+    })
+
+    ## TODO: refactor this to use UPDATE, INSERT, and DELETE instad of DELETE + INSERT
+    ## (for better maintenance downtime)
+
+    variables <- readr::read_csv('data/out/variables.csv')
+    dbExecute(con, "DELETE FROM variables;")
+    dbExecute(
+        con,
+        paste(
+            "INSERT INTO variables VALUES",
+            glue::glue_sql_collapse(
+                with(variables,
+                    glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
+                ),
+                ", "
             )
         )
-
-    })
+    )
 
 
 }
