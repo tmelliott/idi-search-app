@@ -322,14 +322,20 @@ create_tables <- function() {
             dataset_id = dataset_id.x,
             collection_id = collection_id.x
         ) |>
-        select(dataset_id, dataset_name, collection_id, description, reference_period)
+        select(dataset_id, dataset_name, collection_id, description, reference_period) |>
+        mutate(
+            dataset_name = ifelse(is.na(dataset_name),
+                gsub(".+\\.", "", dataset_id),
+                dataset_name
+            )
+        )
 
     all_datasets <- datasets |>
         filter(!is.na(collection_id)) |>
         # filter(!tolower(dataset_id) %in% tolower(missing_collection_datasets$dataset_id)) |>
         bind_rows(missing_collection_datasets)
 
-    collections <- collection_schemas |>
+    all_collections <- collection_schemas |>
         filter(schema %in% missing_collection_datasets$collection_id) |>
         mutate(
             collection_id = schema,
@@ -342,7 +348,7 @@ create_tables <- function() {
 
     # datasets <- datasets |> select(-collection_name, -agency_name)
 
-    agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
+    all_agencies <- agencies |> filter(agency_id %in% unique(all_collections$agency_id))
 
     ## fix up variable dataset_ids
     # variables <- all_variables |>
@@ -383,10 +389,13 @@ create_tables <- function() {
             notes = as.character(notes)
         )
 
+    all_variables <- all_variables |>
+        filter(dataset_id %in% unique(all_datasets$dataset_id))
+
     readr::write_csv(all_variables, "data/out/variables.csv")
-    readr::write_csv(datasets, "data/out/datasets.csv")
-    readr::write_csv(collections, "data/out/collections.csv")
-    readr::write_csv(agencies, "data/out/agencies.csv")
+    readr::write_csv(all_datasets, "data/out/datasets.csv")
+    readr::write_csv(all_collections, "data/out/collections.csv")
+    readr::write_csv(all_agencies, "data/out/agencies.csv")
     readr::write_csv(match_variables, "data/out/variable_matches.csv")
     readr::write_csv(match_tables, "data/out/table_matches.csv")
 

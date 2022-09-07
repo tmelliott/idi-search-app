@@ -6,12 +6,13 @@ export const getServerSideProps = async ({ res }) => {
   const variables = await prisma.variables.findMany({
     select: {
       refreshes: true,
-      dataset_id: true,
-      dataset: {
-        select: {
-          collection_id: true,
-        },
-      },
+      description: true,
+      // dataset_id: true,
+      // dataset: {
+      //   select: {
+      //     collection_id: true,
+      //   },
+      // },
     },
   })
 
@@ -26,12 +27,10 @@ export const getServerSideProps = async ({ res }) => {
   }
   variables.map((v) => {
     if (!v.refreshes) {
-      tally("Unknown", v.dataset.collection_id !== null)
+      tally("Unknown", v.description !== null)
       return
     }
-    v.refreshes
-      .split(",")
-      .map((d) => tally(d, v.dataset.collection_id !== null))
+    v.refreshes.split(",").map((d) => tally(d, v.description !== null))
   })
 
   const stats = [...dbs.keys()].sort().map((k) => ({
@@ -82,6 +81,7 @@ const StatsPage = ({ stats }) => {
         <div className="w-[80%] flex flex-col gap-2">
           {stats.map((stat) => (
             <div
+              key={stat.name}
               className={`flex h-[20px] items-center gap-2 ${
                 stat.name === "Adhoc" && "mt-4"
               }`}

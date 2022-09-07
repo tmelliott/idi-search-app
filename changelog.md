@@ -1,9 +1,11 @@
-# version 0.x
+# version 0.2.0
 
 **TBA**
 
 - Added database filtering (to only show variables in a selected database)
 - Added 'Quick Stats' page
+- Added some manual dataset/collection/agency information
+- Migrated to MySQL: case-insensitive database resulting in more accurate matching; the consequence is that all IDs are cooerced to lower-case
 
 # version 0.1.5
 

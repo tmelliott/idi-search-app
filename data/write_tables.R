@@ -3,7 +3,6 @@ library(dbplyr)
 library(pbapply)
 
 write_tables <- function() {
-
     con <- dbConnect(
         MySQL(),
         user = "root",
@@ -13,8 +12,7 @@ write_tables <- function() {
     )
 
     DBI::dbWithTransaction(con, {
-
-        agencies <- readr::read_csv('data/out/agencies.csv')
+        agencies <- readr::read_csv("data/out/agencies.csv")
         dbExecute(con, "DELETE FROM agencies;")
         dbExecute(
             con,
@@ -27,55 +25,57 @@ write_tables <- function() {
             )
         )
 
-        collections <- readr::read_csv('data/out/collections.csv')
+        collections <- readr::read_csv("data/out/collections.csv")
         dbExecute(con, "DELETE FROM collections;")
         dbExecute(
             con,
             glue::glue_sql(
                 "INSERT INTO collections VALUES ",
                 glue::glue_sql_collapse(
-                    with(collections,
-                        glue::glue_sql("({collection_id}, {agency_id}, {agency_id}, {database_id}, {description})", .con = con)
+                    with(
+                        collections,
+                        glue::glue_sql("({collection_id}, {collection_name}, {agency_id}, {database_id}, {description})", .con = con)
                     ),
                     ", "
                 )
             )
         )
 
-        datasets <- readr::read_csv('data/out/datasets.csv')
+        datasets <- readr::read_csv("data/out/datasets.csv")
         dbExecute(con, "DELETE FROM datasets;")
         dbExecute(
             con,
             paste(
                 "INSERT INTO datasets VALUES",
                 glue::glue_sql_collapse(
-                    with(datasets,
+                    with(
+                        datasets,
                         glue::glue_sql("({dataset_id}, {dataset_name}, {collection_id}, {description}, {reference_period})", .con = con)
                     ),
                     ", "
                 )
             )
         )
-
     })
 
     ## TODO: refactor this to use UPDATE, INSERT, and DELETE instad of DELETE + INSERT
     ## (for better maintenance downtime)
 
-    variables <- readr::read_csv('data/out/variables.csv')
+    variables <- readr::read_csv("data/out/variables.csv")
     dbExecute(con, "DELETE FROM variables;")
     dbExecute(
         con,
         paste(
             "INSERT INTO variables VALUES",
             glue::glue_sql_collapse(
-                with(variables,
+                with(
+                    variables,
                     glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
                 ),
                 ", "
             )
         )
     )
-
-
 }
+
+write_tables()
