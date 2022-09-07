@@ -11,8 +11,8 @@ export const getStaticProps = async () => {
   })
 
   const dbs = new Map()
-  console.log(dbs)
   const tally = (db, hasMeta) => {
+    console.log(dbs)
     if (dbs.has(db))
       dbs.set(db, [
         dbs.get(db).at(0) + 1,
