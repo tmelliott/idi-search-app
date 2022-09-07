@@ -12,7 +12,6 @@ export const getStaticProps = async () => {
 
   const dbs = new Map()
   const tally = (db, hasMeta) => {
-    console.log("DBs looks like ...", dbs)
     if (dbs.has(db))
       dbs.set(db, [dbs.get(db)[0] + 1, dbs.get(db)[1] + (hasMeta ? 1 : 0)])
     else dbs.set(db, [1, hasMeta ? 1 : 0])
