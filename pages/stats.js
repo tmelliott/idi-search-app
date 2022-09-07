@@ -18,12 +18,10 @@ export const getStaticProps = async () => {
 
   const dbs = new Map()
   const tally = (db, hasMeta) => {
-    if (dbs.has(db))
-      dbs.set(db, [
-        dbs.get(db).at(0) + 1,
-        dbs.get(db).at(1) + (hasMeta ? 1 : 0),
-      ])
-    else dbs.set(db, [1, hasMeta ? 1 : 0])
+    if (dbs.has(db)) {
+      const dbi = dbs.get(db)
+      dbs.set(db, [dbi.at(0) + 1, dbi.at(1) + (hasMeta ? 1 : 0)])
+    } else dbs.set(db, [1, hasMeta ? 1 : 0])
   }
   variables.map((v) => {
     if (!v.refreshes) {
