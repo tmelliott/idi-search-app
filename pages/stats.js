@@ -14,10 +14,7 @@ export const getStaticProps = async () => {
   const tally = (db, hasMeta) => {
     console.log("DBs looks like ...", dbs)
     if (dbs.has(db))
-      dbs.set(db, [
-        dbs.get(db).at(0) + 1,
-        dbs.get(db).at(1) + (hasMeta ? 1 : 0),
-      ])
+      dbs.set(db, [dbs.get(db)[0] + 1, dbs.get(db)[1] + (hasMeta ? 1 : 0)])
     else dbs.set(db, [1, hasMeta ? 1 : 0])
   }
   variables.map((v) => {
@@ -30,8 +27,8 @@ export const getStaticProps = async () => {
 
   const stats = [...dbs.keys()].sort().map((k) => ({
     name: k,
-    variables: dbs.get(k).at(0),
-    withMetadata: dbs.get(k).at(1),
+    variables: dbs.get(k)[0],
+    withMetadata: dbs.get(k)[1],
   }))
 
   return {
