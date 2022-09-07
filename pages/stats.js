@@ -2,7 +2,7 @@ import moment from "moment"
 import Head from "next/head"
 import { prisma } from "../lib/db"
 
-export const getServerSideProps = async ({ res }) => {
+export const getStaticProps = async () => {
   const variables = await prisma.variables.findMany({
     select: {
       refreshes: true,
@@ -39,10 +39,10 @@ export const getServerSideProps = async ({ res }) => {
     withMetadata: dbs.get(k).at(1),
   }))
 
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=86400, stale-while-revalidate=200000"
-  )
+  // res.setHeader(
+  //   "Cache-Control",
+  //   "public, s-maxage=86400, stale-while-revalidate=200000"
+  // )
 
   return {
     props: {
