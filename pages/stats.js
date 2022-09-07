@@ -7,21 +7,18 @@ export const getStaticProps = async () => {
     select: {
       refreshes: true,
       description: true,
-      // dataset_id: true,
-      // dataset: {
-      //   select: {
-      //     collection_id: true,
-      //   },
-      // },
     },
   })
 
   const dbs = new Map()
+  console.log(dbs)
   const tally = (db, hasMeta) => {
-    if (dbs.has(db)) {
-      const dbi = dbs.get(db)
-      dbs.set(db, [dbi.at(0) + 1, dbi.at(1) + (hasMeta ? 1 : 0)])
-    } else dbs.set(db, [1, hasMeta ? 1 : 0])
+    if (dbs.has(db))
+      dbs.set(db, [
+        dbs.get(db).at(0) + 1,
+        dbs.get(db).at(1) + (hasMeta ? 1 : 0),
+      ])
+    else dbs.set(db, [1, hasMeta ? 1 : 0])
   }
   variables.map((v) => {
     if (!v.refreshes) {
@@ -36,11 +33,6 @@ export const getStaticProps = async () => {
     variables: dbs.get(k).at(0),
     withMetadata: dbs.get(k).at(1),
   }))
-
-  // res.setHeader(
-  //   "Cache-Control",
-  //   "public, s-maxage=86400, stale-while-revalidate=200000"
-  // )
 
   return {
     props: {
