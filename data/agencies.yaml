@@ -30,9 +30,6 @@
     - IDI SLA IRD Consolidated Data Extract data
     - IDI SLA IRD Unit Record Monthly Data Extract data
 
-- id: KO
-  name: Kainga Ora
-
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
   collections:
@@ -104,7 +101,7 @@
   name: WiseGroup
 
 - id: M
-  name: Multiple
+  name: Miscellaneous
 
 - id: U
   name: Unknown

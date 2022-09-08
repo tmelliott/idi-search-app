@@ -288,7 +288,46 @@ create_tables <- function() {
 
     all_variables <- all_variables |> select(-type_dict)
 
-    collection_schemas <- readxl::read_excel('data/collection_schemas.xlsx') |>
+    ## manually assign some collections to datasets ...
+    mc_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
+        filter(name == "Manual dataset collections")
+    drive_download(
+        mc_file$id[1],
+        path = file.path(fdir, "manual_collections.xlsx"),
+        overwrite = TRUE
+    )
+    manual_collections <- readxl::read_excel(
+        file.path(fdir, "manual_collections.xlsx"),
+        sheet = "Collections"
+    )
+    manual_datasets <- readxl::read_excel(
+        file.path(fdir, "manual_collections.xlsx"),
+        sheet = "Datasets"
+    )
+
+    manual_datasets <- datasets |>
+        filter(is.na(collection_id)) |>
+        select(-collection_id) |>
+        left_join(manual_datasets) |>
+        filter(!is.na(collection_id))
+
+    datasets <- datasets |>
+        filter(!dataset_id %in% manual_datasets$dataset_id) |>
+        bind_rows(manual_datasets)
+
+    collections <- manual_collections |>
+        filter(!collection_id %in% collections$collection_id) |>
+        bind_rows(collections)
+
+
+    cs_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
+        filter(name == "Collection schemas")
+    drive_download(
+        cs_file$id[1],
+        path = file.path(fdir, "collection_schemas.xlsx")
+    )
+    collection_schemas <-
+        readxl::read_excel(file.path(fdir, "collection_schemas.xlsx")) |>
         setNames(c("collection_name", "agency_name", "schema"))
 
     # # duplicate dataset IDs (with different case)
