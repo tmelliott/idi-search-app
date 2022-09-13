@@ -63,6 +63,13 @@ write_tables <- function() {
 
     variables <- readr::read_csv("data/out/variables.csv")
     dbExecute(con, "DELETE FROM variables;")
+    # n <- 10000
+    # N <- ceiling(nrow(variables) / N)
+    # pb <- txtProgressBar(max = N, style = 3L)
+    # for (i in 1:N) {
+    #     setTxtProgressBar(pb, i)
+    #     ii <- 1:N + N * (i - 1)
+    #     ii <- ii[ii <= nrow(variables)]
     dbExecute(
         con,
         paste(
@@ -76,6 +83,8 @@ write_tables <- function() {
             )
         )
     )
+    # }
+    # close(pb)
 }
 
 write_tables()

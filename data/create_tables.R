@@ -1,7 +1,7 @@
 create_tables <- function() {
-
-    if (getRversion() < numeric_version('4.1.0'))
+    if (getRversion() < numeric_version("4.1.0")) {
         stop("Script required R >= 4.1.0.")
+    }
 
     # create tables to load into POSTGRES database ... limit (for now) of 10k rows
     library(tidyverse)
@@ -96,9 +96,11 @@ create_tables <- function() {
 
     if (any(collections$agency_id == "U")) {
         cat("The following collections have yet to be assigned agencies (in agencies.yaml)\n")
-        collections |> filter(agency_id == "U") |>
+        collections |>
+            filter(agency_id == "U") |>
             select(collection_name) |>
-            as.data.frame() |> print()
+            as.data.frame() |>
+            print()
     }
 
     # temporary:
@@ -129,7 +131,11 @@ create_tables <- function() {
             mutate(dataset_id = gsub("\n", "__", dataset_id))
     }
 
-    if (any((datasets$dataset_id |> tolower() |> table()) > 1L)) {
+    dup_ids <- datasets$dataset_id |>
+        tolower() |>
+        table()
+    if (any(dup_ids > 1L)) {
+        print(dup_ids[dup_ids > 1])
         stop("Duplicate dataset IDs")
     }
 
@@ -165,8 +171,10 @@ create_tables <- function() {
                 mutate(size = as.integer(size)) |>
                 select(
                     any_of(
-                        c("schema", "variable_id", "variable_name", "type",
-                        "size", "description", "information", "primary_key")
+                        c(
+                            "schema", "variable_id", "variable_name", "type",
+                            "size", "description", "information", "primary_key"
+                        )
                     )
                 )
         }) |>
@@ -180,8 +188,10 @@ create_tables <- function() {
             dataset_id = str_replace(dataset_id, "\n", "__"),
             database_id = ifelse(str_detect(schema, "IDI_Adhoc"), "IDI_Adhoc", "IDI_Clean")
         ) |>
-        select(variable_id, variable_name, dataset_id, database_id, description, information,
-            primary_key, type, size) |>
+        select(
+            variable_id, variable_name, dataset_id, database_id, description, information,
+            primary_key, type, size
+        ) |>
         mutate(
             variable_id = stringr::str_trim(tolower(variable_id)),
             dataset_id = stringr::str_trim(tolower(dataset_id))
@@ -341,10 +351,11 @@ create_tables <- function() {
         purrr::map_dfr(\(x) {
             y <- stringr::str_replace(x, "IDI_Adhoc.", "")
             y <- stringi::stri_split(y, regex = "\\.")[[1]]
-            tibble(schema = y[1], dataset_id = x) #paste(y[-1], collapse = "."))
+            tibble(schema = y[1], dataset_id = x) # paste(y[-1], collapse = "."))
         }) |>
         # left_join(collection_schemas) |>
-        fuzzyjoin::fuzzy_left_join(collection_schemas, by = "schema",
+        fuzzyjoin::fuzzy_left_join(collection_schemas,
+            by = "schema",
             \(x, y) tolower(x) == tolower(y)
         ) |>
         mutate(collection_id = schema.x) |>
@@ -407,17 +418,19 @@ create_tables <- function() {
         filter(name == "Renamed variables and tables")
     drive_download(match_file$id[1], path = file.path(fdir, "matches.xlsx"))
     match_tables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
-        sheet = "Tables") |>
+        sheet = "Tables"
+    ) |>
         rename(
-            table_id = 'Table Name',
-            alt_table_id = 'Alternative Name',
-            notes = 'Notes'
+            table_id = "Table Name",
+            alt_table_id = "Alternative Name",
+            notes = "Notes"
         ) |>
         mutate(
             notes = as.character(notes)
         )
     match_variables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
-        sheet = "Variables") |>
+        sheet = "Variables"
+    ) |>
         rename(
             table_id = "Table",
             variable_id = "Variable Name",
@@ -526,7 +539,6 @@ create_tables <- function() {
     #     FOREIGN KEY (dataset_id)
     #     REFERENCES datasets (dataset_id);
     # ")
-
 }
 
 create_tables()

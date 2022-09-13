@@ -38,6 +38,9 @@
 
 - id: MOE
   name: Ministry of Education
+  collections:
+    - MOE National Student Index (NSI) data
+    - MOE tertiary education data
 
 - id: MOH
   name: Ministry of Health
