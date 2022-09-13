@@ -8,3 +8,14 @@
 ## TODO:
 
 - schema_updated file as fallback for collection and agency information
+
+## To discuss (13/09/22):
+
+- when is the refresh 'finalised' (before releasing), and can we get a list of variables early to pre-build the DB? This can be on our staging branch and merged across to the live version once the release is live in the IDI ...
+- any more DDs?
+- latest variable changes update was more detailed than normal (according to Barry?) - how likely would we be to get a standardised process for this? i.e., a spreadsheet of variable name changes we can read in?
+- many variables are admin/IT vars, probably never useful to researchers - is there maybe a list of tables we can _exclude_?
+
+- clean_read_classifications - remove
+- Quick Stats - duplicate for datasets
+- Rename "datasets" to "data tables"
