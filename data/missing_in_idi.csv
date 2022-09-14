@@ -660,7 +660,6 @@ paydate_filing_period,Paydate filing period,ei_e_{quarter}_{timestamp}
 dol_app_occ_region_text,dol_app_occ_region_text,dol_clean.application_points
 dol_edu_provider_name_text,dol_edu_provider_name_text,dol_clean.student_edprovider
 moe_crs_compulsory_course_costs_,moe_crs_compulsory_course_costs_,moe_clean.course
-NA,NA,moe_clean.course
 moe_crs_pbrf_course_complete_yea,moe_crs_pbrf_course_complete_yea,moe_clean.course
 moe_com_year_nbr,moe_com_year_nbr,moe_clean.qualification
 snz_uid,snz_uid,moe_clean.qualification

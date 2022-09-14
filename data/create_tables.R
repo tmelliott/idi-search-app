@@ -444,6 +444,11 @@ create_tables <- function() {
     all_variables <- all_variables |>
         filter(dataset_id %in% unique(all_datasets$dataset_id))
 
+    ## Now filter out a bunch of databases we don't want ...
+    all_variables <- all_variables |>
+        dplyr::filter(grepl("^data\\.|^idi\\_adhoc|^clean\\_read|\\_clean\\.", dataset_id)) |>
+        dplyr::filter(!grepl("^clean_read_classifications", dataset_id))
+
     readr::write_csv(all_variables, "data/out/variables.csv")
     readr::write_csv(all_datasets, "data/out/datasets.csv")
     readr::write_csv(all_collections, "data/out/collections.csv")
