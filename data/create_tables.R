@@ -230,7 +230,9 @@ create_tables <- function() {
     }
 
     all_variables <- variables |>
-        full_join(refresh_vars |> mutate(dataset_id = stringr::str_trim(tolower(dataset_id))),
+        right_join(
+            refresh_vars |>
+                mutate(dataset_id = stringr::str_trim(tolower(dataset_id))),
             by = c("variable_id", "dataset_id")
         )
 

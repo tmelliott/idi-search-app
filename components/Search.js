@@ -114,14 +114,14 @@ function Search() {
               Adhoc
             </div>
 
-            <div className="flex gap-2 items-center">
+            {/* <div className="flex gap-2 items-center">
               <input
                 type="checkbox"
                 checked={searchMetadata}
                 onChange={(e) => setSearchMetadata(e.target.checked)}
               />{" "}
               Metadata
-            </div>
+            </div> */}
 
             <div className="flex gap-2 items-center">
               <input
