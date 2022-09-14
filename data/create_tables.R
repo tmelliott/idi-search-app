@@ -451,6 +451,9 @@ create_tables <- function() {
         dplyr::filter(grepl("^data\\.|^idi\\_adhoc|^clean\\_read|\\_clean\\.", dataset_id)) |>
         dplyr::filter(!grepl("^clean_read_classifications", dataset_id))
 
+    all_datasets <- all_datasets |> filter(dataset_id %in% all_variables$dataset_id)
+    all_collections <- all_collections |> filter(collection_id %in% all_datasets$collection_id)
+
     readr::write_csv(all_variables, "data/out/variables.csv")
     readr::write_csv(all_datasets, "data/out/datasets.csv")
     readr::write_csv(all_collections, "data/out/collections.csv")
