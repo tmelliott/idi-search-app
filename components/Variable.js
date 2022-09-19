@@ -111,7 +111,18 @@ function Variable({ d_id, v_id }) {
         {variable.matches.length > 0 && (
           <>
             <h4>This variable may have a different name in other refreshes:</h4>
-            <p>Coming soon &hellip;</p>
+            <ul>
+              {variable.matches.map((v) => (
+                <li>
+                  <Link
+                    key={v.variable_id + "_" + v.table_id}
+                    href={`/?v=variable&d=${v.table_id}&id=${v.variable_id}`}
+                  >
+                    <a>{v.variable_id}</a>
+                  </Link>
+                </li>
+              ))}
+            </ul>
           </>
         )}
 

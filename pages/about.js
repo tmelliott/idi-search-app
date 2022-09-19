@@ -56,17 +56,10 @@ function about() {
 
         <p>
           We are also open to collboration, so if you or your team would like to
-          contribute to IDI Search in some way, please get in touch with{` `}
-          <a href="https://terourou.org/team/tom/?utm_medium=web&utm_source=idisearch&utm_content=about">
-            Tom
-          </a>
-          ,{" "}
-          <a href="https://terourou.org/team/barry/?utm_medium=web&utm_source=idisearch&utm_content=about">
-            Barry
-          </a>
-          , or{" "}
-          <a href="https://terourou.org/team/eileen/?utm_medium=web&utm_source=idisearch&utm_content=about">
-            Eileen
+          contribute to IDI Search in some way, please get in touch with us at
+          {` `}
+          <a href="mailto:terourounz@gmail.com?subject=IDI Search App">
+            terourounz@gmail.com
           </a>
           .
         </p>

@@ -85,6 +85,41 @@ write_tables <- function() {
     )
     # }
     # close(pb)
+
+
+    DBI::dbWithTransaction(con, {
+        table_matches <- readr::read_csv("data/out/table_matches.csv")
+        dbExecute(con, "DELETE FROM table_matches;")
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO table_matches VALUES",
+                glue::glue_sql_collapse(
+                    with(
+                        table_matches,
+                        glue::glue_sql("({table_id}, {alt_table_id}, {notes})", .con = con)
+                    ),
+                    ", "
+                )
+            )
+        )
+
+        variable_matches <- readr::read_csv("data/out/variable_matches.csv")
+        dbExecute(con, "DELETE FROM variable_matches;")
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO variable_matches VALUES",
+                glue::glue_sql_collapse(
+                    with(
+                        variable_matches,
+                        glue::glue_sql("({table_id}, {variable_id}, {alt_variable_id}, {notes})", .con = con)
+                    ),
+                    ", "
+                )
+            )
+        )
+    })
 }
 
 write_tables()
