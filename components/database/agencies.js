@@ -9,8 +9,8 @@ async function main(query) {
       ...args,
       where: {
         OR: [
-          { agency_id: { contains: query, mode: "insensitive" } },
-          { agency_name: { contains: query, mode: "insensitive" } },
+          { agency_id: { contains: query } },
+          { agency_name: { contains: query } },
         ],
       },
     }

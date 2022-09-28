@@ -1,11 +1,12 @@
-generator client {
-  provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch"]
+datasource db {
+  provider             = "mysql"
+  url                  = env("DATABASE_URL")
+  referentialIntegrity = "prisma"
 }
 
-datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["referentialIntegrity"]
 }
 
 model agencies {
@@ -19,7 +20,7 @@ model collections {
   collection_name String?
   agency_id       String?
   database_id     String?
-  description     String?
+  description     String?    @db.LongText
   agency          agencies?  @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
   datasets        datasets[]
 }
@@ -28,7 +29,7 @@ model datasets {
   dataset_id       String       @id
   dataset_name     String?
   collection_id    String?
-  description      String?
+  description      String?      @db.LongText
   reference_period String?
   collection       collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
   variables        variables[]
@@ -41,8 +42,8 @@ model variables {
   variable_id   String
   variable_name String?
   dataset_id    String
-  description   String?
-  information   String?
+  description   String?  @db.LongText
+  information   String?  @db.LongText
   primary_key   Boolean?
   type          String?
   size          Int?

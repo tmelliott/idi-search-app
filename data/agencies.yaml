@@ -30,9 +30,6 @@
     - IDI SLA IRD Consolidated Data Extract data
     - IDI SLA IRD Unit Record Monthly Data Extract data
 
-- id: KO
-  name: Kainga Ora
-
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
   collections:
@@ -41,6 +38,9 @@
 
 - id: MOE
   name: Ministry of Education
+  collections:
+    - MOE National Student Index (NSI) data
+    - MOE tertiary education data
 
 - id: MOH
   name: Ministry of Health
@@ -104,7 +104,7 @@
   name: WiseGroup
 
 - id: M
-  name: Multiple
+  name: Miscellaneous
 
 - id: U
   name: Unknown

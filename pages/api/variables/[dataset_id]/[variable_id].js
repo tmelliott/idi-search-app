@@ -43,14 +43,26 @@ async function main(d_id, v_id) {
       },
       alternate: {
         select: {
-          match: true,
+          table_id: true,
+          alt_variable_id: true,
         },
       },
       matches: {
         select: {
-          variable: true,
+          table_id: true,
+          variable_id: true,
         },
       },
+      // alternate: {
+      //   select: {
+      //     variable: true,
+      //   },
+      // },
+      // matches: {
+      //   select: {
+      //     match: true,
+      //   },
+      // },
     },
   })
   const current_refreshes = [
@@ -63,7 +75,8 @@ async function main(d_id, v_id) {
     "202203",
     "202206",
   ]
-  if (!variable) return null
+
+  if (!variable) return {}
 
   let refreshes = variable.refreshes || null
   if (refreshes && refreshes.length) {
@@ -85,8 +98,13 @@ async function main(d_id, v_id) {
       matches: tmatch.map((m) => m.table).concat(talt.map((a) => a.match)),
     },
     matches: matches
-      .map((m) => m.variable)
-      .concat(alternate.map((a) => a.match)),
+      // .map((m) => m.match)
+      .concat(
+        alternate.map((a) => ({
+          table_id: a.table_id,
+          variable_id: a.alt_variable_id,
+        }))
+      ),
     database: variable.refreshes
       ? variable.refreshes.match("Adhoc|RnD|Metadata")
         ? variable.refreshes

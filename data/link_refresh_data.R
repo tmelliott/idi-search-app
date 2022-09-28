@@ -60,7 +60,9 @@ get_refresh_vars <- function() {
             ) |>
             select(database, dataset_id, variable_id, type) |>
             mutate(
-                database = gsub("IDI(_Clean)?_", "", database)
+                database = gsub("IDI(_Clean)?_", "", database),
+                variable_id = stringr::str_trim(tolower(variable_id)),
+                dataset_id = stringr::str_trim(tolower(dataset_id))
             ) |>
             distinct()
     })

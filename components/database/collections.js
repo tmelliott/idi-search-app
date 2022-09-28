@@ -18,8 +18,8 @@ async function main(query, agencyId) {
       ...args,
       where: {
         OR: [
-          { collection_name: { contains: query, mode: "insensitive" } },
-          { description: { contains: query, mode: "insensitive" } },
+          { collection_name: { contains: query } },
+          { description: { contains: query } },
         ],
       },
     }
