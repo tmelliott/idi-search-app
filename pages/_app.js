@@ -6,6 +6,7 @@ import Script from "next/script"
 import * as gtag from "../lib/gtag"
 
 import MainLayout from "../components/layout/Layout"
+import PlausibleProvider from "next-plausible"
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter()
@@ -29,8 +30,14 @@ function MyApp({ Component, pageProps }) {
   const Layout = Component.Layout || MainLayout
 
   return (
-    <>
-      <Script
+    <PlausibleProvider
+      domain="idisearch.terourou.org"
+      customDomain="https://plausible.terourou.org"
+      selfHosted="true"
+      // trackLocalhost="true"
+      // enabled="true"
+    >
+      {/* <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
       />
@@ -47,7 +54,7 @@ function MyApp({ Component, pageProps }) {
             });
           `,
         }}
-      />
+      /> */}
       <Layout>
         <Component
           {...pageProps}
@@ -55,7 +62,7 @@ function MyApp({ Component, pageProps }) {
           setFilterTerm={setFilterTerm}
         />
       </Layout>
-    </>
+    </PlausibleProvider>
   )
 }
 
