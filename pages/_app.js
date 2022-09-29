@@ -32,6 +32,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <PlausibleProvider
       domain="idisearch.terourou.org"
+      customDomain="https://plausible.terourou.org"
       selfHosted="true"
       // trackLocalhost="true"
       enabled="true"
