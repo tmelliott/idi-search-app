@@ -35,7 +35,7 @@ function MyApp({ Component, pageProps }) {
       customDomain="https://plausible.terourou.org"
       selfHosted="true"
       // trackLocalhost="true"
-      // enabled="true"
+      enabled="true"
     >
       {/* <Script
         strategy="afterInteractive"
