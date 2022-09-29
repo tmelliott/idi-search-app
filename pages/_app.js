@@ -34,9 +34,10 @@ function MyApp({ Component, pageProps }) {
       domain="idisearch.terourou.org"
       customDomain="https://plausible.terourou.org"
       selfHosted="true"
+      trackLocalhost="true"
       enabled="true"
     >
-      {/* <Script
+      <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
       />
@@ -53,7 +54,7 @@ function MyApp({ Component, pageProps }) {
             });
           `,
         }}
-      /> */}
+      />
       <Layout>
         <Component
           {...pageProps}

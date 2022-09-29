@@ -1,4 +1,5 @@
 import { CogIcon, FilterIcon } from "@heroicons/react/outline"
+import { usePlausible } from "next-plausible"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
 import { event } from "../lib/gtag"
@@ -15,6 +16,8 @@ function Search() {
   const [searchMetadata, setSearchMetadata] = useState(true)
   const [searchRnD, setSearchRnD] = useState(true)
 
+  const plausible = usePlausible()
+
   useEffect(() => {
     setValue(router.query.s || "")
   }, [router.query])
@@ -26,7 +29,14 @@ function Search() {
       s: value,
     }
     if (value === "") q = rest
-    if (value !== "") event("search", "general", value)
+    if (value !== "") {
+      event("search", "general", value)
+      plausible("Search", {
+        props: {
+          term: value,
+        },
+      })
+    }
     if (!(searchRefreshes && searchAdhoc && searchMetadata && searchRnD)) {
       let include = []
       if (searchRefreshes) include.push("refreshes")
