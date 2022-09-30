@@ -34,7 +34,7 @@ function MyApp({ Component, pageProps }) {
       domain="idisearch.terourou.org"
       customDomain="https://info.terourou.org"
       selfHosted="true"
-      trackLocalhost="true"
+      // trackLocalhost="true"
       enabled="true"
       // scriptProps={{
       //   src: "/js/script.js",
