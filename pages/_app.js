@@ -36,10 +36,6 @@ function MyApp({ Component, pageProps }) {
       selfHosted="true"
       // trackLocalhost="true"
       enabled="true"
-      // scriptProps={{
-      //   src: "/js/script.js",
-      //   "data-api": "/api/event",
-      // }}
     >
       <Script
         strategy="afterInteractive"
