@@ -64,18 +64,27 @@ function Variables({
     {
       name: "dataset_name",
       label: "Dataset / Collection",
-      value: (r) => {
-        return r.dataset ? (
-          <>
-            <div>{r.dataset.dataset_name}</div>
-            <div className="text-xxs">
-              {r.dataset.collection?.collection_name}
+      value: (r) => (
+        <div className="flex items-center justify-between gap-1 mr-2">
+          {r.dataset ? (
+            <div className="">
+              <div>{r.dataset.dataset_name}</div>
+              <div className="text-xxs">
+                {r.dataset.collection ? (
+                  r.dataset.collection.collection_name
+                ) : (
+                  <>&nbsp;</>
+                )}
+              </div>
             </div>
-          </>
-        ) : (
-          <div className="text-gray-400 italic text-xxs">Not available</div>
-        )
-      },
+          ) : (
+            <div className="text-gray-400 italic text-xxs">Not available</div>
+          )}
+          {r.metadata && (
+            <span className="h-2 w-2 rounded-full bg-green-400"></span>
+          )}
+        </div>
+      ),
     },
   ]
 
@@ -108,6 +117,7 @@ function Variables({
             ...v,
             dataset_name: v.dataset?.dataset_name,
             id: v.variable_id + "__" + v.dataset_id,
+            metadata: v.description,
           }))}
           n={Math.min(limit, allVars.n)}
           rowHandler={showVariable}

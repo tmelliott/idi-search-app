@@ -5,6 +5,7 @@ async function main(query, agencyId) {
     select: {
       collection_id: true,
       collection_name: true,
+      description: true,
       agency: {
         select: {
           agency_name: true,

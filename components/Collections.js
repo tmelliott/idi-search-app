@@ -30,7 +30,18 @@ function Collections({ term, agencyId, limit, title = "Collections" }) {
       name: "collection_name",
       label: "Collection",
     },
-    { name: "agency_name", label: "Agency" },
+    {
+      name: "agency_name",
+      label: "Agency",
+      value: (r) => (
+        <div className="flex items-center justify-between gap-1 mr-2">
+          <div className="flex-1">{r.agency_name}</div>
+          {r.metadata && (
+            <span className="h-2 w-2 rounded-full bg-green-400"></span>
+          )}
+        </div>
+      ),
+    },
   ]
 
   return (
@@ -58,6 +69,7 @@ function Collections({ term, agencyId, limit, title = "Collections" }) {
             ...c,
             agency_name: c.agency.agency_name,
             id: c.collection_id,
+            metadata: c.description !== null,
           }))}
           n={limit}
           rowHandler={showCollection}

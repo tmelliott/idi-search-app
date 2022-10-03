@@ -6,6 +6,7 @@ async function main(query, include, datasetId, page, size) {
       variable_id: true,
       variable_name: true,
       dataset_id: true,
+      description: true,
       dataset: {
         select: {
           dataset_name: true,
@@ -103,6 +104,7 @@ async function main(query, include, datasetId, page, size) {
     vars: variables.map((v) => ({
       ...v,
       v_id: v.variable_id + "_" + v.dataset_id,
+      description: v.description ? true : false,
     })),
     n,
   }

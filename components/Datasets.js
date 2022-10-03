@@ -52,10 +52,8 @@ function Datasets({ term, collectionId, limit, title = "Datasets" }) {
               <div className="">&nbsp;</div>
             </div>
           )}
-          {r.metadata ? (
+          {r.metadata && (
             <span className="h-2 w-2 rounded-full bg-green-400"></span>
-          ) : (
-            <span className="h-2 w-2 rounded-full bg-red-400"></span>
           )}
         </div>
       ),
