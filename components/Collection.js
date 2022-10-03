@@ -19,7 +19,7 @@ function Collection({ id, term }) {
 
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
 
-  let description = collection.description
+  let description = collection.description || ""
   if (highlight) {
     const searchMask = `(${highlight})`
     const regEx = new RegExp(searchMask, "ig")

@@ -40,7 +40,7 @@ get_refresh_vars <- function() {
         all_vars <-
             lapply(files, \(x) {
                 sheets <- readxl::excel_sheets(x)
-                sheets <- sheets[!grepl("disclaimer", tolower(sheets))]
+                sheets <- sheets[grepl("^varlist", tolower(sheets))]
                 lapply(sheets, \(z) {
                     readxl::read_excel(x, sheet = z) |>
                         select(TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
@@ -60,7 +60,9 @@ get_refresh_vars <- function() {
             ) |>
             select(database, dataset_id, variable_id, type) |>
             mutate(
-                database = gsub("IDI(_Clean)?_", "", database)
+                database = gsub("IDI(_Clean)?_", "", database),
+                variable_id = stringr::str_trim(tolower(variable_id)),
+                dataset_id = stringr::str_trim(tolower(dataset_id))
             ) |>
             distinct()
     })

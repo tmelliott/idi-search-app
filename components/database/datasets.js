@@ -1,6 +1,4 @@
-import { PrismaClient } from "@prisma/client"
-
-const prisma = new PrismaClient()
+import { prisma } from "../../lib/db"
 
 async function main(query, collectionId) {
   let args = {
@@ -27,8 +25,8 @@ async function main(query, collectionId) {
       ...args,
       where: {
         OR: [
-          { dataset_name: { contains: query, mode: "insensitive" } },
-          { description: { contains: query, mode: "insensitive" } },
+          { dataset_name: { contains: query } },
+          { description: { contains: query } },
         ],
       },
     }

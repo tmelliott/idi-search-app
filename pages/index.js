@@ -11,6 +11,7 @@ import DualLayout from "../components/layout/DualLayout"
 function Home() {
   const router = useRouter()
   const filterTerm = router.query.s || ""
+  const filterInclude = router.query.include || "all"
 
   return (
     <>
@@ -21,7 +22,12 @@ function Home() {
       <Agencies term={filterTerm} limit={2} />
       <Collections term={filterTerm} limit={3} />
       <Datasets term={filterTerm} limit={5} />
-      <Variables term={filterTerm} limit={10} linkTo="/variables" />
+      <Variables
+        term={filterTerm}
+        include={filterInclude}
+        limit={10}
+        linkTo="/variables"
+      />
     </>
   )
 }

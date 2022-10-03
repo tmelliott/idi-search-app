@@ -1,3 +1,15 @@
+# version 0.2.0
+
+**Updated 4 October 2022**
+
+- Added database filtering (to only show variables in a selected database)
+- Added 'Quick Stats' page
+- Added some manual dataset/collection/agency information
+- Migrated to MySQL: case-insensitive database resulting in more accurate matching; the consequence is that all IDs are cooerced to lower-case
+- Use server-side caching and static generation of common pages to speed up initial load times
+- Remove ~6k variables that are not available or useful to researchers
+- Add metadata status indicator dot to collection, dataset, and variable lists
+
 # version 0.1.5
 
 **Updated 5 August 2022**

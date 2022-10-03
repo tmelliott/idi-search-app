@@ -11,11 +11,11 @@ function about() {
         <h2>About IDI Search</h2>
 
         <p>
-          IDI Search is a web app that uses data from IDI Data Dictionaries
-          shared to us by Stats NZ. The data is stored in a database, which can
-          then be searched using the web app. The goal of this app is to allow
-          researchers to discover what data is available to use in research
-          projects.
+          IDI Search is a web app that allows researchers to search for
+          variables that are available in the IDI and, in some cases, metadata
+          about these variables. The app uses data from IDI variables and Data
+          Dictionaries shared with us by Stats NZ. The data are stored in a
+          database which can then be searched using the web app.
         </p>
 
         <p>
@@ -56,17 +56,10 @@ function about() {
 
         <p>
           We are also open to collboration, so if you or your team would like to
-          contribute to IDI Search in some way, please get in touch with{` `}
-          <a href="https://terourou.org/team/tom/?utm_medium=web&utm_source=idisearch&utm_content=about">
-            Tom
-          </a>
-          ,{" "}
-          <a href="https://terourou.org/team/barry/?utm_medium=web&utm_source=idisearch&utm_content=about">
-            Barry
-          </a>
-          , or{" "}
-          <a href="https://terourou.org/team/eileen/?utm_medium=web&utm_source=idisearch&utm_content=about">
-            Eileen
+          contribute to IDI Search in some way, please get in touch with us at
+          {` `}
+          <a href="mailto:terourounz@gmail.com?subject=IDI Search App">
+            terourounz@gmail.com
           </a>
           .
         </p>

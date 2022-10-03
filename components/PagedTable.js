@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useRef } from "react"
 import { useEffect } from "react"
 import { useState } from "react"
 import Link from "next/link"
@@ -9,6 +9,7 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/outline"
+import { Input } from "@material-ui/core"
 
 // table with pagination if items.length > n
 function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl, lazy }) {
@@ -18,6 +19,8 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl, lazy }) {
   const [page, setPage] = useState(lazy ? lazy.page : 0)
   const total = lazy ? lazy.n : rows.length
   const nPage = Math.ceil(total / limit)
+
+  const goRef = useRef()
 
   useEffect(() => {
     if (lazy) {
@@ -110,13 +113,34 @@ function PagedTable({ cols, rows, n, rowHandler = () => {}, moreUrl, lazy }) {
             className={iconClass + (page === 0 ? " opacity-0" : "")}
             onClick={() => setPage(Math.max(0, page - 1))}
           />
-          <div className="px-2 flex-1 text-center text-xs">
+          <div className="px-2 flex-1 text-center text-xs flex items-center justify-center">
             Page {page + 1} of {nPage}
             {moreUrl && (
               <Link href={moreUrl}>
                 <a className="mx-2 text-blue-500 italic">View more</a>
               </Link>
             )}
+            <div className="w-5"></div>
+            Jump to page
+            <div className="w-2"></div>
+            <Input
+              defaultValue={""}
+              size="small"
+              inputRef={goRef}
+              className="w-10"
+            />
+            <div
+              className="bg-gray-200 p-1 px-2 ml-2 text-xs rounded cursor-pointer hover:bg-gray-300"
+              onClick={() => {
+                if (goRef.current === undefined) return
+                const to = parseInt(goRef.current.value)
+                if (isNaN(to)) return
+                setPage(Math.min(nPage - 1, Math.max(0, to)))
+                goRef.current.value = ""
+              }}
+            >
+              Go
+            </div>
           </div>
           <ChevronRightIcon
             className={iconClass + (page === nPage - 1 ? " opacity-0" : "")}

@@ -1,7 +1,7 @@
 create_tables <- function() {
-
-    if (getRversion() < numeric_version('4.1.0'))
+    if (getRversion() < numeric_version("4.1.0")) {
         stop("Script required R >= 4.1.0.")
+    }
 
     # create tables to load into POSTGRES database ... limit (for now) of 10k rows
     library(tidyverse)
@@ -30,6 +30,9 @@ create_tables <- function() {
     close(pb)
     files <- list.files(fdir, full.names = TRUE)
 
+    # saveRDS(files, "data/cache/files.rda")
+    # files <- readRDS("data/cache/files.rda")
+
     agency_collection <- yaml::read_yaml("data/agencies.yaml") |>
         lapply(\(x) {
             tibble(
@@ -44,10 +47,12 @@ create_tables <- function() {
         select(agency_id, agency_name) |>
         distinct()
 
+    cat("\n **** Starting dictionary processing ...\n")
     suppressMessages({
         collection_tables <- files |>
-            lapply(readxl::read_excel, sheet = "Index") |>
             lapply(\(x) {
+                cat("\r* Processing dictionary", x, "...")
+                x <- readxl::read_excel(x, sheet = "Index")
                 di <- grep("Dataset Name", x$Index)
                 dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
                 tables <- x[(di + 1):dj, ]
@@ -57,15 +62,19 @@ create_tables <- function() {
                 colnames(tables) <- cn
                 col <- x[[2]][grep("Title", x$Index)]
                 schema <- x[[2]][grep("schema", tolower(x$Index))]
-                schema <- strsplit(schema, "].[", fixed = TRUE)[[1]]
-                schema <- gsub("\\[|\\]", "", schema)
+                if (length(schema) == 0) {
+                    schema <- c("UNKNOWN", tolower(make.names(col)))
+                } else {
+                    schema <- strsplit(schema, "].[", fixed = TRUE)[[1]]
+                    schema <- gsub("\\[|\\]", "", schema)
+                }
                 tables <- tables[!is.na(tables[[3]]), ]
                 colnames(tables) <- tolower(make.names(colnames(tables)))
                 list(
                     collection = tibble(
                         collection_schema = schema[2],
                         collection_name = col,
-                        database_id = schema[1],
+                        database_id = stringr::str_trim(tolower(schema[1])),
                         description = x[[2]][grep("Introduction", x$Index)],
                     ),
                     tables = tables |>
@@ -77,6 +86,7 @@ create_tables <- function() {
                 )
             })
     })
+    cat("\r* Processing complete!\n")
 
     collections <- map(collection_tables, "collection") |>
         bind_rows() |>
@@ -86,9 +96,11 @@ create_tables <- function() {
 
     if (any(collections$agency_id == "U")) {
         cat("The following collections have yet to be assigned agencies (in agencies.yaml)\n")
-        collections |> filter(agency_id == "U") |>
+        collections |>
+            filter(agency_id == "U") |>
             select(collection_name) |>
-            as.data.frame() |> print()
+            as.data.frame() |>
+            print()
     }
 
     # temporary:
@@ -108,13 +120,23 @@ create_tables <- function() {
         ) |>
         mutate(
             dataset_id = gsub("*", "", dataset_id, fixed = TRUE),
-            dataset_name = gsub("*", "", dataset_name, fixed = TRUE)
+            dataset_name = gsub("*", "", dataset_name, fixed = TRUE),
+            dataset_id = gsub("^\\[?IDI\\_Adhoc\\]?\\.", "", dataset_id)
         ) |>
-        select(dataset_id, dataset_name, collection_name, description, reference_period)
+        select(dataset_id, dataset_name, collection_name, description, reference_period) |>
+        mutate(dataset_id = stringr::str_trim(tolower(dataset_id)))
 
     if (any(grepl("\n", datasets$dataset_id))) {
         datasets <- datasets |>
             mutate(dataset_id = gsub("\n", "__", dataset_id))
+    }
+
+    dup_ids <- datasets$dataset_id |>
+        tolower() |>
+        table()
+    if (any(dup_ids > 1L)) {
+        print(dup_ids[dup_ids > 1])
+        stop("Duplicate dataset IDs")
     }
 
     repair_colnames <- function(x, expr, name) {
@@ -149,8 +171,10 @@ create_tables <- function() {
                 mutate(size = as.integer(size)) |>
                 select(
                     any_of(
-                        c("schema", "variable_id", "variable_name", "type",
-                        "size", "description", "information", "primary_key")
+                        c(
+                            "schema", "variable_id", "variable_name", "type",
+                            "size", "description", "information", "primary_key"
+                        )
                     )
                 )
         }) |>
@@ -164,13 +188,25 @@ create_tables <- function() {
             dataset_id = str_replace(dataset_id, "\n", "__"),
             database_id = ifelse(str_detect(schema, "IDI_Adhoc"), "IDI_Adhoc", "IDI_Clean")
         ) |>
-        select(variable_id, variable_name, dataset_id, database_id, description, information,
-            primary_key, type, size)
+        select(
+            variable_id, variable_name, dataset_id, database_id, description, information,
+            primary_key, type, size
+        ) |>
+        mutate(
+            variable_id = stringr::str_trim(tolower(variable_id)),
+            dataset_id = stringr::str_trim(tolower(dataset_id))
+        ) |>
+        distinct()
+
+    if (any((with(variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1L)) {
+        stop("Duplicate variable-dataset IDs")
+    }
 
     collections <- datasets |>
         right_join(
             variables |> select(dataset_id, database_id) |> distinct()
         ) |>
+        filter(!is.na(collection_name)) |>
         select(collection_name, database_id) |>
         distinct() |>
         left_join(collections) |>
@@ -180,23 +216,46 @@ create_tables <- function() {
         select(collection_id, collection_name, agency_id, database_id, description)
 
     variables <- variables |>
-        distinct() |>
         select(-database_id) |>
         rename(type_dict = type)
 
     source("data/link_refresh_data.R")
     refresh_vars <- get_refresh_vars()
 
+    # saveRDS(refresh_vars, "data/cache/refresh_vars.rda")
+    # refresh_vars <- readRDS("data/cache/refresh_vars.rda")
+
+    if (any((with(refresh_vars, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
+        stop("Duplicate refresh_vars")
+    }
+
     all_variables <- variables |>
-        full_join(refresh_vars, by = c("variable_id", "dataset_id"))
+        right_join(
+            refresh_vars |>
+                mutate(dataset_id = stringr::str_trim(tolower(dataset_id))),
+            by = c("variable_id", "dataset_id")
+        )
+
+    if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
+        stop("Duplicate variables (after join)")
+    }
 
     # # variables in dictionaries not in IDI:
-    # variables |>
-    #     anti_join(refresh_vars, by = c("variable_id", "dataset_id"))
+    miss_idi <- variables |>
+        anti_join(refresh_vars, by = c("variable_id", "dataset_id")) |>
+        mutate(variable_name = gsub("\n", "", variable_name))
+
+    write_csv(miss_idi |> select(variable_id, variable_name, dataset_id),
+        file = "data/missing_in_idi.csv"
+    )
 
     # # variables in IDI not in dictionaries:
-    # refresh_vars |>
-    #     anti_join(variables, by = c("variable_id", "dataset_id"))
+    miss_dd <- refresh_vars |>
+        anti_join(variables, by = c("variable_id", "dataset_id"))
+
+    write_csv(miss_dd,
+        file = "data/missing_in_dictionaries.csv"
+    )
 
     datasets <- datasets |>
         left_join(collections |> select(collection_name, collection_id)) |>
@@ -214,7 +273,7 @@ create_tables <- function() {
         stop("DUPLICATED VARIABLES")
     }
 
-    isin <- all_variables$dataset_id %in% datasets$dataset_id
+    # isin <- all_variables$dataset_id %in% datasets$dataset_id
     # if (!all(isin)) {
     #     print(all_variables[!isin, c("variable_id", "dataset_id")] |> as.data.frame())
     #     warning("NOT ALL VARS IN DATABASE")
@@ -235,27 +294,145 @@ create_tables <- function() {
     collections$description <- fix_text(collections$description)
     datasets$description <- fix_text(datasets$description)
     all_variables$description <- fix_text(all_variables$description)
+    all_variables$variable_name <- gsub("\n", "", all_variables$variable_name)
 
-    agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
+    # agencies <- agencies |> filter(agency_id %in% unique(collections$agency_id))
 
     all_variables <- all_variables |> select(-type_dict)
+
+    ## manually assign some collections to datasets ...
+    mc_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
+        filter(name == "Manual dataset collections")
+    drive_download(
+        mc_file$id[1],
+        path = file.path(fdir, "manual_collections.xlsx"),
+        overwrite = TRUE
+    )
+    manual_collections <- readxl::read_excel(
+        file.path(fdir, "manual_collections.xlsx"),
+        sheet = "Collections"
+    )
+    manual_datasets <- readxl::read_excel(
+        file.path(fdir, "manual_collections.xlsx"),
+        sheet = "Datasets"
+    )
+
+    manual_datasets <- datasets |>
+        filter(is.na(collection_id)) |>
+        select(-collection_id) |>
+        left_join(manual_datasets) |>
+        filter(!is.na(collection_id))
+
+    datasets <- datasets |>
+        filter(!dataset_id %in% manual_datasets$dataset_id) |>
+        bind_rows(manual_datasets)
+
+    collections <- manual_collections |>
+        filter(!collection_id %in% collections$collection_id) |>
+        bind_rows(collections)
+
+
+    cs_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
+        filter(name == "Collection schemas")
+    drive_download(
+        cs_file$id[1],
+        path = file.path(fdir, "collection_schemas.xlsx")
+    )
+    collection_schemas <-
+        readxl::read_excel(file.path(fdir, "collection_schemas.xlsx")) |>
+        setNames(c("collection_name", "agency_name", "schema"))
+
+    # # duplicate dataset IDs (with different case)
+    # datasets$dataset_id <- tolower(datasets$dataset_id)
+    # all_variables$dataset_id <- tolower(all_variables$dataset_id)
+
+    ## add in dataset IDs
+    missing_collection_datasets <- datasets |>
+        filter(is.na(collection_id)) |>
+        pull(dataset_id) |>
+        purrr::map_dfr(\(x) {
+            y <- stringr::str_replace(x, "IDI_Adhoc.", "")
+            y <- stringi::stri_split(y, regex = "\\.")[[1]]
+            tibble(schema = y[1], dataset_id = x) # paste(y[-1], collapse = "."))
+        }) |>
+        # left_join(collection_schemas) |>
+        fuzzyjoin::fuzzy_left_join(collection_schemas,
+            by = "schema",
+            \(x, y) tolower(x) == tolower(y)
+        ) |>
+        mutate(collection_id = schema.x) |>
+        select(-schema.x, -schema.y) |>
+        # left_join(datasets)
+        mutate(
+            dataset_id = gsub("}", "\\}", gsub("{", "\\{", dataset_id, fixed = TRUE), fixed = TRUE)
+        ) |>
+        fuzzyjoin::fuzzy_left_join(datasets,
+            by = c("dataset_id", "collection_id"),
+            \(x, y) tolower(x) == tolower(y)
+        ) |>
+        mutate(
+            dataset_id = dataset_id.x,
+            collection_id = collection_id.x
+        ) |>
+        select(dataset_id, dataset_name, collection_id, description, reference_period) |>
+        mutate(
+            dataset_name = ifelse(is.na(dataset_name),
+                gsub(".+\\.", "", dataset_id),
+                dataset_name
+            )
+        )
+
+    all_datasets <- datasets |>
+        filter(!is.na(collection_id)) |>
+        # filter(!tolower(dataset_id) %in% tolower(missing_collection_datasets$dataset_id)) |>
+        bind_rows(missing_collection_datasets)
+
+    all_collections <- collection_schemas |>
+        filter(schema %in% missing_collection_datasets$collection_id) |>
+        mutate(
+            collection_id = schema,
+            agency_id = agency_name,
+            database_id = "",
+            description = ""
+        ) |>
+        select(-schema, -agency_name) |>
+        bind_rows(collections)
+
+    # datasets <- datasets |> select(-collection_name, -agency_name)
+
+    all_agencies <- agencies |> filter(agency_id %in% unique(all_collections$agency_id))
+
+    ## fix up variable dataset_ids
+    # variables <- all_variables |>
+    #     fuzzyjoin::fuzzy_left_join(datasets,
+    #         by = "dataset_id",
+    #         \(x, y) tolower(x) == tolower(y)
+    #     ) |>
+    #     mutate(
+    #         dataset_id = ifelse(is.null(dataset_id.y), dataset_id.x, dataset_id.y),
+    #         description = description.x
+    #     ) |>
+    #     select(-dataset_id.x, -dataset_id.y, -description.x, -description.y)
+
 
     ### --- renamed variables/tables information
     match_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
         filter(name == "Renamed variables and tables")
     drive_download(match_file$id[1], path = file.path(fdir, "matches.xlsx"))
     match_tables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
-        sheet = "Tables") |>
+        sheet = "Tables"
+    ) |>
         rename(
-            table_id = 'Table Name',
-            alt_table_id = 'Alternative Name',
-            notes = 'Notes'
+            table_id = "Table Name",
+            alt_table_id = "Alternative Name",
+            notes = "Notes"
         ) |>
         mutate(
             notes = as.character(notes)
         )
     match_variables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
-        sheet = "Variables") |>
+        sheet = "Variables"
+    ) |>
         rename(
             table_id = "Table",
             variable_id = "Variable Name",
@@ -266,82 +443,112 @@ create_tables <- function() {
             notes = as.character(notes)
         )
 
-    # create new table..
-    library(RPostgreSQL)
-    library(dbplyr)
+    all_variables <- all_variables |>
+        filter(dataset_id %in% unique(all_datasets$dataset_id))
 
-    dotenv::load_dot_env()
+    ## Now filter out a bunch of databases we don't want ...
+    all_variables <- all_variables |>
+        dplyr::filter(grepl("^data\\.|^idi\\_adhoc|^clean\\_read|\\_clean\\.", dataset_id)) |>
+        dplyr::filter(!grepl("^clean_read_classifications", dataset_id))
 
-    con <- dbConnect(
-        PostgreSQL(),
-        user = Sys.getenv("PG_USER"),
-        password = Sys.getenv("PG_PASSWORD"),
-        host = Sys.getenv("PG_HOST"),
-        port = Sys.getenv("PG_PORT"),
-        dbname = Sys.getenv("PG_DATABASE")
-    )
+    all_datasets <- all_datasets |> filter(dataset_id %in% all_variables$dataset_id)
+    all_collections <- all_collections |> filter(collection_id %in% all_datasets$collection_id)
 
-    dbExecute(con, "
-    DROP TABLE IF EXISTS variables;
-    DROP TABLE IF EXISTS datasets;
-    DROP TABLE IF EXISTS collections;
-    DROP TABLE IF EXISTS agencies;
-    DROP TABLE IF EXISTS variable_matches;
-    DROP TABLE IF EXISTS table_matches;
-    ")
+    readr::write_csv(all_variables, "data/out/variables.csv")
+    readr::write_csv(all_datasets, "data/out/datasets.csv")
+    readr::write_csv(all_collections, "data/out/collections.csv")
+    readr::write_csv(all_agencies, "data/out/agencies.csv")
+    readr::write_csv(match_variables, "data/out/variable_matches.csv")
+    readr::write_csv(match_tables, "data/out/table_matches.csv")
 
-    # CREATE TABLE idi_tables (
-    #     schema TEXT PRIMARY KEY,
-    #     collection TEXT,
-    #     \"table\" TEXT,
-    #     description TEXT
-    # );
-    # CREATE TABLE idi_vars (
-    #     schema TEXT PRIMARY KEY,
-    #     \"table\" TEXT REFERENCES idi_tables (schema),
-    #     name TEXT,
-    #     description TEXT,
-    #     information TEXT
-    # );
+    # if (isTRUE(Sys.getenv("DEPLOY") != "yes")) {
+    #     message("Building complete - to confirm run, specify environment variable DEPLOY=yes")
+    #     return()
+    # }
+
+    # stop("NOT WORKING")
+
+    # # create new table..
+    # # TODO: pscale deployment request, etc ...
+
+    # library(RMySQL)
+    # library(dbplyr)
+
+    # dotenv::load_dot_env()
+
+    # con <- dbConnect(
+    #     MySQL(),
+    #     user = "root",
+    #     host = "127.0.0.1",
+    #     port = 3309,
+    #     dbname = "idisearchapp"
+    #     # user = Sys.getenv("PG_USER"),
+    #     # password = Sys.getenv("PG_PASSWORD"),
+    #     # host = Sys.getenv("PG_HOST"),
+    #     # port = Sys.getenv("PG_PORT"),
+    #     # dbname = Sys.getenv("PG_DATABASE")
+    # )
+
+    # # dbExecute(con, "DROP TABLE IF EXISTS variables;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS datasets;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS collections;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS agencies;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS variable_matches;")
+    # # dbExecute(con, "DROP TABLE IF EXISTS table_matches;")
+
+    # # CREATE TABLE idi_tables (
+    # #     schema TEXT PRIMARY KEY,
+    # #     collection TEXT,
+    # #     \"table\" TEXT,
+    # #     description TEXT
+    # # );
+    # # CREATE TABLE idi_vars (
+    # #     schema TEXT PRIMARY KEY,
+    # #     \"table\" TEXT REFERENCES idi_tables (schema),
+    # #     name TEXT,
+    # #     description TEXT,
+    # #     information TEXT
+    # # );
+    # # ")
+
+    # db_insert_into(con, "agencies", agencies)
+
+    # dbWriteTable(con, "agencies", agencies, row.names = FALSE)
+    # dbWriteTable(con, "collections", collections, row.names = FALSE)
+    # dbWriteTable(con, "datasets", datasets, row.names = FALSE)
+    # dbWriteTable(con, "variables", all_variables, row.names = FALSE)
+    # dbWriteTable(con, "variable_matches", match_variables, row.names = FALSE)
+    # dbWriteTable(con, "table_matches", match_tables, row.names = FALSE)
+
+    # dbExecute(con, "
+    # ALTER TABLE agencies
+    #     ADD CONSTRAINT agencies_pkey
+    #     PRIMARY KEY (agency_id);
+
+    # ALTER TABLE collections
+    #     ADD CONSTRAINT collections_pkey
+    #     PRIMARY KEY (collection_id);
+    # ALTER TABLE collections
+    #     ADD CONSTRAINT collection_agency_fkey
+    #     FOREIGN KEY (agency_id)
+    #     REFERENCES agencies (agency_id);
+
+    # ALTER TABLE datasets
+    #     ADD CONSTRAINT datasets_pkey
+    #     PRIMARY KEY (dataset_id);
+    # ALTER TABLE datasets
+    #     ADD CONSTRAINT dataset_collection_fkey
+    #     FOREIGN KEY (collection_id)
+    #     REFERENCES collections (collection_id);
+
+    # ALTER TABLE variables
+    #     ADD CONSTRAINT variables_pkey
+    #     PRIMARY KEY (variable_id, dataset_id);
+    # ALTER TABLE variables
+    #     ADD CONSTRAINT variable_dataset_fkey
+    #     FOREIGN KEY (dataset_id)
+    #     REFERENCES datasets (dataset_id);
     # ")
-
-    dbWriteTable(con, "agencies", agencies, row.names = FALSE)
-    dbWriteTable(con, "collections", collections, row.names = FALSE)
-    dbWriteTable(con, "datasets", datasets, row.names = FALSE)
-    dbWriteTable(con, "variables", all_variables, row.names = FALSE)
-    dbWriteTable(con, "variable_matches", match_variables, row.names = FALSE)
-    dbWriteTable(con, "table_matches", match_tables, row.names = FALSE)
-
-    dbExecute(con, "
-    ALTER TABLE agencies
-        ADD CONSTRAINT agencies_pkey
-        PRIMARY KEY (agency_id);
-
-    ALTER TABLE collections
-        ADD CONSTRAINT collections_pkey
-        PRIMARY KEY (collection_id);
-    ALTER TABLE collections
-        ADD CONSTRAINT collection_agency_fkey
-        FOREIGN KEY (agency_id)
-        REFERENCES agencies (agency_id);
-
-    ALTER TABLE datasets
-        ADD CONSTRAINT datasets_pkey
-        PRIMARY KEY (dataset_id);
-    ALTER TABLE datasets
-        ADD CONSTRAINT dataset_collection_fkey
-        FOREIGN KEY (collection_id)
-        REFERENCES collections (collection_id);
-
-    ALTER TABLE variables
-        ADD CONSTRAINT variables_pkey
-        PRIMARY KEY (variable_id, dataset_id);
-    ALTER TABLE variables
-        ADD CONSTRAINT variable_dataset_fkey
-        FOREIGN KEY (dataset_id)
-        REFERENCES datasets (dataset_id);
-    ")
-
 }
 
 create_tables()
