@@ -1,6 +1,6 @@
 # version 0.2.0
 
-**TBA**
+**Updated 4 October 2022**
 
 - Added database filtering (to only show variables in a selected database)
 - Added 'Quick Stats' page
