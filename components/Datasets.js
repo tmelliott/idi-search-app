@@ -39,16 +39,26 @@ function Datasets({ term, collectionId, limit, title = "Datasets" }) {
     {
       name: "collection_name",
       label: "Collection / Agency",
-      value: (r) => {
-        return r.collection ? (
-          <>
-            <div>{r.collection?.collection_name}</div>
-            <div className="text-xxs">{r.collection?.agency.agency_name}</div>
-          </>
-        ) : (
-          <div className="text-gray-400 italic text-xxs">Not available</div>
-        )
-      },
+      value: (r) => (
+        <div className="flex items-center justify-between gap-1 mr-2">
+          {r.collection ? (
+            <div className="flex-1">
+              <div>{r.collection?.collection_name}</div>
+              <div className="text-xxs">{r.collection?.agency.agency_name}</div>
+            </div>
+          ) : (
+            <div className="flex-1">
+              <div className="text-gray-400 italic text-xxs">Not available</div>
+              <div className="">&nbsp;</div>
+            </div>
+          )}
+          {r.metadata ? (
+            <span className="h-2 w-2 rounded-full bg-green-400"></span>
+          ) : (
+            <span className="h-2 w-2 rounded-full bg-red-400"></span>
+          )}
+        </div>
+      ),
     },
   ]
 
@@ -77,6 +87,7 @@ function Datasets({ term, collectionId, limit, title = "Datasets" }) {
             ...d,
             collection_name: d.collection?.collection_name,
             id: d.dataset_id,
+            metadata: d.description !== null,
           }))}
           n={limit}
           rowHandler={showDataset}
