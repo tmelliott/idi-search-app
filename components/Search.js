@@ -144,6 +144,18 @@ function Search() {
           </div>
         </div>
       )}
+
+      <div className="flex gap-2 justify-end items-center text-xxs mx-2">
+        Metadata:
+        <div className="flex items-center gap-1">
+          <span className="h-2 w-2 rounded-full bg-green-400"></span>
+          <span>Available</span>
+        </div>
+        <div className="flex items-center gap-1">
+          <span className="h-2 w-2 rounded-full bg-red-400"></span>
+          <span>Unavailable</span>
+        </div>
+      </div>
     </form>
   )
 }
