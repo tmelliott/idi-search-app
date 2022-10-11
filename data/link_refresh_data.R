@@ -39,6 +39,7 @@ get_refresh_vars <- function() {
     suppressMessages({
         all_vars <-
             lapply(files, \(x) {
+                print(x)
                 sheets <- readxl::excel_sheets(x)
                 sheets <- sheets[grepl("^varlist", tolower(sheets))]
                 lapply(sheets, \(z) {

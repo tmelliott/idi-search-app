@@ -22,12 +22,31 @@ create_tables <- function() {
         googledrive_quiet = TRUE
     )
 
-    pb <- txtProgressBar(0, nrow(g_files), style = 3L, title = "Downloading dictionaries from Google Drive")
-    for (i in seq_len(nrow(g_files))) {
-        drive_download(g_files$id[i], path = file.path(fdir, g_files$name[i]))
-        setTxtProgressBar(pb, i)
-    }
-    close(pb)
+    library(parallel)
+    cl <- makeCluster(12L)
+    clusterExport(cl, c("g_files", "fdir"))
+
+    z <- clusterEvalQ(cl, googledrive::drive_auth(Sys.getenv("GOOGLE_EMAIL")))
+
+    # pb <- txtProgressBar(0, nrow(g_files),
+    #     style = 3L,
+    #     title = "Downloading dictionaries from Google Drive"
+    # )
+    z <- pbapply::pblapply(
+        seq_len(nrow(g_files)),
+        \(i) {
+            googledrive::drive_download(
+                g_files$id[i],
+                path = file.path(fdir, g_files$name[i])
+            )
+        },
+        cl = cl
+    )
+    stopCluster(cl)
+    # for (i in seq_len(nrow(g_files))) {
+    #     setTxtProgressBar(pb, i)
+    # }
+    # close(pb)
     files <- list.files(fdir, full.names = TRUE)
 
     # saveRDS(files, "data/cache/files.rda")
@@ -47,6 +66,13 @@ create_tables <- function() {
         select(agency_id, agency_name) |>
         distinct()
 
+
+    fixTableNames <- function(names) {
+        names <- tolower(make.names(names))
+        names[grepl("idi.table", names)] <- "idi.table.name"
+        names
+    }
+
     cat("\n **** Starting dictionary processing ...\n")
     suppressMessages({
         collection_tables <- files |>
@@ -60,7 +86,7 @@ create_tables <- function() {
                 tables <- tables[!is.na(cn) & cn != "NA"]
                 cn <- cn[!is.na(cn) & cn != "NA"]
                 colnames(tables) <- cn
-                col <- x[[2]][grep("Title", x$Index)]
+                col <- gsub("\\r|\\n", "", x[[2]][grep("Title", x$Index)])
                 schema <- x[[2]][grep("schema", tolower(x$Index))]
                 if (length(schema) == 0) {
                     schema <- c("UNKNOWN", tolower(make.names(col)))
@@ -69,7 +95,7 @@ create_tables <- function() {
                     schema <- gsub("\\[|\\]", "", schema)
                 }
                 tables <- tables[!is.na(tables[[3]]), ]
-                colnames(tables) <- tolower(make.names(colnames(tables)))
+                colnames(tables) <- fixTableNames(colnames(tables))
                 list(
                     collection = tibble(
                         collection_schema = schema[2],
@@ -151,7 +177,7 @@ create_tables <- function() {
             cn <- tolower(make.names(colnames(x)))
             cn <- cn |>
                 repair_colnames("table.name", "schema") |>
-                repair_colnames("^variable.name|^field.name", "variable_id") |>
+                repair_colnames("^(idi.)?variable.name|^(idi.)?field.name", "variable_id") |>
                 repair_colnames("des.+ion", "description") |>
                 repair_colnames("additional.+information", "information") |>
                 repair_colnames("plain.english", "variable_name") |>
@@ -198,7 +224,10 @@ create_tables <- function() {
         ) |>
         distinct()
 
-    if (any((with(variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1L)) {
+    vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
+        tolower() |>
+        table()
+    if (any(vid_tab > 1L)) {
         stop("Duplicate variable-dataset IDs")
     }
 
