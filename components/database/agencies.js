@@ -7,7 +7,7 @@ async function main(query) {
   if (query !== undefined && query !== "") {
     const searchTerms = query
       .split(" ")
-      .map((x) => "+" + x)
+      .map((x) => (x.length ? "+" + x : x))
       .join(" ")
     args = {
       ...args,

@@ -28,7 +28,7 @@ async function main(query, include, datasetId, page, size) {
   if (query !== undefined && query !== "") {
     const searchTerms = query
       .split(" ")
-      .map((x) => "+" + x)
+      .map((x) => (x.length ? "+" + x : x))
       .join(" ")
     args = {
       ...args,
