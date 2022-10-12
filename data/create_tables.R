@@ -478,7 +478,9 @@ all_variables <- all_variables |>
 all_variables <- all_variables |>
     dplyr::filter(grepl("^data\\.|^idi\\_adhoc|^clean\\_read|\\_clean\\.", dataset_id)) |>
     dplyr::filter(!grepl("^clean_read_classifications", dataset_id)) |>
-    dplyr::filter(!grepl("RnD", refreshes))
+    dplyr::filter(!grepl("RnD", refreshes)) |>
+    dplyr::filter(!grepl("\\_v$", dataset_id)) |>
+    dplyr::filter(dataset_id != "dol_clean.grounds_code")
 
 all_datasets <- all_datasets |> filter(dataset_id %in% all_variables$dataset_id)
 all_collections <- all_collections |> filter(collection_id %in% all_datasets$collection_id)

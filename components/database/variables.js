@@ -58,6 +58,7 @@ async function main(query, include, datasetId, page, size) {
     "20211020",
     "202203",
     "202206",
+    "202210",
   ]
 
   if (include !== "all") {

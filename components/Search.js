@@ -132,7 +132,7 @@ function Search() {
               />{" "}
               Metadata
             </div> */}
-
+            {/*
             <div className="flex gap-2 items-center">
               <input
                 type="checkbox"
@@ -140,17 +140,19 @@ function Search() {
                 onChange={(e) => setSearchRnD(e.target.checked)}
               />{" "}
               RnD
-            </div>
+            </div> */}
           </div>
         </div>
       )}
 
-      <div className="flex gap-2 justify-end items-center text-xxs mx-2">
-        <div className="flex items-center gap-1">
-          <span className="h-2 w-2 rounded-full bg-green-400"></span>
-          <span>Metadata available</span>
+      {router.pathname !== "/agencies" && (
+        <div className="flex gap-2 justify-end items-center text-xxs mx-2">
+          <div className="flex items-center gap-1">
+            <span className="h-2 w-2 rounded-full bg-green-400"></span>
+            <span>Metadata available</span>
+          </div>
         </div>
-      </div>
+      )}
     </form>
   )
 }

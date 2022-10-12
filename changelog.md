@@ -1,3 +1,11 @@
+# version 0.3.0
+
+**Updated 19 October 2022**
+
+- Tweaked colours and text on the 'Quick Stats' page
+- Added October 2022 refresh data
+- reverse 'refresh availability' so newest first
+
 # version 0.2.0
 
 **Updated 4 October 2022**

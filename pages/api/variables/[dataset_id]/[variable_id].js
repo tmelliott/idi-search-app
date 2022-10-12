@@ -74,6 +74,7 @@ async function main(d_id, v_id) {
     "20211020",
     "202203",
     "202206",
+    "202210",
   ]
 
   if (!variable) return {}

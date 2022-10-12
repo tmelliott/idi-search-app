@@ -92,19 +92,21 @@ const StatsPage = ({ variableStats, dbStats }) => {
       <section>
         <h2>Basic Stats from the IDI</h2>
         <p>
-          Here is some basic information about the counts of variables in the
-          IDI, and what proportion of them have metadata currently available in
-          our app.
+          Here is some basic information about the counts of variables and
+          datasets in the IDI, and what proportion of them have metadata
+          currently available in our app.
+        </p>
+
+        <p>
+          The grey bars show the number of variables or datasets available from
+          each refresh, and in the latest Adhoc database. The blue bar
+          represents how many have metadata available, which is shown as a
+          percentage in brackets.
         </p>
       </section>
 
       <section>
-        <h4 className="">Variables in the IDI by database</h4>
-
-        <p>
-          The percentage of variables in each database with metadata available
-          (darker blue) is shown in brackets.
-        </p>
+        <h4 className="">Variables</h4>
 
         <div className="w-[80%] flex flex-col gap-2">
           {variableStats.map((stat) => (
@@ -117,11 +119,12 @@ const StatsPage = ({ variableStats, dbStats }) => {
               <div className="flex-1 text-right">
                 {isNaN(parseInt(stat.name))
                   ? stat.name
-                  : moment(stat.name, "YYYYMMDD").format("MMMM YYYY")}
+                  : moment(stat.name, "YYYYMMDD").format("MMM YYYY") +
+                    " refresh"}
               </div>
-              <div className="h-full w-3/4 flex">
+              <div className="h-full w-2/3 flex ">
                 <div
-                  className="h-full bg-blue-500 relative"
+                  className="h-full bg-gray-300 relative"
                   style={{
                     width: Math.round((stat.variables / maxN) * 100) + "%",
                   }}
@@ -146,12 +149,7 @@ const StatsPage = ({ variableStats, dbStats }) => {
       </section>
 
       <section>
-        <h4 className="">Datasets in the IDI by database</h4>
-
-        <p>
-          The percentage of datasets in each database with metadata available
-          (darker blue) is shown in brackets.
-        </p>
+        <h4 className="">Datasets</h4>
 
         <div className="w-[80%] flex flex-col gap-2">
           {dbStats.map((stat) => (
@@ -164,11 +162,12 @@ const StatsPage = ({ variableStats, dbStats }) => {
               <div className="flex-1 text-right">
                 {isNaN(parseInt(stat.name))
                   ? stat.name
-                  : moment(stat.name, "YYYYMMDD").format("MMMM YYYY")}
+                  : moment(stat.name, "YYYYMMDD").format("MMM YYYY") +
+                    " refresh"}
               </div>
-              <div className="h-full w-3/4 flex">
+              <div className="h-full w-2/3 flex">
                 <div
-                  className="h-full bg-blue-500 relative"
+                  className="h-full bg-gray-300 relative"
                   style={{
                     width: Math.round((stat.datasets / maxM) * 100) + "%",
                   }}
