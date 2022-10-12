@@ -5,6 +5,7 @@
 - Tweaked colours and text on the 'Quick Stats' page
 - Added October 2022 refresh data
 - reverse 'refresh availability' so newest first
+- use SQL fulltext search for better search results
 
 # version 0.2.0
 

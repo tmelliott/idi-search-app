@@ -26,12 +26,17 @@ async function main(query, include, datasetId, page, size) {
     orderBy: [{ variable_name: "asc" }],
   }
   if (query !== undefined && query !== "") {
+    const searchTerms = query
+      .split(" ")
+      .map((x) => "+" + x)
+      .join(" ")
     args = {
       ...args,
       where: {
         OR: [
-          { variable_id: { contains: query } },
-          { description: { contains: query } },
+          { variable_id: { search: searchTerms } },
+          { variable_name: { search: searchTerms } },
+          { description: { search: searchTerms } },
         ],
         // NOT: {
         //   description: null,
@@ -100,6 +105,8 @@ async function main(query, include, datasetId, page, size) {
   const variables = await prisma.variables.findMany({
     ...args,
   })
+
+  console.log(variables)
 
   return {
     vars: variables.map((v) => ({

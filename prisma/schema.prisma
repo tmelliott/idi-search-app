@@ -6,13 +6,15 @@ datasource db {
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity"]
+  previewFeatures = ["referentialIntegrity", "fullTextSearch", "fullTextIndex"]
 }
 
 model agencies {
   agency_id   String        @id
   agency_name String?
   collections collections[]
+
+  @@fulltext([agency_id, agency_name])
 }
 
 model collections {
@@ -23,6 +25,8 @@ model collections {
   description     String?    @db.LongText
   agency          agencies?  @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
   datasets        datasets[]
+
+  @@fulltext([collection_id, collection_name, description])
 }
 
 model datasets {
@@ -36,6 +40,8 @@ model datasets {
 
   alternate table_matches[] @relation("alt_table")
   matches   table_matches[] @relation("match_table")
+
+  @@fulltext([dataset_id, dataset_name, description])
 }
 
 model variables {
@@ -54,6 +60,7 @@ model variables {
   matches   variable_matches[] @relation("match_variable")
 
   @@id([variable_id, dataset_id], name: "v_id")
+  @@fulltext([variable_id, variable_name, description])
 }
 
 model table_matches {

@@ -21,7 +21,7 @@ function Collection({ id, term }) {
 
   let description = collection.description || ""
   if (highlight) {
-    const searchMask = `(${highlight})`
+    const searchMask = `(${highlight.replaceAll(" ", "|")})`
     const regEx = new RegExp(searchMask, "ig")
     const replaceMask = "<mark>$1</mark>"
     description = description.replace(regEx, replaceMask)

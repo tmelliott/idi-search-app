@@ -13,8 +13,6 @@ function Search() {
   const [showConfig, setShowConfig] = useState(false)
   const [searchRefreshes, setSearchRefreshes] = useState(true)
   const [searchAdhoc, setSearchAdhoc] = useState(true)
-  const [searchMetadata, setSearchMetadata] = useState(true)
-  const [searchRnD, setSearchRnD] = useState(true)
 
   const plausible = usePlausible()
 
@@ -37,12 +35,10 @@ function Search() {
         },
       })
     }
-    if (!(searchRefreshes && searchAdhoc && searchMetadata && searchRnD)) {
+    if (!(searchRefreshes && searchAdhoc)) {
       let include = []
       if (searchRefreshes) include.push("refreshes")
       if (searchAdhoc) include.push("adhoc")
-      if (searchMetadata) include.push("meta")
-      if (searchRnD) include.push("rnd")
       q.include = include.join("_")
     }
     router.push(
@@ -123,24 +119,6 @@ function Search() {
               />{" "}
               Adhoc
             </div>
-
-            {/* <div className="flex gap-2 items-center">
-              <input
-                type="checkbox"
-                checked={searchMetadata}
-                onChange={(e) => setSearchMetadata(e.target.checked)}
-              />{" "}
-              Metadata
-            </div> */}
-            {/*
-            <div className="flex gap-2 items-center">
-              <input
-                type="checkbox"
-                checked={searchRnD}
-                onChange={(e) => setSearchRnD(e.target.checked)}
-              />{" "}
-              RnD
-            </div> */}
           </div>
         </div>
       )}

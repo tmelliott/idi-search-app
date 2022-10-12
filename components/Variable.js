@@ -23,7 +23,8 @@ function Variable({ d_id, v_id }) {
 
   let description = variable.description || ""
   if (highlight) {
-    const searchMask = `(${highlight})`
+    const searchMask = `(${highlight.replaceAll(" ", "|")})`
+    console.log(searchMask)
     const regEx = new RegExp(searchMask, "ig")
     const replaceMask = "<mark>$1</mark>"
     description = description.replace(regEx, replaceMask)
