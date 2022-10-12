@@ -14,7 +14,7 @@ async function main(query, agencyId) {
     },
     orderBy: [{ collection_name: "asc" }],
   }
-  if (query !== undefined && query !== "") {
+  if (query !== undefined && query.replaceAll(" ", "") !== "") {
     const searchTerms = query
       .split(" ")
       .map((x) => "+" + x)

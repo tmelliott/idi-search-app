@@ -4,7 +4,7 @@ async function main(query) {
   let args = {
     orderBy: [{ agency_name: "asc" }],
   }
-  if (query !== undefined) {
+  if (query !== undefined && query !== "") {
     const searchTerms = query
       .split(" ")
       .map((x) => "+" + x)
