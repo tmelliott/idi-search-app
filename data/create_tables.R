@@ -27,11 +27,6 @@ create_tables <- function() {
     clusterExport(cl, c("g_files", "fdir"))
 
     z <- clusterEvalQ(cl, googledrive::drive_auth(Sys.getenv("GOOGLE_EMAIL")))
-
-    # pb <- txtProgressBar(0, nrow(g_files),
-    #     style = 3L,
-    #     title = "Downloading dictionaries from Google Drive"
-    # )
     z <- pbapply::pblapply(
         seq_len(nrow(g_files)),
         \(i) {
@@ -43,14 +38,7 @@ create_tables <- function() {
         cl = cl
     )
     stopCluster(cl)
-    # for (i in seq_len(nrow(g_files))) {
-    #     setTxtProgressBar(pb, i)
-    # }
-    # close(pb)
     files <- list.files(fdir, full.names = TRUE)
-
-    # saveRDS(files, "data/cache/files.rda")
-    # files <- readRDS("data/cache/files.rda")
 
     agency_collection <- yaml::read_yaml("data/agencies.yaml") |>
         lapply(\(x) {
@@ -212,7 +200,11 @@ create_tables <- function() {
             variable_name = str_replace_all(variable_name, "\\[|\\]", ""),
             dataset_id = str_replace(schema, "IDI_Adhoc\\.", ""),
             dataset_id = str_replace(dataset_id, "\n", "__"),
-            database_id = ifelse(str_detect(schema, "IDI_Adhoc"), "IDI_Adhoc", "IDI_Clean")
+            database_id = ifelse(
+                str_detect(schema, "IDI_Adhoc"),
+                "IDI_Adhoc",
+                "IDI_Clean"
+            )
         ) |>
         select(
             variable_id, variable_name, dataset_id, database_id, description, information,
@@ -230,19 +222,6 @@ create_tables <- function() {
     if (any(vid_tab > 1L)) {
         stop("Duplicate variable-dataset IDs")
     }
-
-    collections <- datasets |>
-        right_join(
-            variables |> select(dataset_id, database_id) |> distinct()
-        ) |>
-        filter(!is.na(collection_name)) |>
-        select(collection_name, database_id) |>
-        distinct() |>
-        left_join(collections) |>
-        mutate(
-            collection_id = make.names(gsub("\\s", "_", collection_name))
-        ) |>
-        select(collection_id, collection_name, agency_id, database_id, description)
 
     variables <- variables |>
         select(-database_id) |>
@@ -263,11 +242,31 @@ create_tables <- function() {
             refresh_vars |>
                 mutate(dataset_id = stringr::str_trim(tolower(dataset_id))),
             by = c("variable_id", "dataset_id")
+        ) |>
+        mutate(
+            database_id = ifelse(grepl("Adhoc", refreshes), "Adhoc", "Clean")
         )
 
     if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
         stop("Duplicate variables (after join)")
     }
+
+    datasets <- datasets |>
+        right_join(
+            all_variables |> select(dataset_id, database_id) |> distinct()
+        )
+
+    collections <- datasets |>
+        filter(!is.na(collection_name)) |>
+        select(collection_name, database_id) |>
+        distinct() |>
+        group_by(collection_name) |>
+        summarize(database_id = paste(sort(database_id), collapse = "|")) |>
+        left_join(collections) |>
+        mutate(
+            collection_id = make.names(gsub("\\s", "_", collection_name))
+        ) |>
+        select(collection_id, collection_name, agency_id, database_id, description)
 
     # # variables in dictionaries not in IDI:
     miss_idi <- variables |>
