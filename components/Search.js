@@ -2,7 +2,6 @@ import { CogIcon, FilterIcon } from "@heroicons/react/outline"
 import { usePlausible } from "next-plausible"
 import { useRouter } from "next/router"
 import { useEffect, useRef, useState } from "react"
-import { event } from "../lib/gtag"
 
 function Search() {
   const router = useRouter()
@@ -28,7 +27,6 @@ function Search() {
     }
     if (value === "") q = rest
     if (value !== "") {
-      event("search", "general", value)
       plausible("Search", {
         props: {
           term: value,

@@ -106,8 +106,6 @@ async function main(query, include, datasetId, page, size) {
     ...args,
   })
 
-  console.log(variables)
-
   return {
     vars: variables.map((v) => ({
       ...v,

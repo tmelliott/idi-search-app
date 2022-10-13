@@ -15,15 +15,11 @@ function help() {
         agencies, collections, datasets, or variables containing the term in any
         of the information associated with it.
       </p>
-      {/* <p>
-        To search for multiple terms, use commas for OR search, and plus for AND
-        search.
-      </p>
       <p>
-        For example, searching "sex, gender" will show variables matching "sex"
-        OR "gender". Searching for "income + tax" will show variables matching
-        both "income" AND "tax".
-      </p> */}
+        Currently, the search only does 'AND' search by simply separating search
+        terms with spaces. For example, "social housing" will find results that
+        match both "social" and "housing".
+      </p>
 
       <h2>Exploring variables</h2>
       <p>

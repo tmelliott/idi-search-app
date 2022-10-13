@@ -6,6 +6,7 @@
 - Added October 2022 refresh data
 - reverse 'refresh availability' so newest first
 - use SQL fulltext search for better search results
+- update about and help pages
 
 # version 0.2.0
 

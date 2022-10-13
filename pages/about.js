@@ -23,12 +23,11 @@ function about() {
           <a href="https://terourou.org?utm_medium=web&utm_source=idisearch&utm_content=about">
             Te Rourou Tātaritanga
           </a>
-          , funded by MBIE Endevaour Grant (ref 62506 ENDRP).
+          , a research group funded by an MBIE Endevaour Grant (ref 62506
+          ENDRP).
         </p>
-      </section>
 
-      <section>
-        <h2>IDI: Integrated Data Infrastructure</h2>
+        <h4>IDI: Integrated Data Infrastructure</h4>
 
         <p>
           The IDI is New Zealand's Integrated Data Infrastructure, provided by
@@ -44,51 +43,81 @@ function about() {
         </p>
       </section>
 
+      <hr />
+
       <section>
-        <h2>Feedback and Collaboration</h2>
+        <h3>The Update Process</h3>
 
         <p>
-          This app is still under development, and as such we are looking for
-          feedback from (potential) users. This may be letting us know what
-          works and what doesn't, or contributing ideas to make the app more
-          useful.
+          Updates to IDI Search follow the triannual cycle of the IDI refresh
+          with collaboration between Te Rourou Tātaritanga and Statistics NZ.
         </p>
 
         <p>
-          We are also open to collboration, so if you or your team would like to
-          contribute to IDI Search in some way, please get in touch with us at
-          {` `}
+          Before each new IDI refresh goes live, Stats NZ extracts the variable
+          listings from the latest refresh and provides this information to the
+          app developers. This allows researchers to build an accurate picture
+          of what data is currently available in the IDI.
+        </p>
+
+        <p>
+          Stats NZ also provides the app developers with the latest IDI data
+          dictionaries from the Data Lab User Wiki that have been updated in
+          response to changes and additions to the latest refresh data and
+          researcher queries. This information is extracted and added to the
+          app.
+        </p>
+      </section>
+
+      <hr />
+
+      <section>
+        <h3>Our Vision</h3>
+
+        <p>
+          We envision a future where Data Lab researchers can readily access
+          accurate and reliable information about the data contained within the
+          IDI through a user-friendly interface that is not limited to current
+          IDI researchers.
+        </p>
+
+        <p>
+          The IDI Search app uses a data model that gives rise to the
+          opportunity for automation of data dictionaries and codes and
+          classifications updates. In collaboration with Stats NZ, this will
+          ensure the quality of IDI metadata is improved over time. It will also
+          provide the opportunity to automate data dictionary, code, and
+          classification updates.
+        </p>
+
+        <p>
+          We encourage researchers to utilise this app and share it with other
+          Data Lab researchers: experienced, new, or potential future
+          researchers! Through your use, we can gain insights that will help
+          further improve the app.
+        </p>
+
+        <p>
+          Please get in touch with{" "}
           <a href="mailto:terourounz@gmail.com?subject=IDI Search App">
             terourounz@gmail.com
-          </a>
-          .
+          </a>{" "}
+          for your app-related feedback, or with{" "}
+          <a href="mailto:access2microdata@stats.govt.nz">
+            access2microdata@stats.govt.nz
+          </a>{" "}
+          for questions or inquiries about the metadata included in the app.
         </p>
       </section>
 
       <section>
-        <h2>Planned Features</h2>
+        <h3>Privacy Statement</h3>
 
         <p>
-          The following additional features are planned for future development:
+          We collect analytics data to track page views and search terms. This
+          information is stored internally and used solely for tracking demand
+          and collecting information to help us improve the app.
         </p>
-
-        <ul>
-          <li>
-            display links to other names of variables or datasets, so
-            researchers can update code for new refreshes
-          </li>
-          <li>allow for multiple search terms (AND, OR, etc.)</li>
-          <li className="text-green-600 italic line-through">
-            include variables with missing data dictionaries: these variables
-            will not have descriptions and other such information, but will
-            otherwise show up where expected (but with limited search capacity)
-          </li>
-          <li>continue adding more data dictionaries</li>
-          <li>
-            add facilities for users to register and provide comments on
-            agencies/collections/datasets/variables
-          </li>
-        </ul>
       </section>
     </div>
   )
