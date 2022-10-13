@@ -102,7 +102,7 @@ function about() {
           <a href="mailto:terourounz@gmail.com?subject=IDI Search App">
             terourounz@gmail.com
           </a>{" "}
-          for your app-related feedback, or with{" "}
+          for your app-related feedback or with{" "}
           <a href="mailto:access2microdata@stats.govt.nz">
             access2microdata@stats.govt.nz
           </a>{" "}
