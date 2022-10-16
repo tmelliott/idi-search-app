@@ -26,13 +26,19 @@ async function main(query, collectionId) {
       .map((x) => (x.length ? "+" + x : x))
       .join(" ")
       .replace("_", "\\_")
-    console.log(searchTerms)
     args = {
       ...args,
       where: {
-        dataset_id: { search: searchTerms },
-        dataset_name: { search: searchTerms },
-        description: { search: searchTerms },
+        OR: [
+          {
+            AND: [
+              { dataset_id: { search: searchTerms } },
+              { dataset_name: { search: searchTerms } },
+              { description: { search: searchTerms } },
+            ],
+          },
+          { dataset_id: { contains: query } },
+        ],
       },
     }
   }

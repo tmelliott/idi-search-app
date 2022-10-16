@@ -34,12 +34,16 @@ async function main(query, include, datasetId, page, size) {
     args = {
       ...args,
       where: {
-        variable_id: { search: searchTerms },
-        variable_name: { search: searchTerms },
-        description: { search: searchTerms },
-        // NOT: {
-        //   description: null,
-        // },
+        OR: [
+          {
+            AND: [
+              { variable_id: { search: searchTerms } },
+              { variable_name: { search: searchTerms } },
+              { description: { search: searchTerms } },
+            ],
+          },
+          { variable_id: { contains: query } },
+        ],
       },
     }
   }

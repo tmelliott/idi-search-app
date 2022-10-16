@@ -23,9 +23,16 @@ async function main(query, agencyId) {
     args = {
       ...args,
       where: {
-        collection_id: { search: searchTerms },
-        collection_name: { search: searchTerms },
-        description: { search: searchTerms },
+        OR: [
+          {
+            AND: [
+              { collection_id: { search: searchTerms } },
+              { collection_name: { search: searchTerms } },
+              { description: { search: searchTerms } },
+            ],
+          },
+          { collection_id: { contains: query } },
+        ],
       },
     }
   }

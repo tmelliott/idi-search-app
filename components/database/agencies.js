@@ -13,8 +13,15 @@ async function main(query) {
     args = {
       ...args,
       where: {
-        agency_id: { search: searchTerms },
-        agency_name: { search: searchTerms },
+        OR: [
+          {
+            AND: [
+              { agency_id: { search: searchTerms } },
+              { agency_name: { search: searchTerms } },
+            ],
+          },
+          { agency_id: { contains: query } },
+        ],
       },
     }
   }
