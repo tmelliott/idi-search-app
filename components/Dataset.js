@@ -50,7 +50,7 @@ function Dataset({ id, term }) {
       )}
       {dataset.collection && dataset.collection.agency && (
         <div className="text-xs">
-          Agency:{` `}
+          Data Supply Agency:{` `}
           <Link href={`/agencies/${dataset.collection.agency.agency_id}`}>
             <a className="underline cursor-pointer">
               {dataset.collection.agency.agency_name}

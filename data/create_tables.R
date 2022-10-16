@@ -368,7 +368,8 @@ drive_download(
 )
 collection_schemas <-
     readxl::read_excel(file.path(fdir, "collection_schemas.xlsx")) |>
-    setNames(c("collection_name", "agency_name", "schema"))
+    setNames(c("collection_name", "agency_name", "schema", "collection_id")) |>
+    mutate(collection_id = ifelse(is.na(collection_id), schema, collection_id))
 
 # # duplicate dataset IDs (with different case)
 # datasets$dataset_id <- tolower(datasets$dataset_id)
@@ -388,7 +389,7 @@ missing_collection_datasets <- datasets |>
         by = "schema",
         \(x, y) tolower(x) == tolower(y)
     ) |>
-    mutate(collection_id = schema.x) |>
+    mutate(collection_id = ifelse(is.na(collection_id), schema.x, collection_id)) |>
     select(-schema.x, -schema.y) |>
     # left_join(datasets)
     mutate(

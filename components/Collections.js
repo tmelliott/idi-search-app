@@ -8,7 +8,6 @@ import { LinkIcon } from "@heroicons/react/outline"
 function Collections({ term, agencyId, limit, title = "Collections" }) {
   const router = useRouter()
   const { collections, isLoading } = useCollections(term, agencyId)
-
   const showCollection = (collection) => {
     router.push(
       {

@@ -56,7 +56,7 @@ function Variable({ d_id, v_id }) {
 
       {variable.dataset.collection && variable.dataset.collection.agency && (
         <div className="text-xs">
-          Agency:{` `}
+          Data Supply Agency:{` `}
           <Link
             href={`/agencies/${variable.dataset.collection.agency.agency_id}`}
           >

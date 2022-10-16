@@ -35,7 +35,7 @@ function Collection({ id, term }) {
         </h2>
       </Link>
       <div className="text-xs">
-        Agency:{` `}
+        Data Supply Agency:{` `}
         <Link href={`/agencies/${collection.agency.agency_id}`}>
           <a className="underline cursor-pointer">
             {collection.agency.agency_name}
