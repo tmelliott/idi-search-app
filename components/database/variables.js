@@ -30,14 +30,13 @@ async function main(query, include, datasetId, page, size) {
       .split(" ")
       .map((x) => (x.length ? "+" + x : x))
       .join(" ")
+      .replace("_", "\\_")
     args = {
       ...args,
       where: {
-        OR: [
-          { variable_id: { search: searchTerms } },
-          { variable_name: { search: searchTerms } },
-          { description: { search: searchTerms } },
-        ],
+        variable_id: { search: searchTerms },
+        variable_name: { search: searchTerms },
+        description: { search: searchTerms },
         // NOT: {
         //   description: null,
         // },

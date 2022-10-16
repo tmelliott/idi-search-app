@@ -9,13 +9,12 @@ async function main(query) {
       .split(" ")
       .map((x) => (x.length ? "+" + x : x))
       .join(" ")
+      .replace("_", "\\_")
     args = {
       ...args,
       where: {
-        OR: [
-          { agency_id: { search: searchTerms } },
-          { agency_name: { search: searchTerms } },
-        ],
+        agency_id: { search: searchTerms },
+        agency_name: { search: searchTerms },
       },
     }
   }

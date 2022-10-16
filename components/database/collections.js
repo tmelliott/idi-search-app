@@ -19,14 +19,13 @@ async function main(query, agencyId) {
       .split(" ")
       .map((x) => (x.length ? "+" + x : x))
       .join(" ")
+      .replace("_", "\\_")
     args = {
       ...args,
       where: {
-        OR: [
-          { collection_id: { search: searchTerms } },
-          { collection_name: { search: searchTerms } },
-          { description: { search: searchTerms } },
-        ],
+        collection_id: { search: searchTerms },
+        collection_name: { search: searchTerms },
+        description: { search: searchTerms },
       },
     }
   }
