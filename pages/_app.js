@@ -4,6 +4,16 @@ import { useState } from "react"
 
 import MainLayout from "../components/layout/Layout"
 import PlausibleProvider from "next-plausible"
+import { MDXProvider } from "@mdx-js/react"
+
+const HeaderH2 = ({ children }) => {
+  const idText = children.replace(/ /g, "_").toLowerCase()
+  return <h2 id={idText}>{children}</h2>
+}
+
+const components = {
+  h2: HeaderH2,
+}
 
 function MyApp({ Component, pageProps }) {
   const [filterTerm, setFilterTerm] = useState("")
@@ -17,13 +27,15 @@ function MyApp({ Component, pageProps }) {
       selfHosted="true"
       enabled="true"
     >
-      <Layout>
-        <Component
-          {...pageProps}
-          filterTerm={filterTerm}
-          setFilterTerm={setFilterTerm}
-        />
-      </Layout>
+      <MDXProvider components={components}>
+        <Layout>
+          <Component
+            {...pageProps}
+            filterTerm={filterTerm}
+            setFilterTerm={setFilterTerm}
+          />
+        </Layout>
+      </MDXProvider>
     </PlausibleProvider>
   )
 }
