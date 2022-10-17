@@ -35,7 +35,9 @@ function Agencies({ term, limit }) {
             Data Supply Agencies ({isLoading ? <Loading /> : agencies.length})
           </>
         ) : (
-          <Link href="/agencies">
+          <Link
+            href={`/agencies${router.query.s ? "?s=" + router.query.s : ""}`}
+          >
             <a className="flex flex-row items-center gap-2 group">
               Data Supply Agencies ({isLoading ? <Loading /> : agencies.length})
               <LinkIcon

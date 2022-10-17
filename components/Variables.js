@@ -98,7 +98,9 @@ function Variables({
         {router.asPath === "/datasets" ? (
           <>Variables ({isLoading ? <Loading /> : variables?.n})</>
         ) : (
-          <Link href="/variables">
+          <Link
+            href={`/variables${router.query.s ? "?s=" + router.query.s : ""}`}
+          >
             <a className="flex flex-row items-center gap-2 group">
               Variables ({isLoading ? <Loading /> : variables?.n})
               <LinkIcon

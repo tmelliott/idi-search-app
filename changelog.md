@@ -9,6 +9,7 @@
 - use SQL fulltext search for better search results
 - update about and help pages
 - specify 'Data Supply Agency'
+- clicking headings persists the search term
 
 # version 0.2.0
 
