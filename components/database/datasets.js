@@ -25,14 +25,14 @@ async function main(query, collectionId) {
       .split(" ")
       .map((x) => (x.length ? "+" + x : x))
       .join(" ")
-      .replace("_", "\\_")
+    // .replace("_", "\\_")
     args = {
       ...args,
       where: {
         OR: [
           {
             AND: [
-              { dataset_id: { search: searchTerms } },
+              // { dataset_id: { search: searchTerms } },
               { dataset_name: { search: searchTerms } },
               { description: { search: searchTerms } },
             ],

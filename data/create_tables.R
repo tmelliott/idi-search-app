@@ -481,9 +481,18 @@ all_variables <- all_variables |>
     dplyr::filter(!grepl("^clean_read_classifications", dataset_id)) |>
     dplyr::filter(!grepl("RnD", refreshes)) |>
     dplyr::filter(!grepl("\\_v$", dataset_id)) |>
-    dplyr::filter(dataset_id != "dol_clean.grounds_code")
+    dplyr::filter(dataset_id != "dol_clean.grounds_code") |>
+    mutate(
+        variable_name = ifelse(
+            is.na(variable_name),
+            gsub("_", " ", variable_id, fixed = TRUE),
+            variable_name
+        )
+    )
 
-all_datasets <- all_datasets |> filter(dataset_id %in% all_variables$dataset_id)
+all_datasets <- all_datasets |>
+    filter(dataset_id %in% all_variables$dataset_id) |>
+    mutate(dataset_name = gsub("_", " ", dataset_name, fixed = TRUE))
 all_collections <- all_collections |> filter(collection_id %in% all_datasets$collection_id)
 
 readr::write_csv(all_variables, "data/out/variables.csv")

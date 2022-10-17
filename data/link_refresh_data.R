@@ -1,9 +1,9 @@
 # links refresh information from IDI VarList
 
 get_refresh_vars <- function() {
-
-    if (getRversion() < numeric_version('4.1.0'))
+    if (getRversion() < numeric_version("4.1.0")) {
         stop("Script required R >= 4.1.0.")
+    }
 
     # create tables to load into POSTGRES database ... limit (for now) of 10k rows
     library(tidyverse)
@@ -44,7 +44,8 @@ get_refresh_vars <- function() {
                 sheets <- sheets[grepl("^varlist", tolower(sheets))]
                 lapply(sheets, \(z) {
                     readxl::read_excel(x, sheet = z) |>
-                        select(TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
+                        select(
+                            TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
                             COLUMN_NAME, DATA_TYPE
                         )
                 }) |>

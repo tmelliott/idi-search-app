@@ -30,14 +30,13 @@ async function main(query, include, datasetId, page, size) {
       .split(" ")
       .map((x) => (x.length ? "+" + x : x))
       .join(" ")
-      .replace("_", "\\_")
+
     args = {
       ...args,
       where: {
         OR: [
           {
             AND: [
-              { variable_id: { search: searchTerms } },
               { variable_name: { search: searchTerms } },
               { description: { search: searchTerms } },
             ],
@@ -77,10 +76,6 @@ async function main(query, include, datasetId, page, size) {
           return current_refreshes
         case "adhoc":
           return "Adhoc"
-        case "meta":
-          return "Metadata"
-        case "rnd":
-          return "RnD"
       }
     })
     const incsWhere = incs.flat().map((inc) => ({
