@@ -339,11 +339,18 @@ drive_download(
 manual_collections <- readxl::read_excel(
     file.path(fdir, "manual_collections.xlsx"),
     sheet = "Collections"
-)
+) |>
+    mutate(
+        collection_id = tolower(collection_id)
+    )
 manual_datasets <- readxl::read_excel(
     file.path(fdir, "manual_collections.xlsx"),
     sheet = "Datasets"
-)
+) |>
+    mutate(
+        dataset_id = tolower(dataset_id),
+        collection_id = tolower(collection_id)
+    )
 
 manual_datasets <- datasets |>
     filter(is.na(collection_id)) |>
