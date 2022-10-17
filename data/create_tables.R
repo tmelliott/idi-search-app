@@ -348,8 +348,8 @@ manual_datasets <- readxl::read_excel(
     sheet = "Datasets"
 ) |>
     mutate(
-        dataset_id = tolower(dataset_id),
-        collection_id = tolower(collection_id)
+        dataset_id = tolower(dataset_id)
+        # collection_id = tolower(collection_id)
     )
 
 manual_datasets <- datasets |>

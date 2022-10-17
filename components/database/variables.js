@@ -25,6 +25,7 @@ async function main(query, include, datasetId, page, size) {
     },
     orderBy: [{ variable_name: "asc" }],
   }
+
   if (query !== undefined && query !== "") {
     const searchTerms = query
       .split(" ")
@@ -46,6 +47,7 @@ async function main(query, include, datasetId, page, size) {
       },
     }
   }
+
   if (datasetId !== "") {
     args = {
       ...args,
@@ -100,6 +102,7 @@ async function main(query, include, datasetId, page, size) {
       skip: parseInt(size) * (parseInt(page) - 1),
     }
   }
+
   const variables = await prisma.variables.findMany({
     ...args,
   })
