@@ -125,7 +125,7 @@ suppressMessages({
 cli::cli_progress_step("Extracting collections")
 collections <- map(collection_tables, "collection") |>
     bind_rows() |>
-    left_join(agency_collection) |>
+    left_join(agency_collection, by = "collection_name") |>
     select(collection_schema, collection_name, agency_id, description) |>
     mutate(agency_id = ifelse(is.na(agency_id), "U", agency_id))
 cli::cli_progress_done()
@@ -300,7 +300,7 @@ variables <- variables |>
 cli::cli_h1("Loading IDI variable lists")
 cli::cli_progress_step("Loading")
 source("data/link_refresh_data.R")
-refresh_vars <- get_refresh_vars()
+refresh_vars <- link_refresh_data()
 
 # saveRDS(refresh_vars, "data/cache/refresh_vars.rda")
 # refresh_vars <- readRDS("data/cache/refresh_vars.rda")
@@ -327,7 +327,8 @@ if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> tab
 cli::cli_progress_step("Merging datasets")
 datasets <- datasets |>
     right_join(
-        all_variables |> select(dataset_id, database_id) |> distinct()
+        all_variables |> select(dataset_id, database_id) |> distinct(),
+        by = "dataset_id"
     )
 
 cli::cli_progress_step("Merging collections")
@@ -337,7 +338,7 @@ collections <- datasets |>
     distinct() |>
     group_by(collection_name) |>
     summarize(database_id = paste(sort(database_id), collapse = "|")) |>
-    left_join(collections) |>
+    left_join(collections, by = "collection_name") |>
     mutate(
         collection_id = make.names(gsub("\\s", "_", collection_name))
     ) |>
@@ -363,12 +364,16 @@ write_csv(miss_dd,
 
 cli::cli_progress_step("Linking datasets with their collection ID")
 datasets <- datasets |>
-    left_join(collections |> select(collection_name, collection_id)) |>
+    left_join(collections |> select(collection_name, collection_id),
+        by = "collection_name"
+    ) |>
     select(dataset_id, dataset_name, collection_id, description, reference_period)
 
 # add datasets from all_variables missing:
 datasets <- datasets |>
-    full_join(all_variables |> select(dataset_id) |> distinct()) |>
+    full_join(all_variables |> select(dataset_id) |> distinct(),
+        by = "dataset_id"
+    ) |>
     mutate(
         dataset_name = ifelse(is.na(dataset_name), dataset_id, dataset_name)
     )
@@ -441,7 +446,7 @@ cli::cli_progress_step("Adding manual datasets and collections")
 manual_datasets <- datasets |>
     filter(is.na(collection_id)) |>
     select(-collection_id) |>
-    left_join(manual_datasets) |>
+    left_join(manual_datasets, by = "dataset_id") |>
     filter(!is.na(collection_id))
 
 datasets <- datasets |>
