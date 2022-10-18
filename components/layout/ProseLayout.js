@@ -23,16 +23,23 @@ const ProseLayout = ({ meta, children }) => {
         <title>{meta?.title || "IDI Search App"}</title>
       </Head>
 
-      <div className="about mx-auto py-12 flex flex-col max-w-3xl lg:max-w-none lg:flex-row gap-8 justify-center lg:h-full">
-        <div className="flex flex-col prose prose-sm prose-blue px-4">
-          <h4>Table of Contents</h4>
-          <ul className="list-none">
+      <div className="about mx-auto py-2 flex flex-col max-w-3xl lg:max-w-none lg:flex-row gap-8 justify-center lg:h-full">
+        <div className="flex flex-col px-4 prose-ul:list-none prose-ul:list-outside h-full rounded bg-gray-100 p-4 w-full lg:w-[320px] text-slate-900 shadow">
+          <h4 className="text-lg font-bold mb-4 text-gray-800">
+            Table of Contents
+          </h4>
+          <div className="flex flex-col gap-2">
             {headings.map((heading) => (
-              <li key={heading.text}>
-                <a href={heading.link}>{heading.text}</a>
-              </li>
+              <div key={heading.text} className="">
+                <a
+                  className="text-gray-800 font-semibold hover:underline"
+                  href={heading.link}
+                >
+                  {heading.text}
+                </a>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
 
         <div className="prose  prose-blue max-w-3xl lg:overflow-x-scroll">
