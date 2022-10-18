@@ -17,6 +17,10 @@ function Home() {
     <>
       <Head>
         <title>IDI Search | What's in the IDI?</title>
+        <meta
+          name="description"
+          content="A tool for exploring the data available in New Zealand's IDI"
+        />
       </Head>
 
       <Agencies term={filterTerm} limit={2} />
