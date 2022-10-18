@@ -34,7 +34,7 @@ function Home() {
         />
         <meta
           property="og:image"
-          content="https://idisearch.terourou.org/logo.png"
+          content="https://idisearch.terourou.org/banner.png"
         />
 
         {/* <!-- Twitter --> */}
@@ -53,7 +53,7 @@ function Home() {
         />
         <meta
           property="twitter:image"
-          content="https://idisearch.terourou.org/logo.png"
+          content="https://idisearch.terourou.org/banner.png"
         />
       </Head>
 
