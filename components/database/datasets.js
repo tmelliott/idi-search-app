@@ -21,12 +21,23 @@ async function main(query, collectionId) {
     orderBy: [{ dataset_name: "asc" }],
   }
   if (query !== undefined && query !== "") {
+    const searchTerms = query
+      .split(" ")
+      .map((x) => (x.length ? "+" + x : x))
+      .join(" ")
+    // .replace("_", "\\_")
     args = {
       ...args,
       where: {
         OR: [
-          { dataset_name: { contains: query } },
-          { description: { contains: query } },
+          {
+            AND: [
+              // { dataset_id: { search: searchTerms } },
+              { dataset_name: { search: searchTerms } },
+              { description: { search: searchTerms } },
+            ],
+          },
+          { dataset_id: { contains: query } },
         ],
       },
     }

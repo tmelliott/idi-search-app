@@ -1,3 +1,16 @@
+# version 0.3.0
+
+**Updated 19 October 2022**
+
+- Tweaked colours and text on the 'Quick Stats' page
+- Added October 2022 refresh data and removed _old_ adhoc variables
+- merged most duplicate collections
+- reverse 'refresh availability' so newest first
+- use SQL fulltext search for better search results
+- update about and help pages
+- specify 'Data Supply Agency'
+- clicking headings persists the search term
+
 # version 0.2.0
 
 **Updated 4 October 2022**

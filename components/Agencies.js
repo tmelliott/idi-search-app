@@ -31,11 +31,15 @@ function Agencies({ term, limit }) {
     <section>
       <h3>
         {router.asPath === "/agencies" ? (
-          <>Agencies ({isLoading ? <Loading /> : agencies.length})</>
+          <>
+            Data Supply Agencies ({isLoading ? <Loading /> : agencies.length})
+          </>
         ) : (
-          <Link href="/agencies">
+          <Link
+            href={`/agencies${router.query.s ? "?s=" + router.query.s : ""}`}
+          >
             <a className="flex flex-row items-center gap-2 group">
-              Agencies ({isLoading ? <Loading /> : agencies.length})
+              Data Supply Agencies ({isLoading ? <Loading /> : agencies.length})
               <LinkIcon
                 height={15}
                 className="inline text-blue-600 opacity-0 group-hover:opacity-100"

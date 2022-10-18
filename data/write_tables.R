@@ -63,28 +63,28 @@ write_tables <- function() {
 
     variables <- readr::read_csv("data/out/variables.csv")
     dbExecute(con, "DELETE FROM variables;")
-    # n <- 10000
-    # N <- ceiling(nrow(variables) / N)
-    # pb <- txtProgressBar(max = N, style = 3L)
-    # for (i in 1:N) {
-    #     setTxtProgressBar(pb, i)
-    #     ii <- 1:N + N * (i - 1)
-    #     ii <- ii[ii <= nrow(variables)]
-    dbExecute(
-        con,
-        paste(
-            "INSERT INTO variables VALUES",
-            glue::glue_sql_collapse(
-                with(
-                    variables,
-                    glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
-                ),
-                ", "
+    n <- 5000
+    N <- ceiling(nrow(variables) / n)
+    pb <- txtProgressBar(max = N, style = 3L)
+    for (i in 1:N) {
+        setTxtProgressBar(pb, i)
+        ii <- 1:n + n * (i - 1)
+        ii <- ii[ii <= nrow(variables)]
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO variables VALUES",
+                glue::glue_sql_collapse(
+                    with(
+                        variables[ii, ],
+                        glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
+                    ),
+                    ", "
+                )
             )
         )
-    )
-    # }
-    # close(pb)
+    }
+    close(pb)
 
 
     DBI::dbWithTransaction(con, {

@@ -25,20 +25,29 @@ async function main(query, include, datasetId, page, size) {
     },
     orderBy: [{ variable_name: "asc" }],
   }
+
   if (query !== undefined && query !== "") {
+    const searchTerms = query
+      .split(" ")
+      .map((x) => (x.length ? "+" + x : x))
+      .join(" ")
+
     args = {
       ...args,
       where: {
         OR: [
+          {
+            AND: [
+              { variable_name: { search: searchTerms } },
+              { description: { search: searchTerms } },
+            ],
+          },
           { variable_id: { contains: query } },
-          { description: { contains: query } },
         ],
-        // NOT: {
-        //   description: null,
-        // },
       },
     }
   }
+
   if (datasetId !== "") {
     args = {
       ...args,
@@ -58,6 +67,7 @@ async function main(query, include, datasetId, page, size) {
     "20211020",
     "202203",
     "202206",
+    "202210",
   ]
 
   if (include !== "all") {
@@ -68,10 +78,6 @@ async function main(query, include, datasetId, page, size) {
           return current_refreshes
         case "adhoc":
           return "Adhoc"
-        case "meta":
-          return "Metadata"
-        case "rnd":
-          return "RnD"
       }
     })
     const incsWhere = incs.flat().map((inc) => ({
@@ -96,6 +102,7 @@ async function main(query, include, datasetId, page, size) {
       skip: parseInt(size) * (parseInt(page) - 1),
     }
   }
+
   const variables = await prisma.variables.findMany({
     ...args,
   })

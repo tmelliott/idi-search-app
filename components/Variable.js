@@ -23,7 +23,8 @@ function Variable({ d_id, v_id }) {
 
   let description = variable.description || ""
   if (highlight) {
-    const searchMask = `(${highlight})`
+    const searchMask = `(${highlight.replaceAll(" ", "|")})`
+    console.log(searchMask)
     const regEx = new RegExp(searchMask, "ig")
     const replaceMask = "<mark>$1</mark>"
     description = description.replace(regEx, replaceMask)
@@ -55,7 +56,7 @@ function Variable({ d_id, v_id }) {
 
       {variable.dataset.collection && variable.dataset.collection.agency && (
         <div className="text-xs">
-          Agency:{` `}
+          Data Supply Agency:{` `}
           <Link
             href={`/agencies/${variable.dataset.collection.agency.agency_id}`}
           >

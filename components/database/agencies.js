@@ -4,13 +4,18 @@ async function main(query) {
   let args = {
     orderBy: [{ agency_name: "asc" }],
   }
-  if (query !== undefined) {
+  if (query !== undefined && query !== "") {
+    const searchTerms = query
+      .split(" ")
+      .map((x) => (x.length ? "+" + x : x))
+      .join(" ")
+
     args = {
       ...args,
       where: {
         OR: [
+          { agency_name: { search: searchTerms } },
           { agency_id: { contains: query } },
-          { agency_name: { contains: query } },
         ],
       },
     }

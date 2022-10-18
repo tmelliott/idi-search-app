@@ -8,7 +8,6 @@ import { LinkIcon } from "@heroicons/react/outline"
 function Collections({ term, agencyId, limit, title = "Collections" }) {
   const router = useRouter()
   const { collections, isLoading } = useCollections(term, agencyId)
-
   const showCollection = (collection) => {
     router.push(
       {
@@ -50,7 +49,9 @@ function Collections({ term, agencyId, limit, title = "Collections" }) {
         {router.asPath === "/collections" ? (
           <>Collections ({isLoading ? <Loading /> : collections.length})</>
         ) : (
-          <Link href="/collections">
+          <Link
+            href={`/collections${router.query.s ? "?s=" + router.query.s : ""}`}
+          >
             <a className="flex flex-row items-center gap-2 group">
               Collections ({isLoading ? <Loading /> : collections.length})
               <LinkIcon

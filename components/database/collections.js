@@ -15,12 +15,22 @@ async function main(query, agencyId) {
     orderBy: [{ collection_name: "asc" }],
   }
   if (query !== undefined && query !== "") {
+    const searchTerms = query
+      .split(" ")
+      .map((x) => (x.length ? "+" + x : x))
+      .join(" ")
+
     args = {
       ...args,
       where: {
         OR: [
-          { collection_name: { contains: query } },
-          { description: { contains: query } },
+          {
+            AND: [
+              { collection_name: { search: searchTerms } },
+              { description: { search: searchTerms } },
+            ],
+          },
+          { collection_id: { contains: query } },
         ],
       },
     }

@@ -5,20 +5,31 @@
 
 - id: ACM
   name: Auckland City Mission
-
-- id: Corrections
-  name: Corrections
+  collections:
+    - IDI Auckland City Mission data
 
 - id: Customs
   name: New Zealand Customs Service
   collections:
     - IDI Customs International Travel and Migration data
 
+- id: DoC
+  name: Department of Corrections
+  collections:
+    - Offender Management Periods
+
 - id: DIA
   name: Department of Internal Affairs
+  collections:
+    - IDI Department of Internal Affairs(DIA) Life Event data
+
+- id: EarlyStart
+  name: Early Start Project
+  collections:
+    - IDI Early Start Project data
 
 - id: HNZ
-  name: Kāinga Ora / Housing New Zealand
+  name: Kāinga Ora and Ministry of Social Development
   collections:
     - IDI Housing NZ / Kāinga Ora Social Housing data
 
@@ -29,6 +40,8 @@
     - IDI IR Tax Autocalc Information
     - IDI SLA IRD Consolidated Data Extract data
     - IDI SLA IRD Unit Record Monthly Data Extract data
+    - IDI IR Full data
+    - IDI IR Tax Estate or Trust Beneficiary Details (IR6B) data
 
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
@@ -41,14 +54,35 @@
   collections:
     - MOE National Student Index (NSI) data
     - MOE tertiary education data
+    - IDI MOE Early Childhood Education and Compulsory Schooling data
+    - Tertiary Education Literacy and Numeracy Data
+    - Programme for the International Assessment of Adult Competencies (PIAAC) 2014/15 Survey of Adult Life Skills
+    - IDI SLA Student Loans Account Manager (SLAM) data
 
 - id: MOH
   name: Ministry of Health
   collections:
     - IDI MOH SOCRATES Disability Support Services data
-    - IDI OPC Osteoarthritis Primary Care data
-    - IDI MOH interRai data
     - New Zealand Health Survey
+    - IDI MOH B4 School Checks data
+    - IDI MOH Cancer Registrations data
+    - IDI MOH Chronic Condition/Significant Health Event Cohort data
+    - IDI MOH COVID-19 Immunisation Register data
+    - IDI MOH General Medical Services Claims data
+    - IDI MOH Health Service User data
+    - IDI MOH Health Tracker data
+    - IDI MOH Lab Claims data
+    - IDI MOH Maternity data
+    - IDI MOH Mortality data
+    - IDI MOH National Booking Reporting System data
+    - IDI MOH National Immunisation Register data
+    - IDI MOH National Non-Admitted Patient Collection data
+    - IDI MOH Pharmaceutical data
+    - IDI MOH PHO Enrolment data
+    - IDI MOH Population Cohort data
+    - IDI MOH Private Hospital Discharges data
+    - IDI MOH Programme for the Integration of Mental Health data
+    - IDI MOH Public Hospital Discharges data
 
 - id: MOJ
   name: Ministry of Justice
@@ -58,12 +92,17 @@
 - id: MSD
   name: Ministry of Social Development
   collections:
-    - IDI Early Start Project data
     - IDI MSD COVID Income Relief Payment
     - IDI MSD COVID Wage Subsidy (CWS)
     - IDI MSD Fixed Forecasting and Costing data
     - IDI MSD Income Support Debt to Government data
     - IDI Youth Service Interventions (YST) data
+    - IDI MSD Benefit Dynamics Data and Income Support Expenditure data
+    - IDI Ministry of Social Development Client Identity data
+    - IDI MSD COVID Wage Subsidy (CWS) & Repayments data
+    - IDI Ministry of Social Development Employment Assistance and Education History data
+    - IDI Ministry of Social Development Residential and Postal Address data
+    - IDI SLA MSD Study Link data
 
 - id: NZPOL
   name: New Zealand Police
@@ -84,6 +123,8 @@
   name: Oranga Tamariki
   collections:
     - IDI Oranga Tamariki Child, Youth and Family (CYF) data
+    - IDI Ministry for Children data - CAP Children’s Team data
+    - IDI Oranga Tamariki Family Start data
 
 - id: SNZ
   name: Statistics New Zealand
@@ -95,10 +136,24 @@
     - IDI HES Net Worth Supplement
     - IDI HLFS Supplements
     - IDI HLFS Wellbeing Supp
+    - IDI Household Labour Force Survey data (HLFS) data
     - IDI Iwi Affiliation Census 2018
+    - IDI Survey of Family Income and Employment data
+    - IDI Business Register data
+    - IDI Longitudinal Immigration Survey of NZ
 
 - id: SportNZ
   name: Sport NZ
+
+- id: TAS
+  name: TAS Kāhui Tuitui Tāngata
+  collections:
+    - IDI MOH interRai data
+
+- id: TuOra
+  name: Tū Ora Compass Health
+  collections:
+    - IDI OPC Osteoarthritis Primary Care data
 
 - id: WiseGroup
   name: WiseGroup

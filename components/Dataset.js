@@ -19,9 +19,11 @@ function Dataset({ id, term }) {
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <>Error ...</>
 
+  console.log(dataset)
+
   let description = dataset.description || ""
   if (highlight) {
-    const searchMask = `(${highlight})`
+    const searchMask = `(${highlight.replaceAll(" ", "|")})`
     const regEx = new RegExp(searchMask, "ig")
     const replaceMask = "<mark>$1</mark>"
     description = description.replace(regEx, replaceMask)
@@ -50,7 +52,7 @@ function Dataset({ id, term }) {
       )}
       {dataset.collection && dataset.collection.agency && (
         <div className="text-xs">
-          Agency:{` `}
+          Data Supply Agency:{` `}
           <Link href={`/agencies/${dataset.collection.agency.agency_id}`}>
             <a className="underline cursor-pointer">
               {dataset.collection.agency.agency_name}

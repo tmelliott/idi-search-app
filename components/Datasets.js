@@ -66,7 +66,9 @@ function Datasets({ term, collectionId, limit, title = "Datasets" }) {
         {router.asPath === "/datasets" ? (
           <>Datasets ({isLoading ? <Loading /> : datasets.length})</>
         ) : (
-          <Link href="/datasets">
+          <Link
+            href={`/datasets${router.query.s ? "?s=" + router.query.s : ""}`}
+          >
             <a className="flex flex-row items-center gap-2 group">
               Datasets ({isLoading ? <Loading /> : datasets.length})
               <LinkIcon
