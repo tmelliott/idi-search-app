@@ -9,6 +9,7 @@ import {
 import { useState } from "react"
 
 import packageJson from "../../package.json"
+import Image from "next/image"
 
 function Header() {
   const [menuHidden, setMenuHidden] = useState(true)
@@ -21,10 +22,13 @@ function Header() {
     <div className="header flex flex-col sm:flex-row items-center">
       {/* Left panel */}
       <div className="flex flex-row items-center w-full sm:w-auto">
-        <div className="flex-1 flex items-baseline gap-5">
-          <h1 className="text-xl p-0 m-0">
+        <div className="flex-1 flex items-center gap-5">
+          <h1 className="text-xl p-0 m-0 cursor-pointer">
             <Link href="/">
-              <a>IDI Search</a>
+              <div className="flex items-center">
+                <Image src="/logo.svg" height={50} width={50} />
+                <a>IDI Search</a>
+              </div>
             </Link>
           </h1>
           <div className="text-xs text-gray-500 font-light hover:text-gray-700">
