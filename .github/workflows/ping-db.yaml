@@ -1,0 +1,21 @@
+# new gh workflow on dev branch running weekly
+name: Ping DB
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  workflow_dispatch:
+
+jobs:
+  # ping the API 'https://idisearch.terourou.org/api/admin/prevent_sleep'
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping API
+        uses: jakejarvis/http-request-action@master
+        with:
+          url: https://idisearch.terourou.org/api/admin/prevent_sleep
+          method: GET
+          timeout: 30
+          headers: |
+            Content-Type: application/json
+            Accept: application/json
