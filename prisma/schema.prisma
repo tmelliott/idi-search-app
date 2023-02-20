@@ -1,12 +1,12 @@
 datasource db {
-  provider             = "mysql"
-  url                  = env("DATABASE_URL")
-  referentialIntegrity = "prisma"
+  provider     = "mysql"
+  url          = env("DATABASE_URL")
+  relationMode = "prisma"
 }
 
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["referentialIntegrity", "fullTextSearch", "fullTextIndex"]
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 model agencies {
@@ -26,6 +26,7 @@ model collections {
   agency          agencies?  @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
   datasets        datasets[]
 
+  @@index([agency_id])
   @@fulltext([collection_name, description])
 }
 
@@ -41,6 +42,7 @@ model datasets {
   alternate table_matches[] @relation("alt_table")
   matches   table_matches[] @relation("match_table")
 
+  @@index([collection_id])
   @@fulltext([dataset_name, description])
 }
 
@@ -60,6 +62,8 @@ model variables {
   matches   variable_matches[] @relation("match_variable")
 
   @@id([variable_id, dataset_id], name: "v_id")
+  @@unique([dataset_id, variable_id])
+  @@index([dataset_id])
   @@fulltext([variable_name, description])
 }
 
@@ -71,6 +75,8 @@ model table_matches {
   notes        String?
 
   @@id([table_id, alt_table_id])
+  @@index([table_id])
+  @@index([alt_table_id])
 }
 
 model variable_matches {
@@ -82,4 +88,6 @@ model variable_matches {
   notes           String?
 
   @@id([table_id, variable_id, alt_variable_id])
+  @@index([table_id, alt_variable_id])
+  @@index([table_id, variable_id])
 }
