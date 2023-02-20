@@ -10,6 +10,7 @@
 - update about and help pages
 - specify 'Data Supply Agency'
 - clicking headings persists the search term
+- add logo/favicon
 
 # version 0.2.0
 

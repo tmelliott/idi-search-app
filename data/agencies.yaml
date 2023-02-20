@@ -46,7 +46,7 @@
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
   collections:
-    - IDI MBIE Immigration data
+    - IDI MBIE Immigration and Visa data
     - IDI MBIE Tenancy Bond data
 
 - id: MOE
@@ -125,6 +125,7 @@
     - IDI Oranga Tamariki Child, Youth and Family (CYF) data
     - IDI Ministry for Children data - CAP Children’s Team data
     - IDI Oranga Tamariki Family Start data
+    - IDI Oranga Tamariki Transition Support Services data collection
 
 - id: SNZ
   name: Statistics New Zealand
@@ -141,6 +142,7 @@
     - IDI Survey of Family Income and Employment data
     - IDI Business Register data
     - IDI Longitudinal Immigration Survey of NZ
+    - IDI General Social Survey 2021 data (GSS2021)
 
 - id: SportNZ
   name: Sport NZ

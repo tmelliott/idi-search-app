@@ -1,16 +1,18 @@
 # links refresh information from IDI VarList
-
-get_refresh_vars <- function() {
+link_refresh_data <- function() {
     if (getRversion() < numeric_version("4.1.0")) {
         stop("Script required R >= 4.1.0.")
     }
 
     # create tables to load into POSTGRES database ... limit (for now) of 10k rows
-    library(tidyverse)
-    library(googledrive)
-    library(dotenv)
+    cli::cli_progress_step("Setting up environment")
+    suppressPackageStartupMessages({
+        library(tidyverse)
+        library(googledrive)
+        library(dotenv)
+    })
 
-    drive_auth(Sys.getenv("GOOGLE_EMAIL"))
+    suppressMessages(drive_auth(Sys.getenv("GOOGLE_EMAIL")))
     g_files <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"), "Variable Lists")) |>
         filter(str_detect(name, "varlist"))
 
@@ -24,58 +26,60 @@ get_refresh_vars <- function() {
         googledrive_quiet = TRUE
     )
 
-    pb <- txtProgressBar(0, nrow(g_files), style = 3L, title = "Downloading refresh information from Google Drive")
-    for (i in seq_len(nrow(g_files))) {
-        drive_download(g_files$id[i], path = file.path(fdir, g_files$name[i]))
-        setTxtProgressBar(pb, i)
-    }
-    close(pb)
-    files <- list.files(fdir, full.names = TRUE)
-
+    z <- lapply(
+        cli::cli_progress_along(seq_len(nrow(g_files)),
+            name = "Downloading refresh lists from Google Drive"
+        ),
+        \(i) drive_download(g_files$id[i], path = file.path(fdir, g_files$name[i]))
+    )
 
     ## Read vars from varlists:
+    cli::cli_progress_step("Reading files")
     files <- list.files(fdir, full.names = TRUE)
-
-    suppressMessages({
-        all_vars <-
-            lapply(files, \(x) {
-                print(x)
-                sheets <- readxl::excel_sheets(x)
-                sheets <- sheets[grepl("^varlist", tolower(sheets))]
-                lapply(sheets, \(z) {
-                    readxl::read_excel(x, sheet = z) |>
-                        select(
-                            TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
-                            COLUMN_NAME, DATA_TYPE
-                        )
-                }) |>
-                    bind_rows()
+    refreshes <- lapply(
+        files,
+        \(x) suppressMessages({
+            sheets <- readxl::excel_sheets(x)
+            sheets <- sheets[grepl("^varlist", tolower(sheets))]
+            lapply(sheets, \(z) {
+                readxl::read_excel(x, sheet = z) |>
+                    select(
+                        TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
+                        COLUMN_NAME, DATA_TYPE
+                    )
             }) |>
-            bind_rows() |>
-            mutate(
-                dataset_id = paste(TABLE_SCHEMA, TABLE_NAME, sep = ".")
-            ) |>
-            rename(
-                database = TABLE_CATALOG,
-                variable_id = COLUMN_NAME,
-                type = DATA_TYPE
-            ) |>
-            select(database, dataset_id, variable_id, type) |>
-            mutate(
-                database = gsub("IDI(_Clean)?_", "", database),
-                variable_id = stringr::str_trim(tolower(variable_id)),
-                dataset_id = stringr::str_trim(tolower(dataset_id))
-            ) |>
-            distinct()
-    })
+                bind_rows()
+        })
+    )
+
+    cli::cli_progress_step("Merging variables")
+    all_vars <- refreshes |>
+        bind_rows() |>
+        mutate(
+            dataset_id = paste(TABLE_SCHEMA, TABLE_NAME, sep = ".")
+        ) |>
+        rename(
+            database = TABLE_CATALOG,
+            variable_id = COLUMN_NAME,
+            type = DATA_TYPE
+        ) |>
+        select(database, dataset_id, variable_id, type) |>
+        mutate(
+            database = gsub("IDI(_Clean)?_", "", database),
+            variable_id = stringr::str_trim(tolower(variable_id)),
+            dataset_id = stringr::str_trim(tolower(dataset_id))
+        ) |>
+        distinct()
 
     ## fix up duplicates
+    cli::cli_progress_step("Removing duplicates")
     all_vars <- all_vars |>
         group_by(dataset_id, variable_id) |>
         mutate(type = first(type)) |>
         ungroup() |>
         distinct()
 
+    cli::cli_progress_step("Creating refresh column")
     refresh_vars <- all_vars |>
         mutate(refresh = database) |>
         pivot_wider(names_from = database, values_from = refresh, values_fill = NA)
@@ -88,8 +92,9 @@ get_refresh_vars <- function() {
         ) |>
         select(dataset_id, variable_id, type, refreshes)
 
-    refresh_vars
+    cli::cli_progress_done()
 
+    refresh_vars
     # variables |>
     #     left_join(refresh_vars, by = c("variable_id", "dataset_id"))
 

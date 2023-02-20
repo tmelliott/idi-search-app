@@ -4,11 +4,18 @@ if (getRversion() < numeric_version("4.1.0")) {
 }
 
 # create tables to load into POSTGRES database ... limit (for now) of 10k rows
-library(tidyverse)
-library(googledrive)
-library(dotenv)
+suppressPackageStartupMessages({
+    library(tidyverse)
+    library(googledrive)
+    library(dotenv)
+})
 
+cli::cli_h1("Downloading dictionaries from Goolge Drive")
+
+cli::cli_progress_step("Authenticating with Google Drive")
 drive_auth(Sys.getenv("GOOGLE_EMAIL"))
+
+cli::cli_progress_step("Setting up temporary directory")
 g_files <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"), "Dictionaries")) |>
     filter(str_detect(name, "data_dictionary"))
 
@@ -22,11 +29,16 @@ options(
     googledrive_quiet = TRUE
 )
 
-library(parallel)
+suppressPackageStartupMessages(library(parallel))
+cli::cli_progress_step("Initializing cluster")
+
 cl <- makeCluster(12L)
 clusterExport(cl, c("g_files", "fdir"))
-
 z <- clusterEvalQ(cl, googledrive::drive_auth(Sys.getenv("GOOGLE_EMAIL")))
+cli::cli_progress_done()
+
+pbapply::pboptions(type = "timer")
+cli::cli_alert("Downloading dictionaries ...")
 z <- pbapply::pblapply(
     seq_len(nrow(g_files)),
     \(i) {
@@ -37,9 +49,18 @@ z <- pbapply::pblapply(
     },
     cl = cl
 )
+cli::cli_alert_success("Dictionaries downloaded")
+
+cli::cli_progress_step("Shutting down cluster")
 stopCluster(cl)
+
+cli::cli_progress_done()
+
+cli::cli_h1("Reading data dictionaries")
+
 files <- list.files(fdir, full.names = TRUE)
 
+cli::cli_progress_step("Reading agencies")
 agency_collection <- yaml::read_yaml("data/agencies.yaml") |>
     lapply(\(x) {
         tibble(
@@ -61,11 +82,11 @@ fixTableNames <- function(names) {
     names
 }
 
-cat("\n **** Starting dictionary processing ...\n")
+cli::cli_progress_step("Processing dictionaries")
 suppressMessages({
     collection_tables <- files |>
         lapply(\(x) {
-            cat("\r* Processing dictionary", x, "...")
+            # cat("\r* Processing dictionary", x, "...")
             x <- readxl::read_excel(x, sheet = "Index")
             di <- grep("Dataset Name", x$Index)
             dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
@@ -100,45 +121,66 @@ suppressMessages({
             )
         })
 })
-cat("\r* Processing complete!\n")
 
+cli::cli_progress_step("Extracting collections")
 collections <- map(collection_tables, "collection") |>
     bind_rows() |>
-    left_join(agency_collection) |>
+    left_join(agency_collection, by = "collection_name") |>
     select(collection_schema, collection_name, agency_id, description) |>
     mutate(agency_id = ifelse(is.na(agency_id), "U", agency_id))
+cli::cli_progress_done()
 
 if (any(collections$agency_id == "U")) {
-    cat("The following collections have yet to be assigned agencies (in agencies.yaml)\n")
+    d <- cli::cli_div(
+        theme = list(
+            rule = list(
+                color = "red"
+            )
+        )
+    )
+    cli::cli_rule()
+    cli::cli_alert_warning(
+        cli::style_bold(
+            cli::col_red(
+                "The following collections have yet to be assigned agencies (in agencies.yaml)"
+            )
+        )
+    )
     collections |>
         filter(agency_id == "U") |>
-        select(collection_name) |>
-        as.data.frame() |>
-        print()
+        pull(collection_name) |>
+        sapply(\(x) cli::col_red(x)) |>
+        cli::cli_ul()
+    cli::cli_rule()
+    cli::cli_end(d)
 }
 
 # temporary:
 if (any(table(collections$collection_name) > 1L)) {
     tbl <- table(collections$collection_name)
     tbl <- tbl[tbl > 1L]
-    print(tbl[tbl > 1L])
-    stop("BAD COLLECTION NAMES")
+    cli::cli_alert_danger("Bad collection names")
+    cli::cli_ul(tbl[tbl > 1L])
+    stop()
 }
 
-datasets <- map(collection_tables, "tables") |>
-    bind_rows() |>
-    rename(
-        dataset_name = "dataset.name",
-        description = "description",
-        reference_period = "reference.period"
-    ) |>
-    mutate(
-        dataset_id = gsub("*", "", dataset_id, fixed = TRUE),
-        dataset_name = gsub("*", "", dataset_name, fixed = TRUE),
-        dataset_id = gsub("^\\[?IDI\\_Adhoc\\]?\\.", "", dataset_id)
-    ) |>
-    select(dataset_id, dataset_name, collection_name, description, reference_period) |>
-    mutate(dataset_id = stringr::str_trim(tolower(dataset_id)))
+cli::cli_progress_step("Extracing datasets")
+datasets <- suppressMessages(
+    map(collection_tables, "tables") |>
+        bind_rows() |>
+        rename(
+            dataset_name = "dataset.name",
+            description = "description",
+            reference_period = "reference.period"
+        ) |>
+        mutate(
+            dataset_id = gsub("*", "", dataset_id, fixed = TRUE),
+            dataset_name = gsub("*", "", dataset_name, fixed = TRUE),
+            dataset_id = gsub("^\\[?IDI\\_Adhoc\\]?\\.", "", dataset_id)
+        ) |>
+        select(dataset_id, dataset_name, collection_name, description, reference_period) |>
+        mutate(dataset_id = stringr::str_trim(tolower(dataset_id)))
+)
 
 if (any(grepl("\n", datasets$dataset_id))) {
     datasets <- datasets |>
@@ -149,8 +191,23 @@ dup_ids <- datasets$dataset_id |>
     tolower() |>
     table()
 if (any(dup_ids > 1L)) {
-    print(dup_ids[dup_ids > 1])
-    stop("Duplicate dataset IDs")
+    d <- cli::cli_div(
+        theme = list(
+            rule = list(
+                color = "red"
+            )
+        )
+    )
+    cli::cli_rule()
+    cli::cli_alert_danger(
+        cli::style_bold(
+            cli::col_red(
+                "Duplicate dataset IDs"
+            )
+        )
+    )
+    cli::cli_ul(dup_ids[dup_ids > 1])
+    stop()
 }
 
 repair_colnames <- function(x, expr, name) {
@@ -158,8 +215,14 @@ repair_colnames <- function(x, expr, name) {
     x
 }
 
-variables <- files |>
-    lapply(readxl::read_excel, sheet = 2L) |>
+cli::cli_progress_step("Loading variables")
+sheets <- lapply(
+    files,
+    \(x) suppressMessages(readxl::read_excel(x, sheet = 2L))
+)
+
+cli::cli_progress_step("Parsing variable information")
+variables <- sheets |>
     lapply(\(x) {
         # fix names of things
         cn <- tolower(make.names(colnames(x)))
@@ -177,7 +240,7 @@ variables <- files |>
 
         if (is.character(x$size)) {
             x <- x |> mutate(
-                size = sapply(lapply(strsplit(size, ","), as.integer), sum)
+                size = suppressWarnings(sapply(lapply(strsplit(size, ","), as.integer), sum))
             )
         }
 
@@ -191,7 +254,10 @@ variables <- files |>
                     )
                 )
             )
-    }) |>
+    })
+
+cli::cli_progress_step("Combining variable lists")
+variables <- variables |>
     bind_rows() |>
     mutate(
         primary_key = !is.na(primary_key) & primary_key == "Y",
@@ -220,15 +286,21 @@ vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
     tolower() |>
     table()
 if (any(vid_tab > 1L)) {
-    stop("Duplicate variable-dataset IDs")
+    cli::cli_alert_danger("Duplicate variable-dataset IDs")
+    cli::cli_ul(vid[vid > 1L])
+    stop("Duplicate IDs")
 }
+
+cli::cli_progress_done()
 
 variables <- variables |>
     select(-database_id) |>
     rename(type_dict = type)
 
+cli::cli_h1("Loading IDI variable lists")
+cli::cli_progress_step("Loading")
 source("data/link_refresh_data.R")
-refresh_vars <- get_refresh_vars()
+refresh_vars <- link_refresh_data()
 
 # saveRDS(refresh_vars, "data/cache/refresh_vars.rda")
 # refresh_vars <- readRDS("data/cache/refresh_vars.rda")
@@ -237,6 +309,7 @@ if (any((with(refresh_vars, paste(variable_id, dataset_id)) |> tolower() |> tabl
     stop("Duplicate refresh_vars")
 }
 
+cli::cli_progress_step("Merging refresh variables to dictionary variables")
 all_variables <- variables |>
     right_join(
         refresh_vars |>
@@ -251,24 +324,28 @@ if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> tab
     stop("Duplicate variables (after join)")
 }
 
+cli::cli_progress_step("Merging datasets")
 datasets <- datasets |>
     right_join(
-        all_variables |> select(dataset_id, database_id) |> distinct()
+        all_variables |> select(dataset_id, database_id) |> distinct(),
+        by = "dataset_id"
     )
 
+cli::cli_progress_step("Merging collections")
 collections <- datasets |>
     filter(!is.na(collection_name)) |>
     select(collection_name, database_id) |>
     distinct() |>
     group_by(collection_name) |>
     summarize(database_id = paste(sort(database_id), collapse = "|")) |>
-    left_join(collections) |>
+    left_join(collections, by = "collection_name") |>
     mutate(
         collection_id = make.names(gsub("\\s", "_", collection_name))
     ) |>
     select(collection_id, collection_name, agency_id, database_id, description)
 
 # # variables in dictionaries not in IDI:
+cli::cli_progress_step("Computing missingness information")
 miss_idi <- variables |>
     anti_join(refresh_vars, by = c("variable_id", "dataset_id")) |>
     mutate(variable_name = gsub("\n", "", variable_name))
@@ -285,20 +362,27 @@ write_csv(miss_dd,
     file = "data/missing_in_dictionaries.csv"
 )
 
+cli::cli_progress_step("Linking datasets with their collection ID")
 datasets <- datasets |>
-    left_join(collections |> select(collection_name, collection_id)) |>
+    left_join(collections |> select(collection_name, collection_id),
+        by = "collection_name"
+    ) |>
     select(dataset_id, dataset_name, collection_id, description, reference_period)
 
 # add datasets from all_variables missing:
 datasets <- datasets |>
-    full_join(all_variables |> select(dataset_id) |> distinct()) |>
+    full_join(all_variables |> select(dataset_id) |> distinct(),
+        by = "dataset_id"
+    ) |>
     mutate(
         dataset_name = ifelse(is.na(dataset_name), dataset_id, dataset_name)
     )
 
 tbl <- table(with(all_variables, paste(variable_id, dataset_id)))
 if (any(tbl > 1L)) {
-    stop("DUPLICATED VARIABLES")
+    cli::cli_alert_danger("Duplicate variables")
+    cli::cli_ul(names(tbl)[tbl > 1])
+    stop("")
 }
 
 # isin <- all_variables$dataset_id %in% datasets$dataset_id
@@ -319,6 +403,7 @@ fix_text <- function(x) {
     x
 }
 
+cli::cli_progress_step("Fixing text values")
 collections$description <- fix_text(collections$description)
 datasets$description <- fix_text(datasets$description)
 all_variables$description <- fix_text(all_variables$description)
@@ -328,7 +413,12 @@ all_variables$variable_name <- gsub("\n", "", all_variables$variable_name)
 
 all_variables <- all_variables |> select(-type_dict)
 
+cli::cli_progress_done()
+
+cli::cli_h1("Merging manual dataset and collection information")
 ## manually assign some collections to datasets ...
+
+cli::cli_progress_step("Downloading files from Google Drive")
 mc_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
     filter(name == "Manual dataset collections")
 drive_download(
@@ -352,10 +442,11 @@ manual_datasets <- readxl::read_excel(
         # collection_id = tolower(collection_id)
     )
 
+cli::cli_progress_step("Adding manual datasets and collections")
 manual_datasets <- datasets |>
     filter(is.na(collection_id)) |>
     select(-collection_id) |>
-    left_join(manual_datasets) |>
+    left_join(manual_datasets, by = "dataset_id") |>
     filter(!is.na(collection_id))
 
 datasets <- datasets |>
@@ -366,13 +457,15 @@ collections <- manual_collections |>
     filter(!collection_id %in% collections$collection_id) |>
     bind_rows(collections)
 
-
+cli::cli_progress_step("Downloading manual collection file")
 cs_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
     filter(name == "Collection schemas")
 drive_download(
     cs_file$id[1],
     path = file.path(fdir, "collection_schemas.xlsx")
 )
+
+cli::cli_progress_step("Reading manual collections file")
 collection_schemas <-
     readxl::read_excel(file.path(fdir, "collection_schemas.xlsx")) |>
     setNames(c("collection_name", "agency_name", "schema", "collection_id")) |>
@@ -383,6 +476,7 @@ collection_schemas <-
 # all_variables$dataset_id <- tolower(all_variables$dataset_id)
 
 ## add in dataset IDs
+cli::cli_progress_step("Fuzzy matching variables ignoring case")
 missing_collection_datasets <- datasets |>
     filter(is.na(collection_id)) |>
     pull(dataset_id) |>
@@ -418,6 +512,7 @@ missing_collection_datasets <- datasets |>
         )
     )
 
+cli::cli_progress_step("Adding missing datasets and collections")
 all_datasets <- datasets |>
     filter(!is.na(collection_id)) |>
     # filter(!tolower(dataset_id) %in% tolower(missing_collection_datasets$dataset_id)) |>
@@ -452,9 +547,12 @@ all_agencies <- agencies |> filter(agency_id %in% unique(all_collections$agency_
 
 
 ### --- renamed variables/tables information
+cli::cli_progress_step("Downloading variable and table renaming file")
 match_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
     filter(name == "Renamed variables and tables")
 drive_download(match_file$id[1], path = file.path(fdir, "matches.xlsx"))
+
+cli::cli_progress_step("Looking for renamed variables and tables")
 match_tables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
     sheet = "Tables"
 ) |>
@@ -479,6 +577,7 @@ match_variables <- readxl::read_excel(file.path(fdir, "matches.xlsx"),
         notes = as.character(notes)
     )
 
+cli::cli_progress_step("Remove unneeded datasets and collections")
 all_variables <- all_variables |>
     filter(dataset_id %in% unique(all_datasets$dataset_id))
 
@@ -502,12 +601,17 @@ all_datasets <- all_datasets |>
     mutate(dataset_name = gsub("_", " ", dataset_name, fixed = TRUE))
 all_collections <- all_collections |> filter(collection_id %in% all_datasets$collection_id)
 
+cli::cli_progress_step("Writing files")
 readr::write_csv(all_variables, "data/out/variables.csv")
 readr::write_csv(all_datasets, "data/out/datasets.csv")
 readr::write_csv(all_collections, "data/out/collections.csv")
 readr::write_csv(all_agencies, "data/out/agencies.csv")
 readr::write_csv(match_variables, "data/out/variable_matches.csv")
 readr::write_csv(match_tables, "data/out/table_matches.csv")
+
+cli::cli_progress_done()
+
+cli::cli_alert_success("Completed dictionary and variable processing!")
 
 # if (isTRUE(Sys.getenv("DEPLOY") != "yes")) {
 #     message("Building complete - to confirm run, specify environment variable DEPLOY=yes")
