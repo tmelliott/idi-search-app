@@ -18,5 +18,5 @@ export default async function preventSleep(req, res) {
     },
   })
   console.log("Deleted: ", dropAgency)
-  res.status(200).json("OK")
+  res.status(200).json("OK - database stimulated successfully!")
 }
