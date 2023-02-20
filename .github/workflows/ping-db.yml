@@ -11,11 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Ping API
-        uses: jakejarvis/http-request-action@master
+        uses: fjogeleit/http-request-action@v1
         with:
           url: https://idisearch.terourou.org/api/admin/prevent_sleep
           method: GET
-          timeout: 30
-          headers: |
-            Content-Type: application/json
-            Accept: application/json
