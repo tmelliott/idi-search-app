@@ -1,3 +1,5 @@
+- add export functionality (JSON or CSV format)
+
 # version 0.3.0
 
 **Updated 19 October 2022**
