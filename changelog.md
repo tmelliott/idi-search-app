@@ -1,4 +1,5 @@
 - add export functionality (JSON or CSV format)
+- on 'linking variables', display the number of links, and move (expanded) information to a tooltip
 
 # version 0.3.0
 
