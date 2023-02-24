@@ -1,6 +1,4 @@
-import { NextPage } from "next";
 import PlausibleProvider from "next-plausible";
-import { type AppType } from "next/app";
 
 import { Layouts } from "~/layout";
 import "~/styles/globals.css";

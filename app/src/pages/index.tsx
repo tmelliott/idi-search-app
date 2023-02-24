@@ -1,10 +1,6 @@
-import { type NextPage } from "next";
-import Head from "next/head";
-import Link from "next/link";
-
 import Agencies from "~/components/Agencies";
 import HeadTags from "~/layout/Head";
-import { NextPageWithLayout } from "~/types/types";
+import { type NextPageWithLayout } from "~/types/types";
 
 const Home: NextPageWithLayout = () => {
   return (

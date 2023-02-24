@@ -1,10 +1,7 @@
-import { useEffect, useState } from "react";
-
-import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
-import Prisma from "@prisma/client";
+import type Prisma from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -46,7 +43,7 @@ export default function Agencies({ limit }: Props) {
   });
 
   const viewAgency = (agency: Agency) => {
-    router.push(
+    void router.push(
       {
         pathname: router.pathname,
         query: {
@@ -60,6 +57,8 @@ export default function Agencies({ limit }: Props) {
     );
   };
 
+  const tempArray = Array(limit ?? 3).fill(0) as number[];
+
   return (
     <section>
       <h3>Data Supply Agencies</h3>
@@ -71,11 +70,6 @@ export default function Agencies({ limit }: Props) {
           the problem persists.
         </p>
       ) : (
-        // ) : isFetching ? (
-        //   <div className="m-2">
-        //     <div className="font-bold border-b">Name</div>
-        //
-        //   </div>
         <div className="p-2">
           <table className="w-full text-left">
             <thead className="border-b">
@@ -96,7 +90,7 @@ export default function Agencies({ limit }: Props) {
             </thead>
             <tbody>
               {isFetching
-                ? [...Array(limit ? limit : 3)].map((_i, i) => (
+                ? [...tempArray].map((_i, i) => (
                     <tr className="border-b text-sm" key={i}>
                       <td className="py-1" colSpan={columns.length}>
                         <div className="animate-pulse bg-gray-100 text-gray-50">
@@ -109,7 +103,7 @@ export default function Agencies({ limit }: Props) {
                     <tr
                       key={row.id}
                       className="border-b text-sm hover:bg-gray-50 cursor-pointer"
-                      onClick={(e) => viewAgency(row.original)}
+                      onClick={() => viewAgency(row.original)}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className="py-1">

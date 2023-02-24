@@ -29,7 +29,7 @@ const DualLayout = ({ children }: PropsWithChildren) => {
                 <div className="flex flex-row justify-end">
                   <div
                     className="flex flex-row text-xs items-center cursor-pointer hover:opacity-70"
-                    // onClick={clearPanel}
+                    onClick={() => setInfo(false)}
                   >
                     Close
                     <XCircleIcon className="h-6 ml-2" />

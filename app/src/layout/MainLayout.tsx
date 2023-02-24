@@ -1,6 +1,6 @@
 // import Footer from "./Footer"
 // import Header from "./Header"
-import { PropsWithChildren } from "react";
+import { type PropsWithChildren } from "react";
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
