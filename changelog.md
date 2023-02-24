@@ -1,5 +1,6 @@
 - add export functionality (JSON or CSV format)
 - on 'linking variables', display the number of links, and move (expanded) information to a tooltip
+- add search options: exact search
 
 # version 0.3.0
 
