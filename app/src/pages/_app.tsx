@@ -2,11 +2,10 @@ import { NextPage } from "next";
 import PlausibleProvider from "next-plausible";
 import { type AppType } from "next/app";
 
-import type { NextComponentTypeWithLayout } from "../types/types";
-
-import { Layouts } from "../layout";
-import "../styles/globals.css";
-import { api } from "../utils/api";
+import { Layouts } from "~/layout";
+import "~/styles/globals.css";
+import type { NextComponentTypeWithLayout } from "~/types/types";
+import { api } from "~/utils/api";
 
 const MyApp = ({ Component, pageProps }: NextComponentTypeWithLayout) => {
   const Layout = Layouts[Component.Layout || "Main"];
