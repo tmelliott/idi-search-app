@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/db"
 
-async function main(query, include, datasetId, page, size, description) {
+async function main(query, include, datasetId, page, size, exact, description) {
   let args = {
     select: {
       variable_id: true,
@@ -27,24 +27,36 @@ async function main(query, include, datasetId, page, size, description) {
   }
 
   if (query !== undefined && query !== "") {
-    const searchTerms = query
-      .split(" ")
-      .map((x) => (x.length ? "+" + x : x))
-      .join(" ")
-
-    args = {
-      ...args,
-      where: {
-        OR: [
-          {
-            AND: [
-              { variable_name: { search: searchTerms } },
-              { description: { search: searchTerms } },
-            ],
-          },
-          { variable_id: { contains: query } },
-        ],
-      },
+    if (exact) {
+      args = {
+        ...args,
+        where: {
+          OR: [
+            { variable_name: { contains: query } },
+            { variable_id: { contains: query } },
+            { description: { contains: query } },
+          ],
+        },
+      }
+    } else {
+      const searchTerms = query
+        .split(" ")
+        .map((x) => (x.length ? "+" + x : x))
+        .join(" ")
+      args = {
+        ...args,
+        where: {
+          OR: [
+            {
+              AND: [
+                { variable_name: { search: searchTerms } },
+                { description: { search: searchTerms } },
+              ],
+            },
+            { variable_id: { contains: query } },
+          ],
+        },
+      }
     }
   }
 
@@ -129,6 +141,7 @@ export default async function getVariables(
   datasetId = "",
   page = 1,
   size = 10000,
+  exact = false,
   description = false
 ) {
   const variables = await main(
@@ -137,6 +150,7 @@ export default async function getVariables(
     datasetId,
     page,
     size,
+    exact,
     description
   )
     .catch((e) => {

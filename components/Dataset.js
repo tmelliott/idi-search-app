@@ -165,7 +165,6 @@ function Dataset({ id, term }) {
       )}
 
       <Variables
-        term={term}
         datasetId={dataset.dataset_id}
         title="Variables in this dataset"
         paginate={5}

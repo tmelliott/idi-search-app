@@ -12,6 +12,7 @@ function Home() {
   const router = useRouter()
   const filterTerm = router.query.s || ""
   const filterInclude = router.query.include || "all"
+  const exact = router.query.exact || false
 
   return (
     <>
@@ -60,12 +61,7 @@ function Home() {
       <Agencies term={filterTerm} limit={2} />
       <Collections term={filterTerm} limit={3} />
       <Datasets term={filterTerm} limit={5} />
-      <Variables
-        term={filterTerm}
-        include={filterInclude}
-        limit={10}
-        linkTo="/variables"
-      />
+      <Variables limit={10} linkTo="/variables" />
     </>
   )
 }

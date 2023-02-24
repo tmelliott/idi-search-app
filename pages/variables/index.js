@@ -1,15 +1,12 @@
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import DualLayout from "../../components/layout/DualLayout"
 
 import Variables from "../../components/Variables"
 
 // a list of datasets
 function VariablesPage() {
-  const router = useRouter()
-  const filterTerm = router.query.s || ""
-
   const [limit, setLimit] = useState(15)
   const limitOptions = [5, 15, 25, 50, 100, 500]
 
@@ -34,7 +31,7 @@ function VariablesPage() {
         ))}
       </div>
 
-      <Variables term={filterTerm} limit={limit} />
+      <Variables limit={limit} />
     </>
   )
 }

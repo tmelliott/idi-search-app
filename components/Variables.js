@@ -6,20 +6,30 @@ import PagedTable from "./PagedTable"
 import { LinkIcon } from "@heroicons/react/outline"
 import useVariables from "./hooks/useVariables"
 
-function Variables({
-  term,
-  include,
-  datasetId,
-  limit = 10,
-  title = "Variables",
-}) {
+function Variables({ limit = 10, datasetId, title = "Variables" }) {
   const router = useRouter()
+  const [term, setTerm] = useState("")
+  const [include, setInclude] = useState("all")
+  const [exact, setExact] = useState(false)
+
+  useEffect(() => {
+    setTerm(router.query.s || "")
+  }, [router.query.s])
+
+  useEffect(() => {
+    setInclude(router.query.include || "all")
+  }, [router.query.include])
+
+  useEffect(() => {
+    setExact(router.query.exact === "true" || false)
+  }, [router.query.exact])
 
   const [page, setPage] = useState(0)
   const [size, setSize] = useState(limit)
   const { variables, isError, isLoading } = useVariables(
     term,
     include,
+    exact,
     datasetId,
     page + 1,
     size
@@ -32,7 +42,7 @@ function Variables({
 
   useEffect(() => {
     setAllVars({})
-  }, [limit, term, include, datasetId])
+  }, [limit, term, include, exact, datasetId])
 
   const showVariable = (variable) => {
     router.push(
@@ -91,6 +101,8 @@ function Variables({
   useEffect(() => {
     if (variables) setAllVars(variables)
   }, [variables])
+
+  console.groupEnd()
 
   return (
     <section>

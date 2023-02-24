@@ -12,6 +12,7 @@ const EXPORT_FORMATS = ["CSV", "JSON"]
 
 function Search() {
   const router = useRouter()
+
   const [value, setValue] = useState("")
   const disabled = false
   const inputRef = useRef()
@@ -19,6 +20,7 @@ function Search() {
   const [showConfig, setShowConfig] = useState(false)
   const [searchRefreshes, setSearchRefreshes] = useState(true)
   const [searchAdhoc, setSearchAdhoc] = useState(true)
+  const [exactSearch, setExactSearch] = useState(false)
 
   const [promptDownload, setPromptDownload] = useState(false)
   const [loadingResults, setLoadingResults] = useState(false)
@@ -26,15 +28,35 @@ function Search() {
   const plausible = usePlausible()
 
   useEffect(() => {
+    if (!router.isReady) return
+
     setValue(router.query.s || "")
-  }, [router.query])
+
+    const include = router.query.include
+    if (include) {
+      setSearchRefreshes(
+        include.includes("all") || include.includes("refreshes")
+      )
+      setSearchAdhoc(include.includes("all") || include.includes("adhoc"))
+    } else {
+      setSearchRefreshes(true)
+      setSearchAdhoc(true)
+    }
+    if (router.query.exact) setExactSearch(router.query.exact === "true")
+    else setExactSearch(false)
+  }, [router.isReady])
+
+  useEffect(() => {
+    updateQuery()
+  }, [searchRefreshes, searchAdhoc, exactSearch])
 
   const updateQuery = () => {
-    const { s, include, ...rest } = router.query
+    const { s, include, exact, ...rest } = router.query
     let q = {
-      ...router.query,
+      ...rest,
       s: value,
     }
+
     if (value === "") q = rest
     if (value !== "") {
       plausible("Search", {
@@ -43,12 +65,16 @@ function Search() {
         },
       })
     }
+
     if (!(searchRefreshes && searchAdhoc)) {
-      let include = []
-      if (searchRefreshes) include.push("refreshes")
-      if (searchAdhoc) include.push("adhoc")
-      q.include = include.join("_")
+      let includes = []
+      if (searchRefreshes) includes.push("refreshes")
+      if (searchAdhoc) includes.push("adhoc")
+      q.include = includes.join("_")
     }
+
+    if (exactSearch) q.exact = "true"
+
     router.push(
       {
         pathname: router.pathname,
@@ -196,49 +222,53 @@ function Search() {
 
   return (
     <form
-      className=""
+      className="@container"
       onSubmit={(e) => {
         e.preventDefault()
         updateQuery()
       }}
     >
       <div
-        className={`flex items-center p-2 mb-2 border border-gray-400 rounded group ${
+        className={`flex flex-col w-full items-stretch gap-2 @lg:flex-row  @lg:gap-0 p-2 mb-2 border border-gray-400 rounded group ${
           disabled ? "bg-gray-100" : "bg-white"
         }`}
       >
-        <FilterIcon className="h-5 mr-2 text-gray-400 group-focus-within:text-black" />
-        <input
-          value={value}
-          type="text"
-          ref={inputRef}
-          className={`bg-transparent focus:outline-none w-full ${
-            disabled ? "text-gray-600" : "text-black"
-          }`}
-          placeholder="Enter search term to filter results"
-          onChange={(e) => setValue(e.target.value)}
-          disabled={disabled}
-        />
-        <button
-          className="border rounded bg-gray-100 pl-2 pr-2 hover:bg-gray-200"
-          disabled={disabled}
-          type="submit"
-        >
-          Search
-        </button>
-        <button
-          type="submit"
-          className="border rounded border-gray-800 pl-2 pr-2 ml-2"
-          onClick={() => {
-            setValue("")
-          }}
-        >
-          Clear
-        </button>
-        <CogIcon
-          className="h-6 w-10 ml-2 cursor-pointer"
-          onClick={() => setShowConfig((prev) => !prev)}
-        />
+        <div className="flex items-center flex-1">
+          <FilterIcon className="h-5 mr-2 text-gray-400 group-focus-within:text-black" />
+          <input
+            value={value}
+            type="text"
+            ref={inputRef}
+            className={`bg-transparent focus:outline-none w-full flex-1 ${
+              disabled ? "text-gray-600" : "text-black"
+            }`}
+            placeholder="Enter search term to filter results"
+            onChange={(e) => setValue(e.target.value)}
+            disabled={disabled}
+          />
+        </div>
+        <div className="flex items-center">
+          <button
+            className="border rounded bg-gray-100 pl-2 pr-2 hover:bg-gray-200"
+            disabled={disabled}
+            type="submit"
+          >
+            Search
+          </button>
+          <button
+            type="submit"
+            className="border rounded border-gray-800 pl-2 pr-2 ml-2"
+            onClick={() => {
+              setValue("")
+            }}
+          >
+            Clear
+          </button>
+          <CogIcon
+            className="h-6 w-10 ml-2 cursor-pointer"
+            onClick={() => setShowConfig((prev) => !prev)}
+          />
+        </div>
       </div>
 
       {showConfig && (
@@ -261,6 +291,18 @@ function Search() {
                 onChange={(e) => setSearchAdhoc(e.target.checked)}
               />{" "}
               Adhoc
+            </div>
+
+            <div className="border border-gray-300 h-6"></div>
+
+            <div className="flex gap-2 items-center">
+              <input
+                type="checkbox"
+                checked={exactSearch}
+                onChange={(e) => setExactSearch(e.target.checked)}
+              />{" "}
+              Exact search (only results that exactly match the search string
+              will be shown)
             </div>
           </div>
         </div>
