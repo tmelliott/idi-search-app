@@ -1,15 +1,35 @@
+import { useEffect, useState } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
+import Prisma from "@prisma/client";
+import {
+  createColumnHelper,
+  flexRender,
+  getCoreRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import { api } from "~/utils/api";
 
 type Props = {
   limit?: number;
 };
 
+type Agency = Prisma.agencies;
+
+const columnHelper = createColumnHelper<Agency>();
+const columns = [
+  columnHelper.accessor("agency_name", {
+    header: () => "Name",
+    cell: (info) => <>{info.getValue()}</>,
+  }),
+];
+
 export default function Agencies({ limit }: Props) {
-  const { query } = useRouter();
+  const router = useRouter();
+  const { query } = router;
   const {
     data: agencies,
     isFetching,
@@ -19,11 +39,26 @@ export default function Agencies({ limit }: Props) {
     limit,
   });
 
-  // define headers
+  const table = useReactTable({
+    data: agencies || [],
+    columns,
+    getCoreRowModel: getCoreRowModel(),
+  });
 
-  // define rows
-
-  // use tanstack table to display results!
+  const viewAgency = (agency: Agency) => {
+    router.push(
+      {
+        pathname: router.pathname,
+        query: {
+          ...router.query,
+          v: "agency",
+          id: agency.agency_id,
+        },
+      },
+      undefined,
+      { shallow: true }
+    );
+  };
 
   return (
     <section>
@@ -35,25 +70,59 @@ export default function Agencies({ limit }: Props) {
           Failed to load agencies - please refresh the page and contact us if
           the problem persists.
         </p>
-      ) : isFetching ? (
-        <div className="m-2">
-          <div className="font-bold border-b">Name</div>
-          {[...Array(limit ? limit : 3)].map((i) => (
-            <div className="animate-pulse py-1 border-b" key={i}>
-              <div className="bg-gray-50 text-gray-100">...</div>
-            </div>
-          ))}
-        </div>
       ) : (
-        <div className="m-2">
-          <div className="font-bold border-b">Name</div>
-          {agencies?.map((agency) => (
-            <div key={agency.agency_id} className="py-1 border-b text-sm">
-              <Link href={`/agencies/${agency.agency_id}`}>
-                {agency.agency_name}
-              </Link>
-            </div>
-          ))}
+        // ) : isFetching ? (
+        //   <div className="m-2">
+        //     <div className="font-bold border-b">Name</div>
+        //
+        //   </div>
+        <div className="p-2">
+          <table className="w-full text-left">
+            <thead className="border-b">
+              {table.getHeaderGroups().map((headerGroup) => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map((header) => (
+                    <th key={header.id}>
+                      {header.isPlaceholder
+                        ? null
+                        : flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                    </th>
+                  ))}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {isFetching
+                ? [...Array(limit ? limit : 3)].map((_i, i) => (
+                    <tr className="border-b text-sm" key={i}>
+                      <td className="py-1" colSpan={columns.length}>
+                        <div className="animate-pulse bg-gray-100 text-gray-50">
+                          ...
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                : table.getRowModel().rows.map((row) => (
+                    <tr
+                      key={row.id}
+                      className="border-b text-sm hover:bg-gray-50 cursor-pointer"
+                      onClick={(e) => viewAgency(row.original)}
+                    >
+                      {row.getVisibleCells().map((cell) => (
+                        <td key={cell.id} className="py-1">
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+            </tbody>
+          </table>
         </div>
       )}
     </section>
