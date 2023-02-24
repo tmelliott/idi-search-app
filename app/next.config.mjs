@@ -1,3 +1,5 @@
+import mdx from "@next/mdx";
+
 // @ts-check
 
 /**
@@ -5,6 +7,16 @@
  * This is especially useful for Docker builds.
  */
 !process.env.SKIP_ENV_VALIDATION && (await import("./src/env.mjs"));
+
+const withMDX = mdx({
+  extension: /\.mdx?$/,
+  options: {
+    remarkPlugins: [],
+    rehypePlugins: [],
+    // If you use `MDXProvider`, uncomment the following line.
+    providerImportSource: "@mdx-js/react",
+  },
+});
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -21,4 +33,8 @@ const config = {
     defaultLocale: "en",
   },
 };
-export default config;
+// export default config;
+
+const nextConfig = withMDX(config);
+
+export default nextConfig;
