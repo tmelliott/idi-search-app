@@ -1,0 +1,11 @@
+{
+  "importOrder": [
+    "^react(.*)",
+    "^next(.*)",
+    "antd/(.*)",
+    "<THIRD_PARTY_MODULES>",
+    "@/(.*)",
+    "^[./]"
+  ],
+  "importOrderSeparation": true
+}
