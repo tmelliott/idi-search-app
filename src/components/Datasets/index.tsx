@@ -11,7 +11,8 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { api } from "~/utils/api";
+import { ArrayElement } from "~/types/types";
+import { api, RouterOutputs } from "~/utils/api";
 
 import { PlaceholderRows, TableHeader, TablePaginator } from "../Table";
 
@@ -19,13 +20,32 @@ type Props = {
   limit?: number;
 };
 
-type Dataset = Prisma.datasets;
+type Dataset = ArrayElement<RouterOutputs["datasets"]["all"]>;
 
 const columnHelper = createColumnHelper<Dataset>();
 const columns = [
   columnHelper.accessor("dataset_name", {
     header: () => "Name",
-    cell: (info) => <>{info.getValue()}</>,
+    cell: (info) => (
+      <div>
+        <div>{info.getValue()}</div>
+        <div className="text-xs text-gray-500">
+          {info.row.original.dataset_id}
+        </div>
+      </div>
+    ),
+  }),
+  columnHelper.accessor((row) => row.collection?.collection_name, {
+    id: "collection_name",
+    header: () => "Collection / Agency",
+    cell: (info) => (
+      <div>
+        <div>{info.getValue()}</div>
+        <div className="text-xs">
+          {info.row.original.collection?.agency?.agency_name}
+        </div>
+      </div>
+    ),
   }),
 ];
 
@@ -83,11 +103,19 @@ export default function Datasets({ limit }: Props) {
         </p>
       ) : (
         <div className="p-2">
-          <table className="w-full text-left">
+          <table className="w-full text-left table-fixed">
             <TableHeader table={table} />
             <tbody>
               {isFetching ? (
-                <PlaceholderRows n={limit ?? 5} m={columns.length} />
+                <PlaceholderRows
+                  n={limit ?? 5}
+                  m={table.getLeafHeaders().length}
+                >
+                  <div>
+                    <div>...</div>
+                    <div className="text-xs">...</div>
+                  </div>
+                </PlaceholderRows>
               ) : (
                 <>
                   {/* TODO: move this to a component also */}

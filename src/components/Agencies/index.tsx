@@ -87,7 +87,9 @@ export default function Agencies({ limit }: Props) {
             <TableHeader table={table} />
             <tbody>
               {isFetching ? (
-                <PlaceholderRows n={limit ?? 5} m={columns.length} />
+                <PlaceholderRows n={limit ?? 5} m={columns.length}>
+                  ...
+                </PlaceholderRows>
               ) : (
                 <>
                   {/* TODO: move this to a component also */}

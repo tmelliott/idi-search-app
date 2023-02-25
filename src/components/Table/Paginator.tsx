@@ -17,7 +17,7 @@ export default function TablePaginator({ table }: Props) {
     <tr className="border-t-2 text-sm border-b-2">
       <td
         className="px-4 py-1 flex justify-between items-center"
-        colSpan={table.getHeaderGroups().length}
+        colSpan={table.getLeafHeaders().length}
       >
         <div className="flex items-center gap-2">
           <button

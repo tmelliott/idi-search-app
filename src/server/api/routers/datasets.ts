@@ -23,6 +23,20 @@ export const datasetsRouter = createTRPCRouter({
       return ctx.prisma.datasets.findMany({
         where: where,
         take: input.limit,
+        select: {
+          dataset_id: true,
+          dataset_name: true,
+          collection: {
+            select: {
+              collection_name: true,
+              agency: {
+                select: {
+                  agency_name: true,
+                },
+              },
+            },
+          },
+        },
       });
     }),
 });

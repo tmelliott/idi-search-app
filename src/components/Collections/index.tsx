@@ -10,19 +10,14 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { inferRouterOutputs } from "@trpc/server";
-import { type AppRouter } from "~/server/api/root";
-import { api } from "~/utils/api";
+import { ArrayElement } from "~/types/types";
+import { api, RouterOutputs } from "~/utils/api";
 
 import { PlaceholderRows, TableHeader, TablePaginator } from "../Table";
 
 type Props = {
   limit?: number;
 };
-
-type RouterOutputs = inferRouterOutputs<AppRouter>;
-type ArrayElement<ArrayType extends readonly unknown[]> =
-  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
 type Collection = ArrayElement<RouterOutputs["collections"]["all"]>;
 
@@ -97,7 +92,9 @@ export default function Collections({ limit }: Props) {
             <TableHeader table={table} />
             <tbody>
               {isFetching ? (
-                <PlaceholderRows n={limit ?? 5} m={columns.length} />
+                <PlaceholderRows n={limit ?? 5} m={columns.length}>
+                  ...
+                </PlaceholderRows>
               ) : (
                 <>
                   {/* TODO: move this to a component also */}
