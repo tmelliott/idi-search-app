@@ -13,7 +13,7 @@ export default function TableCell({ text, subtext, style }: Props) {
       {subtext && (
         <div
           className={`text-xs whitespace-nowrap overflow-ellipsis overflow-hidden ${
-            style === "id" && "text-gray-500 font-mono"
+            style === "id" ? "text-gray-500 font-mono" : ""
           }`}
         >
           {subtext}
