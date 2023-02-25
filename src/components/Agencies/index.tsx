@@ -111,10 +111,9 @@ export default function Agencies({ limit }: Props) {
                   ))}
                 </>
               )}
-
-              {limit && <TablePaginator table={table} />}
             </tbody>
           </table>
+          {limit && <TablePaginator table={table} />}
         </div>
       )}
     </section>

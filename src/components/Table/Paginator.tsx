@@ -10,11 +10,8 @@ import { type Table } from "@tanstack/react-table";
 
 export default function TablePaginator<T>({ table }: { table: Table<T> }) {
   return (
-    <tr className="border-t-2 text-sm border-b-2">
-      <td
-        className="px-4 py-1 flex justify-between items-center"
-        colSpan={table.getLeafHeaders().length}
-      >
+    <div className="border-t-2 text-sm border-b-2">
+      <div className="px-4 py-1 flex justify-between items-center">
         <div className="flex items-center gap-2">
           <button
             className="w-6 h-6 cursor-pointer bg-gray-200 p-[2px] rounded hover:bg-gray-300 disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-300"
@@ -51,7 +48,7 @@ export default function TablePaginator<T>({ table }: { table: Table<T> }) {
             <ChevronDoubleRightIcon />
           </button>
         </div>
-      </td>
-    </tr>
+      </div>
+    </div>
   );
 }
