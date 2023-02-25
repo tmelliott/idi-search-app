@@ -29,8 +29,14 @@ export default function TablePaginator<T>({ table }: { table: Table<T> }) {
           </button>
         </div>
         <div>
-          Page {table.getState().pagination.pageIndex + 1} of{" "}
-          {table.getPageCount()}
+          {table.getPageCount() ? (
+            <>
+              Page {table.getState().pagination.pageIndex + 1} of{" "}
+              {table.getPageCount()}
+            </>
+          ) : (
+            <>No data</>
+          )}
         </div>
         <div className="flex items-center gap-2">
           <button
