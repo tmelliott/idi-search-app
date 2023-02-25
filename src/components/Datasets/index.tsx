@@ -19,29 +19,29 @@ type Props = {
   limit?: number;
 };
 
-type Agency = Prisma.agencies;
+type Dataset = Prisma.datasets;
 
-const columnHelper = createColumnHelper<Agency>();
+const columnHelper = createColumnHelper<Dataset>();
 const columns = [
-  columnHelper.accessor("agency_name", {
+  columnHelper.accessor("dataset_name", {
     header: () => "Name",
     cell: (info) => <>{info.getValue()}</>,
   }),
 ];
 
-export default function Agencies({ limit }: Props) {
+export default function Datasets({ limit }: Props) {
   const router = useRouter();
   const { query } = router;
   const {
-    data: agencies,
+    data: datasets,
     isFetching,
     isError,
-  } = api.agencies.all.useQuery({
+  } = api.datasets.all.useQuery({
     term: query.s as string,
   });
 
   const table = useReactTable({
-    data: agencies || [],
+    data: datasets || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -49,18 +49,18 @@ export default function Agencies({ limit }: Props) {
 
   useEffect(() => {
     if (limit) table.setPageSize(limit);
-    else if (agencies) table.setPageSize(agencies.length);
+    else if (datasets) table.setPageSize(datasets.length);
     else table.setPageSize(3);
-  }, [table, agencies, limit]);
+  }, [table, datasets, limit]);
 
-  const viewAgency = (agency: Agency) => {
+  const viewDataset = (dataset: Dataset) => {
     void router.push(
       {
         pathname: router.pathname,
         query: {
           ...router.query,
-          v: "agency",
-          id: agency.agency_id,
+          v: "dataset",
+          id: dataset.dataset_id,
         },
       },
       undefined,
@@ -71,14 +71,14 @@ export default function Agencies({ limit }: Props) {
   return (
     <section>
       <h3>
-        Data Supply Agencies
-        {agencies && <> ({agencies.length})</>}
+        Datasets
+        {datasets && <> ({datasets.length})</>}
       </h3>
 
       {isError ? (
         <p className="flex items-center text-red-600 text-sm my-2">
           <XCircleIcon className="w-5 h-5 mr-2" />
-          Failed to load agencies - please refresh the page and contact us if
+          Failed to load datasets - please refresh the page and contact us if
           the problem persists.
         </p>
       ) : (
@@ -95,7 +95,7 @@ export default function Agencies({ limit }: Props) {
                     <tr
                       key={row.id}
                       className="border-b text-sm hover:bg-gray-50 cursor-pointer"
-                      onClick={() => viewAgency(row.original)}
+                      onClick={() => viewDataset(row.original)}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className="py-1">

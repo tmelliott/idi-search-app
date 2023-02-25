@@ -1,5 +1,8 @@
-import { agenciesRouter } from "~/server/api/routers/agencies";
 import { createTRPCRouter } from "~/server/api/trpc";
+
+import { agenciesRouter } from "./routers/agencies";
+import { collectionsRouter } from "./routers/collections";
+import { datasetsRouter } from "./routers/datasets";
 
 /**
  * This is the primary router for your server.
@@ -8,6 +11,8 @@ import { createTRPCRouter } from "~/server/api/trpc";
  */
 export const appRouter = createTRPCRouter({
   agencies: agenciesRouter,
+  collections: collectionsRouter,
+  datasets: datasetsRouter,
 });
 
 // export type definition of API

@@ -1,9 +1,8 @@
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
-import type Prisma from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -11,6 +10,8 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
+import { inferRouterOutputs } from "@trpc/server";
+import { type AppRouter } from "~/server/api/root";
 import { api } from "~/utils/api";
 
 import { PlaceholderRows, TableHeader, TablePaginator } from "../Table";
@@ -19,29 +20,38 @@ type Props = {
   limit?: number;
 };
 
-type Agency = Prisma.agencies;
+type RouterOutputs = inferRouterOutputs<AppRouter>;
+type ArrayElement<ArrayType extends readonly unknown[]> =
+  ArrayType extends readonly (infer ElementType)[] ? ElementType : never;
 
-const columnHelper = createColumnHelper<Agency>();
+type Collection = ArrayElement<RouterOutputs["collections"]["all"]>;
+
+const columnHelper = createColumnHelper<Collection>();
 const columns = [
-  columnHelper.accessor("agency_name", {
+  columnHelper.accessor("collection_name", {
     header: () => "Name",
+    cell: (info) => <>{info.getValue()}</>,
+  }),
+  columnHelper.accessor((row) => row.agency?.agency_name, {
+    id: "agency_name",
+    header: () => "Agency",
     cell: (info) => <>{info.getValue()}</>,
   }),
 ];
 
-export default function Agencies({ limit }: Props) {
+export default function Collections({ limit }: Props) {
   const router = useRouter();
   const { query } = router;
   const {
-    data: agencies,
+    data: collections,
     isFetching,
     isError,
-  } = api.agencies.all.useQuery({
+  } = api.collections.all.useQuery({
     term: query.s as string,
   });
 
   const table = useReactTable({
-    data: agencies || [],
+    data: collections || [],
     columns,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
@@ -49,18 +59,18 @@ export default function Agencies({ limit }: Props) {
 
   useEffect(() => {
     if (limit) table.setPageSize(limit);
-    else if (agencies) table.setPageSize(agencies.length);
+    else if (collections) table.setPageSize(collections.length);
     else table.setPageSize(3);
-  }, [table, agencies, limit]);
+  }, [table, collections, limit]);
 
-  const viewAgency = (agency: Agency) => {
+  const viewCollection = (collection: Collection) => {
     void router.push(
       {
         pathname: router.pathname,
         query: {
           ...router.query,
-          v: "agency",
-          id: agency.agency_id,
+          v: "collection",
+          id: collection.collection_id,
         },
       },
       undefined,
@@ -71,19 +81,19 @@ export default function Agencies({ limit }: Props) {
   return (
     <section>
       <h3>
-        Data Supply Agencies
-        {agencies && <> ({agencies.length})</>}
+        Collections
+        {collections && <> ({collections.length})</>}
       </h3>
 
       {isError ? (
         <p className="flex items-center text-red-600 text-sm my-2">
           <XCircleIcon className="w-5 h-5 mr-2" />
-          Failed to load agencies - please refresh the page and contact us if
+          Failed to load collections - please refresh the page and contact us if
           the problem persists.
         </p>
       ) : (
         <div className="p-2">
-          <table className="w-full text-left">
+          <table className="w-full text-left table-fixed">
             <TableHeader table={table} />
             <tbody>
               {isFetching ? (
@@ -95,7 +105,7 @@ export default function Agencies({ limit }: Props) {
                     <tr
                       key={row.id}
                       className="border-b text-sm hover:bg-gray-50 cursor-pointer"
-                      onClick={() => viewAgency(row.original)}
+                      onClick={() => viewCollection(row.original)}
                     >
                       {row.getVisibleCells().map((cell) => (
                         <td key={cell.id} className="py-1">

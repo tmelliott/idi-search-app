@@ -1,4 +1,6 @@
 import Agencies from "~/components/Agencies";
+import Collections from "~/components/Collections";
+import Datasets from "~/components/Datasets";
 import HeadTags from "~/layout/Head";
 import { type NextPageWithLayout } from "~/types/types";
 
@@ -7,7 +9,9 @@ const Home: NextPageWithLayout = () => {
     <>
       <HeadTags />
 
-      <Agencies limit={3} />
+      <Agencies limit={2} />
+      <Collections limit={3} />
+      <Datasets limit={5} />
     </>
   );
 };
