@@ -1,10 +1,6 @@
 import { type Table, flexRender } from "@tanstack/react-table";
 
-type Props = {
-  table: Table<T>;
-};
-
-export default function TableHeader({ table }: Props) {
+export default function TableHeader<T>({ table }: { table: Table<T> }) {
   return (
     <thead className="border-b-2">
       {table.getHeaderGroups().map((headerGroup) => (

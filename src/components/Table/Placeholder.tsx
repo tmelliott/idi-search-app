@@ -9,7 +9,7 @@ export default function PlaceholderRows({
   n: number;
   m: number;
 }) {
-  const tempArray: number[] = Array(n).fill(0);
+  const tempArray = Array(n).fill(0) as number[];
 
   return (
     <>

@@ -4,15 +4,11 @@ import {
   ChevronLeftIcon,
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
-import { Table } from "@tanstack/react-table";
-
-type Props = {
-  table: Table<T>;
-};
+import { type Table } from "@tanstack/react-table";
 
 // TODO: add page jumping
 
-export default function TablePaginator({ table }: Props) {
+export default function TablePaginator<T>({ table }: { table: Table<T> }) {
   return (
     <tr className="border-t-2 text-sm border-b-2">
       <td

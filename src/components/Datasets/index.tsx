@@ -3,7 +3,6 @@ import { useEffect } from "react";
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
-import type Prisma from "@prisma/client";
 import {
   createColumnHelper,
   flexRender,
@@ -11,8 +10,8 @@ import {
   getPaginationRowModel,
   useReactTable,
 } from "@tanstack/react-table";
-import { ArrayElement } from "~/types/types";
-import { api, RouterOutputs } from "~/utils/api";
+import { type ArrayElement } from "~/types/types";
+import { api, type RouterOutputs } from "~/utils/api";
 
 import { PlaceholderRows, TableHeader, TablePaginator } from "../Table";
 
