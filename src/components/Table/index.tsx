@@ -1,5 +1,6 @@
+import TableCell from "./Cell";
 import TableHeader from "./Header";
 import TablePaginator from "./Paginator";
 import PlaceholderRows from "./Placeholder";
 
-export { TableHeader, TablePaginator, PlaceholderRows };
+export { TableHeader, TablePaginator, PlaceholderRows, TableCell };

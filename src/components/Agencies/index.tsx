@@ -13,7 +13,12 @@ import {
 } from "@tanstack/react-table";
 import { api } from "~/utils/api";
 
-import { PlaceholderRows, TableHeader, TablePaginator } from "../Table";
+import {
+  PlaceholderRows,
+  TableCell,
+  TableHeader,
+  TablePaginator,
+} from "../Table";
 
 type Props = {
   limit?: number;
@@ -25,7 +30,7 @@ const columnHelper = createColumnHelper<Agency>();
 const columns = [
   columnHelper.accessor("agency_name", {
     header: () => "Name",
-    cell: (info) => <>{info.getValue()}</>,
+    cell: (info) => <TableCell text={info.getValue()} />,
   }),
 ];
 

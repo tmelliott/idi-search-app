@@ -13,7 +13,12 @@ import {
 import { type ArrayElement } from "~/types/types";
 import { api, type RouterOutputs } from "~/utils/api";
 
-import { PlaceholderRows, TableHeader, TablePaginator } from "../Table";
+import {
+  PlaceholderRows,
+  TableCell,
+  TableHeader,
+  TablePaginator,
+} from "../Table";
 
 type Props = {
   limit?: number;
@@ -25,12 +30,12 @@ const columnHelper = createColumnHelper<Collection>();
 const columns = [
   columnHelper.accessor("collection_name", {
     header: () => "Name",
-    cell: (info) => <>{info.getValue()}</>,
+    cell: (info) => <TableCell text={info.getValue()} />,
   }),
   columnHelper.accessor((row) => row.agency?.agency_name, {
     id: "agency_name",
     header: () => "Agency",
-    cell: (info) => <>{info.getValue()}</>,
+    cell: (info) => <TableCell text={info.getValue()} />,
   }),
 ];
 

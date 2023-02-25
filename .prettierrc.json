@@ -7,5 +7,6 @@
     "@/(.*)",
     "^[./]"
   ],
-  "importOrderSeparation": true
+  "importOrderSeparation": true,
+  "plugins": ["prettier-plugin-tailwindcss"]
 }
