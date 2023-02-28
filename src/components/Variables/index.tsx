@@ -162,7 +162,7 @@ export default function Variables({ limit }: Props) {
               )}
             </tbody>
           </table>
-          {limit && <TablePaginator table={table} />}
+          {limit && <TablePaginator loading={isFetching} table={table} />}
         </div>
       )}
     </section>

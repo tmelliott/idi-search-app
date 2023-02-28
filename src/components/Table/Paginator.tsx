@@ -8,7 +8,13 @@ import { type Table } from "@tanstack/react-table";
 
 // TODO: add page jumping
 
-export default function TablePaginator<T>({ table }: { table: Table<T> }) {
+export default function TablePaginator<T>({
+  table,
+  loading,
+}: {
+  table: Table<T>;
+  loading: boolean;
+}) {
   return (
     <div className="border-t-2 text-sm border-b-2">
       <div className="px-4 py-1 flex justify-between items-center">
@@ -35,7 +41,7 @@ export default function TablePaginator<T>({ table }: { table: Table<T> }) {
               {table.getPageCount()}
             </>
           ) : (
-            <>No data</>
+            <>{loading ? "Loading ..." : "No data"}</>
           )}
         </div>
         <div className="flex items-center gap-2">
