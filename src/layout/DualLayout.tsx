@@ -1,13 +1,41 @@
 // import Footer from "./Footer"
 // import Header from "./Header"
-import { type PropsWithChildren, useState } from "react";
+import { type PropsWithChildren, useState, useEffect } from "react";
+
+import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
+import Agency from "~/components/Agencies/Agency";
 
 import MainLayout from "./MainLayout";
 
+const components = [
+  {
+    value: "agency",
+    component: Agency,
+  },
+  // {
+  //   value: "collection",
+  //   component: Collection,
+  // },
+  // {
+  //   value: "dataset",
+  //   component: Dataset,
+  // },
+  // {
+  //   value: "variable",
+  //   component: Variable,
+  // },
+];
+
 const DualLayout = ({ children }: PropsWithChildren) => {
-  const [info, setInfo] = useState(true);
+  const router = useRouter();
+  const [info, setInfo] = useState(false);
+
+  useEffect(() => {
+    const { v } = router.query;
+    setInfo(v ? true : false);
+  }, [router.query]);
 
   return (
     <MainLayout>
@@ -26,7 +54,7 @@ const DualLayout = ({ children }: PropsWithChildren) => {
           >
             {info && (
               <>
-                <div className="flex flex-row justify-end">
+                <div className="flex flex-row justify-end w-full">
                   <div
                     className="flex flex-row text-xs items-center cursor-pointer hover:opacity-70"
                     onClick={() => setInfo(false)}
@@ -35,6 +63,11 @@ const DualLayout = ({ children }: PropsWithChildren) => {
                     <XCircleIcon className="h-6 ml-2" />
                   </div>
                 </div>
+
+                {router.query.v === "agency" && (
+                  <Agency agency_id={router.query.id as string} />
+                )}
+
                 {/* {type === "agency" && <Agency id={typeId} />}
                 {type === "collection" && <Collection id={typeId} />}
                 {type === "dataset" && <Dataset id={typeId} />}

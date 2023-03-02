@@ -17,4 +17,15 @@ export const agenciesRouter = createTRPCRouter({
         take: input.limit,
       });
     }),
+  get: publicProcedure
+    .input(
+      z.object({
+        agency_id: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.agencies.findUnique({
+        where: { agency_id: input.agency_id },
+      });
+    }),
 });

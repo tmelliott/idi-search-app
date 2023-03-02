@@ -45,6 +45,7 @@ export const variablesRouter = createTRPCRouter({
               },
             },
           },
+          description: true,
         },
       });
 

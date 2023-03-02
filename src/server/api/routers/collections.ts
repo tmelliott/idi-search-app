@@ -1,5 +1,7 @@
+import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import { ArrayElement } from "~/types/types";
 
 export const collectionsRouter = createTRPCRouter({
   all: publicProcedure
@@ -7,10 +9,11 @@ export const collectionsRouter = createTRPCRouter({
       z.object({
         term: z.string().optional(),
         limit: z.number().optional(),
+        agency_id: z.string().optional(),
       })
     )
     .query(({ ctx, input }) => {
-      const where = input.term
+      let where: Prisma.collectionsFindManyArgs["where"] = input.term
         ? {
             OR: [
               { collection_name: { contains: input.term } },
@@ -18,6 +21,13 @@ export const collectionsRouter = createTRPCRouter({
             ],
           }
         : {};
+
+      if (input.agency_id) {
+        where = {
+          ...where,
+          agency_id: input.agency_id,
+        };
+      }
 
       return ctx.prisma.collections.findMany({
         where: where,
@@ -30,6 +40,7 @@ export const collectionsRouter = createTRPCRouter({
               agency_name: true,
             },
           },
+          description: true,
         },
       });
     }),

@@ -40,12 +40,13 @@ const columns = [
   }),
   columnHelper.accessor((row) => row.dataset?.dataset_name, {
     id: "dataset_name",
-    header: () => "Collection / Agency",
+    header: () => "Dataset / Collection",
     cell: (info) => (
       <TableCell
-        text={info.row.original.dataset?.dataset_name}
+        text={info.row.original.dataset?.dataset_name || <em>Not Available</em>}
         subtext={info.row.original.dataset?.collection?.collection_name}
         style="name"
+        indicator={info.row.original.description !== null ? "success" : "none"}
       />
     ),
   }),

@@ -36,6 +36,7 @@ export const datasetsRouter = createTRPCRouter({
               },
             },
           },
+          description: true,
         },
       });
     }),

@@ -20,10 +20,6 @@ import {
   TablePaginator,
 } from "../Table";
 
-type Props = {
-  limit?: number;
-};
-
 type Collection = ArrayElement<RouterOutputs["collections"]["all"]>;
 
 const columnHelper = createColumnHelper<Collection>();
@@ -35,11 +31,21 @@ const columns = [
   columnHelper.accessor((row) => row.agency?.agency_name, {
     id: "agency_name",
     header: () => "Agency",
-    cell: (info) => <TableCell text={info.getValue()} />,
+    cell: (info) => (
+      <TableCell
+        text={info.getValue()}
+        indicator={info.row.original.description !== null ? "success" : "none"}
+      />
+    ),
   }),
 ];
 
-export default function Collections({ limit }: Props) {
+type Props = {
+  limit?: number;
+  agency_id?: string;
+};
+
+export default function Collections({ limit, agency_id }: Props) {
   const router = useRouter();
   const { query } = router;
   const {
@@ -48,6 +54,7 @@ export default function Collections({ limit }: Props) {
     isError,
   } = api.collections.all.useQuery({
     term: query.s as string,
+    agency_id,
   });
 
   const table = useReactTable({
@@ -82,6 +89,7 @@ export default function Collections({ limit }: Props) {
     <section>
       <h3>
         Collections
+        {agency_id && <> by this agency</>}
         {collections && <> ({collections.length})</>}
       </h3>
 

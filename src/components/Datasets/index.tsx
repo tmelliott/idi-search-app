@@ -43,9 +43,14 @@ const columns = [
     header: () => "Collection / Agency",
     cell: (info) => (
       <TableCell
-        text={info.row.original.collection?.collection_name}
+        text={
+          info.row.original.collection?.collection_name || (
+            <em>Not Available</em>
+          )
+        }
         subtext={info.row.original.collection?.agency?.agency_name}
         style="name"
+        indicator={info.row.original.description !== null ? "success" : "none"}
       />
     ),
   }),
