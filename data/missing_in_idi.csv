@@ -2261,50 +2261,50 @@ sqfinalwgt_98,SQfinalwgt_98,clean_read_hlfs.hlfs_wellbeing_datestamp
 sqfinalwgt_99,SQfinalwgt_99,clean_read_hlfs.hlfs_wellbeing_datestamp
 sqfinalwgt_100,SQfinalwgt_100,clean_read_hlfs.hlfs_wellbeing_datestamp
 NA,NA,NA
-snz_ird_uid,Employer's IRD encrypted unique identificator,ei_e_{quarter}_{timestamp}
-snz_empyee_ird_uid,Employee's IRD encrypted unique identificator,ei_e_{quarter}_{timestamp}
-paydate,Paydate,ei_e_{quarter}_{timestamp}
-submissionkey,Submissionkey,ei_e_{quarter}_{timestamp}
-line_number,Line Number,ei_e_{quarter}_{timestamp}
-return_version,Return Version,ei_e_{quarter}_{timestamp}
-location_number,Location Number,ei_e_{quarter}_{timestamp}
-ir_processing_date,Processing Date,ei_e_{quarter}_{timestamp}
-effective_date,Effective Date,ei_e_{quarter}_{timestamp}
-tax_code,Tax Code,ei_e_{quarter}_{timestamp}
-pay_period_start_date,Pay Period Start Date,ei_e_{quarter}_{timestamp}
-pay_period_end_date,Pay Period End Date,ei_e_{quarter}_{timestamp}
-employment_start_date,Employment Start Date,ei_e_{quarter}_{timestamp}
-employment_finish_date,Employment Finish Date,ei_e_{quarter}_{timestamp}
-employee_pay_frequency,Employee Pay Frequency,ei_e_{quarter}_{timestamp}
-gross_earnings,Gross Earnings,ei_e_{quarter}_{timestamp}
-gross_earings_adj,Adjusted Gross Earnings,ei_e_{quarter}_{timestamp}
-earnings_not_liable_acc,Earnings Not Liable Acc,ei_e_{quarter}_{timestamp}
-earnings_not_liable_acc_imp,Imputation flag: Earnings Not Liable Acc,ei_e_{quarter}_{timestamp}
-lump_sum_indicator,Lump Sum Indicator,ei_e_{quarter}_{timestamp}
-paye_schedular_tax_deductions,Paye Schedular Tax Deductions,ei_e_{quarter}_{timestamp}
-child_support_code,Child Support Code,ei_e_{quarter}_{timestamp}
-child_support_deductions,Child Support Deductions,ei_e_{quarter}_{timestamp}
-student_loans_deductions,Student Loans Deductions,ei_e_{quarter}_{timestamp}
-ks_employer_contributions,Kiwisaver Employer Contributions,ei_e_{quarter}_{timestamp}
-kiwisaver_deductions,Kiwisaver Deductions,ei_e_{quarter}_{timestamp}
-tax_credit_payroll_donations,Tax Credit Payroll Donations,ei_e_{quarter}_{timestamp}
-esct_deducted,Esct Deducted,ei_e_{quarter}_{timestamp}
-family_tax_credits,Family Tax Credits,ei_e_{quarter}_{timestamp}
-withholding_type_code,Whithholding type code,ei_e_{quarter}_{timestamp}
-hours_paid,Hours paid,ei_e_{quarter}_{timestamp}
-prior_period_gross_adj,Adjusted Gross Earnings,ei_e_{quarter}_{timestamp}
-prior_period_paye_schd_adj,Adjusted PAYE/Schedular Tax Deductions,ei_e_{quarter}_{timestamp}
-slcir_deductions,Student loans compulsory additional deduction,ei_e_{quarter}_{timestamp}
-slbor_deductions,Student loans voluntary deduction,ei_e_{quarter}_{timestamp}
-kiwisaver_ee_deds_refunded,KiwiSaver employee deductions refunded,ei_e_{quarter}_{timestamp}
-kiwisaver_ee_contrib_rate,KiwiSaver contribution rate,ei_e_{quarter}_{timestamp}
-comp_kiwisaver_deds,Compulsory KiwiSaver employer deductions,ei_e_{quarter}_{timestamp}
-vol_kiwisaver_contribs,Voluntary KiwiSaver employer contributions,ei_e_{quarter}_{timestamp}
-kiwisaver_contrib_refunded,KiwiSaver employer contributions refunded,ei_e_{quarter}_{timestamp}
-gross_emp_contrib_adj,Gross employer contribuitions adjustment,ei_e_{quarter}_{timestamp}
-employee_share_scheme_ded,Employee share scheme deduction,ei_e_{quarter}_{timestamp}
-income_source_code,Income source code,ei_e_{quarter}_{timestamp}
-paydate_filing_period,Paydate filing period,ei_e_{quarter}_{timestamp}
+snz_ird_uid,Employer's IRD encrypted unique identificator,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+snz_empyee_ird_uid,Employee's IRD encrypted unique identificator,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+paydate,Paydate,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+submissionkey,Submissionkey,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+line_number,Line Number,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+return_version,Return Version,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+location_number,Location Number,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+ir_processing_date,Processing Date,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+effective_date,Effective Date,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+tax_code,Tax Code,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+pay_period_start_date,Pay Period Start Date,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+pay_period_end_date,Pay Period End Date,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+employment_start_date,Employment Start Date,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+employment_finish_date,Employment Finish Date,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+employee_pay_frequency,Employee Pay Frequency,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+gross_earnings,Gross Earnings,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+gross_earings_adj,Adjusted Gross Earnings,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+earnings_not_liable_acc,Earnings Not Liable Acc,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+earnings_not_liable_acc_imp,Imputation flag: Earnings Not Liable Acc,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+lump_sum_indicator,Lump Sum Indicator,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+paye_schedular_tax_deductions,Paye Schedular Tax Deductions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+child_support_code,Child Support Code,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+child_support_deductions,Child Support Deductions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+student_loans_deductions,Student Loans Deductions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+ks_employer_contributions,Kiwisaver Employer Contributions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+kiwisaver_deductions,Kiwisaver Deductions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+tax_credit_payroll_donations,Tax Credit Payroll Donations,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+esct_deducted,Esct Deducted,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+family_tax_credits,Family Tax Credits,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+withholding_type_code,Whithholding type code,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+hours_paid,Hours paid,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+prior_period_gross_adj,Adjusted Gross Earnings,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+prior_period_paye_schd_adj,Adjusted PAYE/Schedular Tax Deductions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+slcir_deductions,Student loans compulsory additional deduction,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+slbor_deductions,Student loans voluntary deduction,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+kiwisaver_ee_deds_refunded,KiwiSaver employee deductions refunded,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+kiwisaver_ee_contrib_rate,KiwiSaver contribution rate,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+comp_kiwisaver_deds,Compulsory KiwiSaver employer deductions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+vol_kiwisaver_contribs,Voluntary KiwiSaver employer contributions,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+kiwisaver_contrib_refunded,KiwiSaver employer contributions refunded,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+gross_emp_contrib_adj,Gross employer contribuitions adjustment,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+employee_share_scheme_ded,Employee share scheme deduction,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+income_source_code,Income source code,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
+paydate_filing_period,Paydate filing period,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
 ir_ac_title_text,ir_ac_title_text,NA
 snz_cen_uid,Unique identifier,iwi_affiliation_census_2018
 method,Estimate type,iwi_affiliation_census_2018
@@ -2312,8 +2312,50 @@ iwi_code,Iwi affiliation,iwi_affiliation_census_2018
 iwi_data_source,Iwi data source,iwi_affiliation_census_2018
 weight_iwi,Non-response weight,iwi_affiliation_census_2018
 dol_edu_provider_name_text,dol_edu_provider_name_text,dol_clean.student_edprovider
+selection_date,Date for the selection,clean_read_dol.smc_pools
+snz_dol_uid,"Unique individual identifier, encrypted by Statistics NZ",clean_read_dol.smc_pools
+selected,Outcome of the selection,clean_read_dol.smc_pools
+late_entrant,Pool entrance may have been too late,clean_read_dol.smc_pools
+points,Number of points for the selection,clean_read_dol.smc_pools
+selection_group,Group for the selection,clean_read_dol.smc_pools
+skilled_job,Skilled employment,clean_read_dol.smc_pools
+work_experience,Work experience,clean_read_dol.smc_pools
+qualified,Qualification,clean_read_dol.smc_pools
+on_essential_skills,Essential Skills Work Visa,clean_read_dol.smc_pools
+gender,Gender,clean_read_dol.smc_pools
+age,Age,clean_read_dol.smc_pools
+birth_country,Country of birth,clean_read_dol.smc_pools
+fuzzy_match,client_code assigned using fuzzy matching,clean_read_dol.smc_pools
+ballot,The ballot entered,clean_read_dol.pac_sq_ballots
+selection_date,Date for the selection,clean_read_dol.pac_sq_ballots
+snz_dol_uid,"Unique individual identifier, encrypted by Statistics NZ",clean_read_dol.pac_sq_ballots
+selected,Outcome of the selection,clean_read_dol.pac_sq_ballots
+gender,Gender,clean_read_dol.pac_sq_ballots
+age,Age,clean_read_dol.pac_sq_ballots
+multiple_entries,Has multiple entries,clean_read_dol.pac_sq_ballots
+selection_date,Date for the selection,clean_read_dol.smc_cutoffs
+best_group_below,Group immediately below the cutoff,clean_read_dol.smc_cutoffs
+worst_group_above,Group immediately above the cutoff,clean_read_dol.smc_cutoffs
+best_points_below,Points immediately below the cutoff,clean_read_dol.smc_cutoffs
+worst_points_above,Points immediately above the cutoff,clean_read_dol.smc_cutoffs
+selection_date,Date for the selection,clean_read_dol.smc_secondary
+snz_dol_primary_uid,"Unique individual identifier for the primary entrant, encrypted by Statistics NZ",clean_read_dol.smc_secondary
+snz_dol_secondary_uid,"Unique individual identifier for the secondary entrant, encrypted by Statistics NZ",clean_read_dol.smc_secondary
+relationship,Relationship,clean_read_dol.smc_secondary
+secondary_gender,Gender,clean_read_dol.smc_secondary
+secondary_birth_country,Country of birth,clean_read_dol.smc_secondary
+secondary_age,Age,clean_read_dol.smc_secondary
+ballot,The ballot entered,clean_read_dol.pac_sq_secondary
+snz_dol_primary_uid,"Unique individual identifier for the primary entrant, encrypted by Statistics NZ",clean_read_dol.pac_sq_secondary
+snz_dol_secondary_uid,"Unique individual identifier for the secondary entrant, encrypted by Statistics NZ",clean_read_dol.pac_sq_secondary
+secondary_gender,Gender,clean_read_dol.pac_sq_secondary
+secondary_age,Age,clean_read_dol.pac_sq_secondary
 cap_ref_agency_text,cap_ref_agency_text,cap_clean.referrals
 cap_ref_role_text,cap_ref_role_text,cap_clean.referrals
+providernumber,NA,clean_read_moe.moe_ece_equity_index_histgory
+eceequityindexid,NA,clean_read_moe.moe_ece_equity_index_histgory
+effectivefromdate,NA,clean_read_moe.moe_ece_equity_index_histgory
+effectivetodate,NA,clean_read_moe.moe_ece_equity_index_histgory
 snz_uid,snz_uid,NA
 snz_moe_uid,snz_moe_uid,NA
 moe_nsi_snz_unique_nbr,moe_nsi_snz_unique_nbr,NA
@@ -2321,679 +2363,7 @@ moe_nsi_sex_snz_code,moe_nsi_sex_snz_code,NA
 moe_nsi_birth_month_nbr,moe_nsi_birth_month_nbr,NA
 moe_nsi_birth_year_nbr,moe_nsi_birth_year_nbr,NA
 moe_nsi_verified_code,moe_nsi_verified_code,NA
-piaac_a_n01_t_code,piaac_a_n01_t_code,piaac.data
-piaac_aetpop_ind,piaac_aetpop_ind,piaac.data
-piaac_age_r_nbr,piaac_age_r_nbr,piaac.data
-piaac_ageg10lfs_code,piaac_ageg10lfs_code,piaac.data
-piaac_ageg10lfs_t_code,piaac_ageg10lfs_t_code,piaac.data
-piaac_ageg5lfs_code,piaac_ageg5lfs_code,piaac.data
-piaac_b_d01d_c_code,piaac_b_d01d_c_code,piaac.data
-piaac_b_d01d_nbr,piaac_b_d01d_nbr,piaac.data
-piaac_b_d01dnz_nbr,piaac_b_d01dnz_nbr,piaac.data
-piaac_b_d03d_c_nbr,piaac_b_d03d_c_nbr,piaac.data
-piaac_b_d03d_nbr,piaac_b_d03d_nbr,piaac.data
-piaac_b_d12h_nbr,piaac_b_d12h_nbr,piaac.data
-piaac_b_q01a_code,piaac_b_q01a_code,piaac.data
-piaac_b_q01a_t_code,piaac_b_q01a_t_code,piaac.data
-piaac_b_q01a1nzx5_code,piaac_b_q01a1nzx5_code,piaac.data
-piaac_b_q01a1nzx7_code,piaac_b_q01a1nzx7_code,piaac.data
-piaac_b_q01a2nz_code,piaac_b_q01a2nz_code,piaac.data
-piaac_b_q01a3_c_code,piaac_b_q01a3_c_code,piaac.data
-piaac_b_q01a3_code,piaac_b_q01a3_code,piaac.data
-piaac_b_q01a3nz_code,piaac_b_q01a3nz_code,piaac.data
-piaac_b_q01anz_code,piaac_b_q01anz_code,piaac.data
-piaac_b_q01anzx1_nbr,piaac_b_q01anzx1_nbr,piaac.data
-piaac_b_q01anzx2_code,piaac_b_q01anzx2_code,piaac.data
-piaac_b_q01anzx8_code,piaac_b_q01anzx8_code,piaac.data
-piaac_b_q01b_code,piaac_b_q01b_code,piaac.data
-piaac_b_q01c1_c_code,piaac_b_q01c1_c_code,piaac.data
-piaac_b_q01c1_code,piaac_b_q01c1_code,piaac.data
-piaac_b_q01c1_t_nbr,piaac_b_q01c1_t_nbr,piaac.data
-piaac_b_q01c1nz_nbr,piaac_b_q01c1nz_nbr,piaac.data
-piaac_b_q01c2_nbr,piaac_b_q01c2_nbr,piaac.data
-piaac_b_q01c2nz_nbr,piaac_b_q01c2nz_nbr,piaac.data
-piaac_b_q01d_nbr,piaac_b_q01d_nbr,piaac.data
-piaac_b_q02a_ind,piaac_b_q02a_ind,piaac.data
-piaac_b_q02a_t1_ind,piaac_b_q02a_t1_ind,piaac.data
-piaac_b_q02a_t2_ind,piaac_b_q02a_t2_ind,piaac.data
-piaac_b_q02anz_ind,piaac_b_q02anz_ind,piaac.data
-piaac_b_q02anzx1_code,piaac_b_q02anzx1_code,piaac.data
-piaac_b_q02b_c_code,piaac_b_q02b_c_code,piaac.data
-piaac_b_q02b_code,piaac_b_q02b_code,piaac.data
-piaac_b_q02bnz_code,piaac_b_q02bnz_code,piaac.data
-piaac_b_q02c_code,piaac_b_q02c_code,piaac.data
-piaac_b_q03a_ind,piaac_b_q03a_ind,piaac.data
-piaac_b_q03b_c_code,piaac_b_q03b_c_code,piaac.data
-piaac_b_q03b_code,piaac_b_q03b_code,piaac.data
-piaac_b_q03bnz_code,piaac_b_q03bnz_code,piaac.data
-piaac_b_q03c1_c_code,piaac_b_q03c1_c_code,piaac.data
-piaac_b_q03c1_nbr,piaac_b_q03c1_nbr,piaac.data
-piaac_b_q03c2_nbr,piaac_b_q03c2_nbr,piaac.data
-piaac_b_q03d_nbr,piaac_b_q03d_nbr,piaac.data
-piaac_b_q04a_ind,piaac_b_q04a_ind,piaac.data
-piaac_b_q04b_c_nbr,piaac_b_q04b_c_nbr,piaac.data
-piaac_b_q04b_nbr,piaac_b_q04b_nbr,piaac.data
-piaac_b_q05a_code,piaac_b_q05a_code,piaac.data
-piaac_b_q05anz_code,piaac_b_q05anz_code,piaac.data
-piaac_b_q05b_code,piaac_b_q05b_code,piaac.data
-piaac_b_q05c_ind,piaac_b_q05c_ind,piaac.data
-piaac_b_q05c_t_ind,piaac_b_q05c_t_ind,piaac.data
-piaac_b_q10a_ind,piaac_b_q10a_ind,piaac.data
-piaac_b_q10b_nbr,piaac_b_q10b_nbr,piaac.data
-piaac_b_q10c_code,piaac_b_q10c_code,piaac.data
-piaac_b_q11_code,piaac_b_q11_code,piaac.data
-piaac_b_q12a_ind,piaac_b_q12a_ind,piaac.data
-piaac_b_q12a_t_ind,piaac_b_q12a_t_ind,piaac.data
-piaac_b_q12b_nbr,piaac_b_q12b_nbr,piaac.data
-piaac_b_q12c_ind,piaac_b_q12c_ind,piaac.data
-piaac_b_q12d_c_nbr,piaac_b_q12d_c_nbr,piaac.data
-piaac_b_q12d_nbr,piaac_b_q12d_nbr,piaac.data
-piaac_b_q12e_ind,piaac_b_q12e_ind,piaac.data
-piaac_b_q12f_c_nbr,piaac_b_q12f_c_nbr,piaac.data
-piaac_b_q12f_nbr,piaac_b_q12f_nbr,piaac.data
-piaac_b_q12g_ind,piaac_b_q12g_ind,piaac.data
-piaac_b_q12h_c_nbr,piaac_b_q12h_c_nbr,piaac.data
-piaac_b_q12h_nbr,piaac_b_q12h_nbr,piaac.data
-piaac_b_q13_code,piaac_b_q13_code,piaac.data
-piaac_b_q14a_ind,piaac_b_q14a_ind,piaac.data
-piaac_b_q14b_code,piaac_b_q14b_code,piaac.data
-piaac_b_q15a_ind,piaac_b_q15a_ind,piaac.data
-piaac_b_q15b_code,piaac_b_q15b_code,piaac.data
-piaac_b_q15c_code,piaac_b_q15c_code,piaac.data
-piaac_b_q16_code,piaac_b_q16_code,piaac.data
-piaac_b_q17_code,piaac_b_q17_code,piaac.data
-piaac_b_q18a_nbr,piaac_b_q18a_nbr,piaac.data
-piaac_b_q19a_nbr,piaac_b_q19a_nbr,piaac.data
-piaac_b_q20a_nbr,piaac_b_q20a_nbr,piaac.data
-piaac_b_q20b_code,piaac_b_q20b_code,piaac.data
-piaac_b_q26a_ind,piaac_b_q26a_ind,piaac.data
-piaac_b_q26a_t_ind,piaac_b_q26a_t_ind,piaac.data
-piaac_b_q26b_code,piaac_b_q26b_code,piaac.data
-piaac_birthrgn_code,piaac_birthrgn_code,piaac.data
-piaac_bornlang_code,piaac_bornlang_code,piaac.data
-piaac_c_d04_ind,piaac_c_d04_ind,piaac.data
-piaac_c_d04nz_ind,piaac_c_d04nz_ind,piaac.data
-piaac_c_d05_code,piaac_c_d05_code,piaac.data
-piaac_c_d06_code,piaac_c_d06_code,piaac.data
-piaac_c_d08c_ind,piaac_c_d08c_ind,piaac.data
-piaac_c_d09_code,piaac_c_d09_code,piaac.data
-piaac_c_d09_t_ind,piaac_c_d09_t_ind,piaac.data
-piaac_c_q01a_ind,piaac_c_q01a_ind,piaac.data
-piaac_c_q01b_ind,piaac_c_q01b_ind,piaac.data
-piaac_c_q01c_ind,piaac_c_q01c_ind,piaac.data
-piaac_c_q02a_ind,piaac_c_q02a_ind,piaac.data
-piaac_c_q02b_ind,piaac_c_q02b_ind,piaac.data
-piaac_c_q02c_ind,piaac_c_q02c_ind,piaac.data
-piaac_c_q03_01_ind,piaac_c_q03_01_ind,piaac.data
-piaac_c_q03_02_ind,piaac_c_q03_02_ind,piaac.data
-piaac_c_q03_03_ind,piaac_c_q03_03_ind,piaac.data
-piaac_c_q03_04_ind,piaac_c_q03_04_ind,piaac.data
-piaac_c_q03_05_ind,piaac_c_q03_05_ind,piaac.data
-piaac_c_q03_06_ind,piaac_c_q03_06_ind,piaac.data
-piaac_c_q03_07_ind,piaac_c_q03_07_ind,piaac.data
-piaac_c_q03_08_ind,piaac_c_q03_08_ind,piaac.data
-piaac_c_q03_09_ind,piaac_c_q03_09_ind,piaac.data
-piaac_c_q03_10_ind,piaac_c_q03_10_ind,piaac.data
-piaac_c_q04a_ind,piaac_c_q04a_ind,piaac.data
-piaac_c_q04b_ind,piaac_c_q04b_ind,piaac.data
-piaac_c_q04c_ind,piaac_c_q04c_ind,piaac.data
-piaac_c_q04d_ind,piaac_c_q04d_ind,piaac.data
-piaac_c_q04e_ind,piaac_c_q04e_ind,piaac.data
-piaac_c_q04f_ind,piaac_c_q04f_ind,piaac.data
-piaac_c_q04g_ind,piaac_c_q04g_ind,piaac.data
-piaac_c_q04h_ind,piaac_c_q04h_ind,piaac.data
-piaac_c_q04i_ind,piaac_c_q04i_ind,piaac.data
-piaac_c_q04inzx_ind,piaac_c_q04inzx_ind,piaac.data
-piaac_c_q04j_ind,piaac_c_q04j_ind,piaac.data
-piaac_c_q05_ind,piaac_c_q05_ind,piaac.data
-piaac_c_q06_nbr,piaac_c_q06_nbr,piaac.data
-piaac_c_q07_code,piaac_c_q07_code,piaac.data
-piaac_c_q07_t_code,piaac_c_q07_t_code,piaac.data
-piaac_c_q07nz_code,piaac_c_q07nz_code,piaac.data
-piaac_c_q08a_ind,piaac_c_q08a_ind,piaac.data
-piaac_c_q08b_ind,piaac_c_q08b_ind,piaac.data
-piaac_c_q08c1_c_code,piaac_c_q08c1_c_code,piaac.data
-piaac_c_q08c1_nbr,piaac_c_q08c1_nbr,piaac.data
-piaac_c_q08c2_nbr,piaac_c_q08c2_nbr,piaac.data
-piaac_c_q09_c_nbr,piaac_c_q09_c_nbr,piaac.data
-piaac_c_q09_nbr,piaac_c_q09_nbr,piaac.data
-piaac_c_q10a_c_nbr,piaac_c_q10a_c_nbr,piaac.data
-piaac_c_q10a_nbr,piaac_c_q10a_nbr,piaac.data
-piaac_c_s03_nbr,piaac_c_s03_nbr,piaac.data
-piaac_cba_core_stage1_score_nbr,piaac_cba_core_stage1_score_nbr,piaac.data
-piaac_cba_core_stage2_score_nbr,piaac_cba_core_stage2_score_nbr,piaac.data
-piaac_cba_start_ind,piaac_cba_start_ind,piaac.data
-piaac_cbamod1_code,piaac_cbamod1_code,piaac.data
-piaac_cbamod1stg1_code,piaac_cbamod1stg1_code,piaac.data
-piaac_cbamod1stg2_code,piaac_cbamod1stg2_code,piaac.data
-piaac_cbamod2_code,piaac_cbamod2_code,piaac.data
-piaac_cbamod2alt_code,piaac_cbamod2alt_code,piaac.data
-piaac_cbamod2stg1_code,piaac_cbamod2stg1_code,piaac.data
-piaac_cbamod2stg2_code,piaac_cbamod2stg2_code,piaac.data
-piaac_cnt_brth_code,piaac_cnt_brth_code,piaac.data
-piaac_cnt_h_code,piaac_cnt_h_code,piaac.data
-piaac_cntryid_code,piaac_cntryid_code,piaac.data
-piaac_cntryid_e_code,piaac_cntryid_e_code,piaac.data
-piaac_computerexperience_ind,piaac_computerexperience_ind,piaac.data
-piaac_corestage1_pass_ind,piaac_corestage1_pass_ind,piaac.data
-piaac_corestage2_pass_ind,piaac_corestage2_pass_ind,piaac.data
-piaac_ctryqual_code,piaac_ctryqual_code,piaac.data
-piaac_ctryrgn_code,piaac_ctryrgn_code,piaac.data
-piaac_d_d16a_amt,piaac_d_d16a_amt,piaac.data
-piaac_d_q03_code,piaac_d_q03_code,piaac.data
-piaac_d_q04_code,piaac_d_q04_code,piaac.data
-piaac_d_q04_t_code,piaac_d_q04_t_code,piaac.data
-piaac_d_q04_t1_code,piaac_d_q04_t1_code,piaac.data
-piaac_d_q05a1_c_code,piaac_d_q05a1_c_code,piaac.data
-piaac_d_q05a1_nbr,piaac_d_q05a1_nbr,piaac.data
-piaac_d_q05a2_nbr,piaac_d_q05a2_nbr,piaac.data
-piaac_d_q05a3_nbr,piaac_d_q05a3_nbr,piaac.data
-piaac_d_q05b1_c_code,piaac_d_q05b1_c_code,piaac.data
-piaac_d_q05b1_nbr,piaac_d_q05b1_nbr,piaac.data
-piaac_d_q05b2_nbr,piaac_d_q05b2_nbr,piaac.data
-piaac_d_q05b3_nbr,piaac_d_q05b3_nbr,piaac.data
-piaac_d_q06a_code,piaac_d_q06a_code,piaac.data
-piaac_d_q06b_code,piaac_d_q06b_code,piaac.data
-piaac_d_q06c_ind,piaac_d_q06c_ind,piaac.data
-piaac_d_q07a_ind,piaac_d_q07a_ind,piaac.data
-piaac_d_q07b_c_code,piaac_d_q07b_c_code,piaac.data
-piaac_d_q07b_code,piaac_d_q07b_code,piaac.data
-piaac_d_q08a_ind,piaac_d_q08a_ind,piaac.data
-piaac_d_q08b_code,piaac_d_q08b_code,piaac.data
-piaac_d_q09_code,piaac_d_q09_code,piaac.data
-piaac_d_q09nz_code,piaac_d_q09nz_code,piaac.data
-piaac_d_q10_c_nbr,piaac_d_q10_c_nbr,piaac.data
-piaac_d_q10_nbr,piaac_d_q10_nbr,piaac.data
-piaac_d_q10_t_nbr,piaac_d_q10_t_nbr,piaac.data
-piaac_d_q10_t1_code,piaac_d_q10_t1_code,piaac.data
-piaac_d_q11a_code,piaac_d_q11a_code,piaac.data
-piaac_d_q11b_code,piaac_d_q11b_code,piaac.data
-piaac_d_q11c_code,piaac_d_q11c_code,piaac.data
-piaac_d_q11d_code,piaac_d_q11d_code,piaac.data
-piaac_d_q12a_code,piaac_d_q12a_code,piaac.data
-piaac_d_q12anz_code,piaac_d_q12anz_code,piaac.data
-piaac_d_q12b_code,piaac_d_q12b_code,piaac.data
-piaac_d_q12c_code,piaac_d_q12c_code,piaac.data
-piaac_d_q13a_code,piaac_d_q13a_code,piaac.data
-piaac_d_q13b_code,piaac_d_q13b_code,piaac.data
-piaac_d_q13c_code,piaac_d_q13c_code,piaac.data
-piaac_d_q14_code,piaac_d_q14_code,piaac.data
-piaac_d_q16a_code,piaac_d_q16a_code,piaac.data
-piaac_d_q16b_amt,piaac_d_q16b_amt,piaac.data
-piaac_d_q16b_t_code,piaac_d_q16b_t_code,piaac.data
-piaac_d_q16c_ind,piaac_d_q16c_ind,piaac.data
-piaac_d_q16d1_code,piaac_d_q16d1_code,piaac.data
-piaac_d_q16d2_code,piaac_d_q16d2_code,piaac.data
-piaac_d_q16d3_code,piaac_d_q16d3_code,piaac.data
-piaac_d_q16d4_code,piaac_d_q16d4_code,piaac.data
-piaac_d_q16d5_code,piaac_d_q16d5_code,piaac.data
-piaac_d_q16d6_code,piaac_d_q16d6_code,piaac.data
-piaac_d_q17a_ind,piaac_d_q17a_ind,piaac.data
-piaac_d_q17b_amt,piaac_d_q17b_amt,piaac.data
-piaac_d_q17c_ind,piaac_d_q17c_ind,piaac.data
-piaac_d_q17d_code,piaac_d_q17d_code,piaac.data
-piaac_d_q18a_amt,piaac_d_q18a_amt,piaac.data
-piaac_d_q18a_t_code,piaac_d_q18a_t_code,piaac.data
-piaac_d_q18b_ind,piaac_d_q18b_ind,piaac.data
-piaac_d_q18c1_code,piaac_d_q18c1_code,piaac.data
-piaac_d_q18c2_code,piaac_d_q18c2_code,piaac.data
-piaac_d_s16a_amt,piaac_d_s16a_amt,piaac.data
-piaac_disp_cibq_code,piaac_disp_cibq_code,piaac.data
-piaac_disp_main_code,piaac_disp_main_code,piaac.data
-piaac_disp_mainwrc_code,piaac_disp_mainwrc_code,piaac.data
-piaac_disp_prc_nbr,piaac_disp_prc_nbr,piaac.data
-piaac_e_q03_code,piaac_e_q03_code,piaac.data
-piaac_e_q04_ind,piaac_e_q04_ind,piaac.data
-piaac_e_q05a1_c_code,piaac_e_q05a1_c_code,piaac.data
-piaac_e_q05a1_nbr,piaac_e_q05a1_nbr,piaac.data
-piaac_e_q05a2_nbr,piaac_e_q05a2_nbr,piaac.data
-piaac_e_q05b1_c_code,piaac_e_q05b1_c_code,piaac.data
-piaac_e_q05b1_nbr,piaac_e_q05b1_nbr,piaac.data
-piaac_e_q05b2_nbr,piaac_e_q05b2_nbr,piaac.data
-piaac_e_q06_code,piaac_e_q06_code,piaac.data
-piaac_e_q07a_ind,piaac_e_q07a_ind,piaac.data
-piaac_e_q07b_code,piaac_e_q07b_code,piaac.data
-piaac_e_q08_code,piaac_e_q08_code,piaac.data
-piaac_e_q08nz_code,piaac_e_q08nz_code,piaac.data
-piaac_e_q09_c_nbr,piaac_e_q09_c_nbr,piaac.data
-piaac_e_q09_nbr,piaac_e_q09_nbr,piaac.data
-piaac_e_q10_code,piaac_e_q10_code,piaac.data
-piaac_e_q10nz_code,piaac_e_q10nz_code,piaac.data
-piaac_earnflag_ind,piaac_earnflag_ind,piaac.data
-piaac_earnhr_amt,piaac_earnhr_amt,piaac.data
-piaac_earnhrbonus_amt,piaac_earnhrbonus_amt,piaac.data
-piaac_earnhrbonusdcl_code,piaac_earnhrbonusdcl_code,piaac.data
-piaac_earnhrbonusppp_amt,piaac_earnhrbonusppp_amt,piaac.data
-piaac_earnhrdcl_code,piaac_earnhrdcl_code,piaac.data
-piaac_earnhrppp_amt,piaac_earnhrppp_amt,piaac.data
-piaac_earnmth_amt,piaac_earnmth_amt,piaac.data
-piaac_earnmthall_amt,piaac_earnmthall_amt,piaac.data
-piaac_earnmthalldcl_code,piaac_earnmthalldcl_code,piaac.data
-piaac_earnmthallppp_amt,piaac_earnmthallppp_amt,piaac.data
-piaac_earnmthbonus_amt,piaac_earnmthbonus_amt,piaac.data
-piaac_earnmthbonusppp_amt,piaac_earnmthbonusppp_amt,piaac.data
-piaac_earnmthppp_amt,piaac_earnmthppp_amt,piaac.data
-piaac_earnmthselfppp_amt,piaac_earnmthselfppp_amt,piaac.data
-piaac_edcat6_code,piaac_edcat6_code,piaac.data
-piaac_edcat7_code,piaac_edcat7_code,piaac.data
-piaac_edcat8_code,piaac_edcat8_code,piaac.data
-piaac_edlevel3_code,piaac_edlevel3_code,piaac.data
-piaac_edwork_code,piaac_edwork_code,piaac.data
-piaac_ethmention1_code,piaac_ethmention1_code,piaac.data
-piaac_ethmention2_code,piaac_ethmention2_code,piaac.data
-piaac_ethmention3_code,piaac_ethmention3_code,piaac.data
-piaac_ethmention4_code,piaac_ethmention4_code,piaac.data
-piaac_ethmention5_code,piaac_ethmention5_code,piaac.data
-piaac_ethmention6_code,piaac_ethmention6_code,piaac.data
-piaac_ethmention7_code,piaac_ethmention7_code,piaac.data
-piaac_ethnic_grp1_snz_ind,piaac_ethnic_grp1_snz_ind,piaac.data
-piaac_ethnic_grp2_snz_ind,piaac_ethnic_grp2_snz_ind,piaac.data
-piaac_ethnic_grp3_snz_ind,piaac_ethnic_grp3_snz_ind,piaac.data
-piaac_ethnic_grp4_snz_ind,piaac_ethnic_grp4_snz_ind,piaac.data
-piaac_ethnic_grp5_snz_ind,piaac_ethnic_grp5_snz_ind,piaac.data
-piaac_ethnic_grp6_snz_ind,piaac_ethnic_grp6_snz_ind,piaac.data
-piaac_f_q01b_code,piaac_f_q01b_code,piaac.data
-piaac_f_q02a_code,piaac_f_q02a_code,piaac.data
-piaac_f_q02b_code,piaac_f_q02b_code,piaac.data
-piaac_f_q02c_code,piaac_f_q02c_code,piaac.data
-piaac_f_q02d_code,piaac_f_q02d_code,piaac.data
-piaac_f_q02e_code,piaac_f_q02e_code,piaac.data
-piaac_f_q03a_code,piaac_f_q03a_code,piaac.data
-piaac_f_q03b_code,piaac_f_q03b_code,piaac.data
-piaac_f_q03c_code,piaac_f_q03c_code,piaac.data
-piaac_f_q04a_code,piaac_f_q04a_code,piaac.data
-piaac_f_q04b_code,piaac_f_q04b_code,piaac.data
-piaac_f_q05a_code,piaac_f_q05a_code,piaac.data
-piaac_f_q05b_code,piaac_f_q05b_code,piaac.data
-piaac_f_q06b_code,piaac_f_q06b_code,piaac.data
-piaac_f_q06c_code,piaac_f_q06c_code,piaac.data
-piaac_f_q07a_ind,piaac_f_q07a_ind,piaac.data
-piaac_f_q07b_ind,piaac_f_q07b_ind,piaac.data
-piaac_faet12_ind,piaac_faet12_ind,piaac.data
-piaac_faet12jr_ind,piaac_faet12jr_ind,piaac.data
-piaac_faet12njr_ind,piaac_faet12njr_ind,piaac.data
-piaac_fe12_ind,piaac_fe12_ind,piaac.data
-piaac_firlgrgn_code,piaac_firlgrgn_code,piaac.data
-piaac_fnfaet12_ind,piaac_fnfaet12_ind,piaac.data
-piaac_fnfaet12jr_ind,piaac_fnfaet12jr_ind,piaac.data
-piaac_fnfaet12njr_ind,piaac_fnfaet12njr_ind,piaac.data
-piaac_fnfe12jr_ind,piaac_fnfe12jr_ind,piaac.data
-piaac_forbilang_code,piaac_forbilang_code,piaac.data
-piaac_forbornlang_code,piaac_forbornlang_code,piaac.data
-piaac_g_q01a_code,piaac_g_q01a_code,piaac.data
-piaac_g_q01a_t_code,piaac_g_q01a_t_code,piaac.data
-piaac_g_q01a_t1_code,piaac_g_q01a_t1_code,piaac.data
-piaac_g_q01b_code,piaac_g_q01b_code,piaac.data
-piaac_g_q01b_t_code,piaac_g_q01b_t_code,piaac.data
-piaac_g_q01b_t1_code,piaac_g_q01b_t1_code,piaac.data
-piaac_g_q01c_code,piaac_g_q01c_code,piaac.data
-piaac_g_q01c_t_code,piaac_g_q01c_t_code,piaac.data
-piaac_g_q01c_t1_code,piaac_g_q01c_t1_code,piaac.data
-piaac_g_q01d_code,piaac_g_q01d_code,piaac.data
-piaac_g_q01e_code,piaac_g_q01e_code,piaac.data
-piaac_g_q01f_code,piaac_g_q01f_code,piaac.data
-piaac_g_q01f_t_code,piaac_g_q01f_t_code,piaac.data
-piaac_g_q01f_t1_code,piaac_g_q01f_t1_code,piaac.data
-piaac_g_q01g_code,piaac_g_q01g_code,piaac.data
-piaac_g_q01g_t_code,piaac_g_q01g_t_code,piaac.data
-piaac_g_q01g_t1_code,piaac_g_q01g_t1_code,piaac.data
-piaac_g_q01h_code,piaac_g_q01h_code,piaac.data
-piaac_g_q01h_t_code,piaac_g_q01h_t_code,piaac.data
-piaac_g_q01h_t1_code,piaac_g_q01h_t1_code,piaac.data
-piaac_g_q02a_code,piaac_g_q02a_code,piaac.data
-piaac_g_q02b_code,piaac_g_q02b_code,piaac.data
-piaac_g_q02c_code,piaac_g_q02c_code,piaac.data
-piaac_g_q02d_code,piaac_g_q02d_code,piaac.data
-piaac_g_q03b_code,piaac_g_q03b_code,piaac.data
-piaac_g_q03c_code,piaac_g_q03c_code,piaac.data
-piaac_g_q03d_code,piaac_g_q03d_code,piaac.data
-piaac_g_q03f_code,piaac_g_q03f_code,piaac.data
-piaac_g_q03g_code,piaac_g_q03g_code,piaac.data
-piaac_g_q03h_code,piaac_g_q03h_code,piaac.data
-piaac_g_q03hnzx1_code,piaac_g_q03hnzx1_code,piaac.data
-piaac_g_q03hnzx2_code,piaac_g_q03hnzx2_code,piaac.data
-piaac_g_q03hnzx3_code,piaac_g_q03hnzx3_code,piaac.data
-piaac_g_q03hnzx4_code,piaac_g_q03hnzx4_code,piaac.data
-piaac_g_q04_ind,piaac_g_q04_ind,piaac.data
-piaac_g_q04_t_ind,piaac_g_q04_t_ind,piaac.data
-piaac_g_q05a_code,piaac_g_q05a_code,piaac.data
-piaac_g_q05c_code,piaac_g_q05c_code,piaac.data
-piaac_g_q05d_code,piaac_g_q05d_code,piaac.data
-piaac_g_q05e_code,piaac_g_q05e_code,piaac.data
-piaac_g_q05f_code,piaac_g_q05f_code,piaac.data
-piaac_g_q05g_code,piaac_g_q05g_code,piaac.data
-piaac_g_q05h_code,piaac_g_q05h_code,piaac.data
-piaac_g_q06_code,piaac_g_q06_code,piaac.data
-piaac_g_q07_ind,piaac_g_q07_ind,piaac.data
-piaac_g_q08_ind,piaac_g_q08_ind,piaac.data
-piaac_gender_r_code,piaac_gender_r_code,piaac.data
-piaac_h_q01a_code,piaac_h_q01a_code,piaac.data
-piaac_h_q01b_code,piaac_h_q01b_code,piaac.data
-piaac_h_q01b_t_code,piaac_h_q01b_t_code,piaac.data
-piaac_h_q01c_code,piaac_h_q01c_code,piaac.data
-piaac_h_q01c_t_code,piaac_h_q01c_t_code,piaac.data
-piaac_h_q01d_code,piaac_h_q01d_code,piaac.data
-piaac_h_q01e_code,piaac_h_q01e_code,piaac.data
-piaac_h_q01e_t_code,piaac_h_q01e_t_code,piaac.data
-piaac_h_q01f_code,piaac_h_q01f_code,piaac.data
-piaac_h_q01g_code,piaac_h_q01g_code,piaac.data
-piaac_h_q01h_code,piaac_h_q01h_code,piaac.data
-piaac_h_q02a_code,piaac_h_q02a_code,piaac.data
-piaac_h_q02b_code,piaac_h_q02b_code,piaac.data
-piaac_h_q02c_code,piaac_h_q02c_code,piaac.data
-piaac_h_q02d_code,piaac_h_q02d_code,piaac.data
-piaac_h_q03b_code,piaac_h_q03b_code,piaac.data
-piaac_h_q03c_code,piaac_h_q03c_code,piaac.data
-piaac_h_q03d_code,piaac_h_q03d_code,piaac.data
-piaac_h_q03f_code,piaac_h_q03f_code,piaac.data
-piaac_h_q03g_code,piaac_h_q03g_code,piaac.data
-piaac_h_q03h_code,piaac_h_q03h_code,piaac.data
-piaac_h_q03hnzx_code,piaac_h_q03hnzx_code,piaac.data
-piaac_h_q04a_ind,piaac_h_q04a_ind,piaac.data
-piaac_h_q04b_ind,piaac_h_q04b_ind,piaac.data
-piaac_h_q05a_code,piaac_h_q05a_code,piaac.data
-piaac_h_q05c_code,piaac_h_q05c_code,piaac.data
-piaac_h_q05d_code,piaac_h_q05d_code,piaac.data
-piaac_h_q05e_code,piaac_h_q05e_code,piaac.data
-piaac_h_q05f_code,piaac_h_q05f_code,piaac.data
-piaac_h_q05g_code,piaac_h_q05g_code,piaac.data
-piaac_h_q05h_code,piaac_h_q05h_code,piaac.data
-piaac_h_q05hnzx1_code,piaac_h_q05hnzx1_code,piaac.data
-piaac_h_q05hnzx2_code,piaac_h_q05hnzx2_code,piaac.data
-piaac_homlang_code,piaac_homlang_code,piaac.data
-piaac_homlgrgn_code,piaac_homlgrgn_code,piaac.data
-piaac_i_q04b_code,piaac_i_q04b_code,piaac.data
-piaac_i_q04d_code,piaac_i_q04d_code,piaac.data
-piaac_i_q04h_code,piaac_i_q04h_code,piaac.data
-piaac_i_q04j_code,piaac_i_q04j_code,piaac.data
-piaac_i_q04l_code,piaac_i_q04l_code,piaac.data
-piaac_i_q04m_code,piaac_i_q04m_code,piaac.data
-piaac_i_q05f_code,piaac_i_q05f_code,piaac.data
-piaac_i_q06a_code,piaac_i_q06a_code,piaac.data
-piaac_i_q07a_code,piaac_i_q07a_code,piaac.data
-piaac_i_q07b_code,piaac_i_q07b_code,piaac.data
-piaac_i_q08_code,piaac_i_q08_code,piaac.data
-piaac_i_q08_t_code,piaac_i_q08_t_code,piaac.data
-piaac_icthome_nbr,piaac_icthome_nbr,piaac.data
-piaac_icthome_se_nbr,piaac_icthome_se_nbr,piaac.data
-piaac_icthome_wle_ca_code,piaac_icthome_wle_ca_code,piaac.data
-piaac_ictwork_nbr,piaac_ictwork_nbr,piaac.data
-piaac_ictwork_se_nbr,piaac_ictwork_se_nbr,piaac.data
-piaac_ictwork_wle_ca_code,piaac_ictwork_wle_ca_code,piaac.data
-piaac_imgen_code,piaac_imgen_code,piaac.data
-piaac_impar_code,piaac_impar_code,piaac.data
-piaac_impflgag_ind,piaac_impflgag_ind,piaac.data
-piaac_imyrcat_code,piaac_imyrcat_code,piaac.data
-piaac_imyrs_c_code,piaac_imyrs_c_code,piaac.data
-piaac_imyrs_nbr,piaac_imyrs_nbr,piaac.data
-piaac_influence_nbr,piaac_influence_nbr,piaac.data
-piaac_influence_wle_ca_code,piaac_influence_wle_ca_code,piaac.data
-piaac_isced_hf_c_code,piaac_isced_hf_c_code,piaac.data
-piaac_isced_hf_code,piaac_isced_hf_code,piaac.data
-piaac_iscednz1_code,piaac_iscednz1_code,piaac.data
-piaac_iscednz2_code,piaac_iscednz2_code,piaac.data
-piaac_isco08_c_code,piaac_isco08_c_code,piaac.data
-piaac_isco08_l_code,piaac_isco08_l_code,piaac.data
-piaac_isco1c_code,piaac_isco1c_code,piaac.data
-piaac_isco1l_code,piaac_isco1l_code,piaac.data
-piaac_isco2c_code,piaac_isco2c_code,piaac.data
-piaac_isco2l_code,piaac_isco2l_code,piaac.data
-piaac_iscoskil4_code,piaac_iscoskil4_code,piaac.data
-piaac_isic1c_code,piaac_isic1c_code,piaac.data
-piaac_isic1c_n_code,piaac_isic1c_n_code,piaac.data
-piaac_isic1l_code,piaac_isic1l_code,piaac.data
-piaac_isic2c_code,piaac_isic2c_code,piaac.data
-piaac_isic2l_code,piaac_isic2l_code,piaac.data
-piaac_isic4_c_code,piaac_isic4_c_code,piaac.data
-piaac_isic4_l_code,piaac_isic4_l_code,piaac.data
-piaac_j_n05a2_ind,piaac_j_n05a2_ind,piaac.data
-piaac_j_q01_c_nbr,piaac_j_q01_c_nbr,piaac.data
-piaac_j_q01_nbr,piaac_j_q01_nbr,piaac.data
-piaac_j_q01_t_nbr,piaac_j_q01_t_nbr,piaac.data
-piaac_j_q01_t1_code,piaac_j_q01_t1_code,piaac.data
-piaac_j_q02a_ind,piaac_j_q02a_ind,piaac.data
-piaac_j_q02c_code,piaac_j_q02c_code,piaac.data
-piaac_j_q02cnz_code,piaac_j_q02cnz_code,piaac.data
-piaac_j_q03a_ind,piaac_j_q03a_ind,piaac.data
-piaac_j_q03anz_ind,piaac_j_q03anz_ind,piaac.data
-piaac_j_q03b_c_nbr,piaac_j_q03b_c_nbr,piaac.data
-piaac_j_q03b_nbr,piaac_j_q03b_nbr,piaac.data
-piaac_j_q03bnz_nbr,piaac_j_q03bnz_nbr,piaac.data
-piaac_j_q03c_c_code,piaac_j_q03c_c_code,piaac.data
-piaac_j_q03c_nbr,piaac_j_q03c_nbr,piaac.data
-piaac_j_q03cnz_nbr,piaac_j_q03cnz_nbr,piaac.data
-piaac_j_q03d1_c_code,piaac_j_q03d1_c_code,piaac.data
-piaac_j_q03d1_nbr,piaac_j_q03d1_nbr,piaac.data
-piaac_j_q03d2_c_code,piaac_j_q03d2_c_code,piaac.data
-piaac_j_q03d2_nbr,piaac_j_q03d2_nbr,piaac.data
-piaac_j_q03d2nx1_ind,piaac_j_q03d2nx1_ind,piaac.data
-piaac_j_q03d2nx21_nbr,piaac_j_q03d2nx21_nbr,piaac.data
-piaac_j_q03d2nx22_nbr,piaac_j_q03d2nx22_nbr,piaac.data
-piaac_j_q03d2nx23_nbr,piaac_j_q03d2nx23_nbr,piaac.data
-piaac_j_q04a_ind,piaac_j_q04a_ind,piaac.data
-piaac_j_q04a_t_ind,piaac_j_q04a_t_ind,piaac.data
-piaac_j_q04bnz_code,piaac_j_q04bnz_code,piaac.data
-piaac_j_q04c1_c_code,piaac_j_q04c1_c_code,piaac.data
-piaac_j_q04c1_nbr,piaac_j_q04c1_nbr,piaac.data
-piaac_j_q04c2_nbr,piaac_j_q04c2_nbr,piaac.data
-piaac_j_q04c2_t_nbr,piaac_j_q04c2_t_nbr,piaac.data
-piaac_j_q04c2_t1_code,piaac_j_q04c2_t1_code,piaac.data
-piaac_j_q05a1nz_code,piaac_j_q05a1nz_code,piaac.data
-piaac_j_q05a2nz_code,piaac_j_q05a2nz_code,piaac.data
-piaac_j_q05bnz_code,piaac_j_q05bnz_code,piaac.data
-piaac_j_q06a_ind,piaac_j_q06a_ind,piaac.data
-piaac_j_q06a_t_code,piaac_j_q06a_t_code,piaac.data
-piaac_j_q06b_code,piaac_j_q06b_code,piaac.data
-piaac_j_q06b_t_code,piaac_j_q06b_t_code,piaac.data
-piaac_j_q06bnz_code,piaac_j_q06bnz_code,piaac.data
-piaac_j_q06dnzx1_ind,piaac_j_q06dnzx1_ind,piaac.data
-piaac_j_q07a_ind,piaac_j_q07a_ind,piaac.data
-piaac_j_q07a_t_code,piaac_j_q07a_t_code,piaac.data
-piaac_j_q07b_code,piaac_j_q07b_code,piaac.data
-piaac_j_q07b_t_code,piaac_j_q07b_t_code,piaac.data
-piaac_j_q07bnz_code,piaac_j_q07bnz_code,piaac.data
-piaac_j_q07dnzx1_code,piaac_j_q07dnzx1_code,piaac.data
-piaac_j_q08_code,piaac_j_q08_code,piaac.data
-piaac_learnatwork_nbr,piaac_learnatwork_nbr,piaac.data
-piaac_learnatwork_wle_ca_code,piaac_learnatwork_wle_ca_code,piaac.data
-piaac_leavedu_nbr,piaac_leavedu_nbr,piaac.data
-piaac_leaver1624_code,piaac_leaver1624_code,piaac.data
-piaac_litstatus_ind,piaac_litstatus_ind,piaac.data
-piaac_lng_bq_code,piaac_lng_bq_code,piaac.data
-piaac_lng_ci_code,piaac_lng_ci_code,piaac.data
-piaac_lng_home_code,piaac_lng_home_code,piaac.data
-piaac_lng_l1_code,piaac_lng_l1_code,piaac.data
-piaac_lng_l2_code,piaac_lng_l2_code,piaac.data
-piaac_match_birth_month_nbr,piaac_match_birth_month_nbr,piaac.data
-piaac_match_birth_year_nbr,piaac_match_birth_year_nbr,piaac.data
-piaac_match_interview_month_nbr,piaac_match_interview_month_nbr,piaac.data
-piaac_match_interview_year_nbr,piaac_match_interview_year_nbr,piaac.data
-piaac_match_mb2013_code,piaac_match_mb2013_code,piaac.data
-piaac_match_meshblock_code,piaac_match_meshblock_code,piaac.data
-piaac_match_meshblock_imputed_in,piaac_match_meshblock_imputed_in,piaac.data
-piaac_match_region_code,piaac_match_region_code,piaac.data
-piaac_match_ta_code,piaac_match_ta_code,piaac.data
-piaac_monthlyincpr_code,piaac_monthlyincpr_code,piaac.data
-piaac_natbilang_code,piaac_natbilang_code,piaac.data
-piaac_nativelang_code,piaac_nativelang_code,piaac.data
-piaac_nativespeaker_ind,piaac_nativespeaker_ind,piaac.data
-piaac_neet_ind,piaac_neet_ind,piaac.data
-piaac_nfe12_ind,piaac_nfe12_ind,piaac.data
-piaac_nfe12jr_ind,piaac_nfe12jr_ind,piaac.data
-piaac_nfe12njr_ind,piaac_nfe12njr_ind,piaac.data
-piaac_nfehrs_nbr,piaac_nfehrs_nbr,piaac.data
-piaac_nfehrsjr_nbr,piaac_nfehrsjr_nbr,piaac.data
-piaac_nfehrsnjr_nbr,piaac_nfehrsnjr_nbr,piaac.data
-piaac_nopaidworkever_ind,piaac_nopaidworkever_ind,piaac.data
-piaac_numhome_nbr,piaac_numhome_nbr,piaac.data
-piaac_numhome_wle_ca_code,piaac_numhome_wle_ca_code,piaac.data
-piaac_numstatus_code,piaac_numstatus_code,piaac.data
-piaac_numwork_nbr,piaac_numwork_nbr,piaac.data
-piaac_numwork_wle_ca_code,piaac_numwork_wle_ca_code,piaac.data
-piaac_paidwork12_ind,piaac_paidwork12_ind,piaac.data
-piaac_paidwork5_ind,piaac_paidwork5_ind,piaac.data
-piaac_paper_code,piaac_paper_code,piaac.data
-piaac_pared_code,piaac_pared_code,piaac.data
-piaac_pbroute_code,piaac_pbroute_code,piaac.data
-piaac_planning_nbr,piaac_planning_nbr,piaac.data
-piaac_planning_wle_ca_code,piaac_planning_wle_ca_code,piaac.data
-piaac_ppc_score_nbr,piaac_ppc_score_nbr,piaac.data
-piaac_prc_pc_scr_nbr,piaac_prc_pc_scr_nbr,piaac.data
-piaac_prc_pf_q1_nbr,piaac_prc_pf_q1_nbr,piaac.data
-piaac_prc_pf_q2_nbr,piaac_prc_pf_q2_nbr,piaac.data
-piaac_prc_pf_q3_nbr,piaac_prc_pf_q3_nbr,piaac.data
-piaac_prc_pv_q1_nbr,piaac_prc_pv_q1_nbr,piaac.data
-piaac_prc_pv_scr_nbr,piaac_prc_pv_scr_nbr,piaac.data
-piaac_prc_sp_q1_nbr,piaac_prc_sp_q1_nbr,piaac.data
-piaac_prc_sp_scr_nbr,piaac_prc_sp_scr_nbr,piaac.data
-piaac_pslstatus_code,piaac_pslstatus_code,piaac.data
-piaac_pvlit1_nbr,piaac_pvlit1_nbr,piaac.data
-piaac_pvlit10_nbr,piaac_pvlit10_nbr,piaac.data
-piaac_pvlit2_nbr,piaac_pvlit2_nbr,piaac.data
-piaac_pvlit3_nbr,piaac_pvlit3_nbr,piaac.data
-piaac_pvlit4_nbr,piaac_pvlit4_nbr,piaac.data
-piaac_pvlit5_nbr,piaac_pvlit5_nbr,piaac.data
-piaac_pvlit6_nbr,piaac_pvlit6_nbr,piaac.data
-piaac_pvlit7_nbr,piaac_pvlit7_nbr,piaac.data
-piaac_pvlit8_nbr,piaac_pvlit8_nbr,piaac.data
-piaac_pvlit9_nbr,piaac_pvlit9_nbr,piaac.data
-piaac_pvnum1_nbr,piaac_pvnum1_nbr,piaac.data
-piaac_pvnum10_nbr,piaac_pvnum10_nbr,piaac.data
-piaac_pvnum2_nbr,piaac_pvnum2_nbr,piaac.data
-piaac_pvnum3_nbr,piaac_pvnum3_nbr,piaac.data
-piaac_pvnum4_nbr,piaac_pvnum4_nbr,piaac.data
-piaac_pvnum5_nbr,piaac_pvnum5_nbr,piaac.data
-piaac_pvnum6_nbr,piaac_pvnum6_nbr,piaac.data
-piaac_pvnum7_nbr,piaac_pvnum7_nbr,piaac.data
-piaac_pvnum8_nbr,piaac_pvnum8_nbr,piaac.data
-piaac_pvnum9_nbr,piaac_pvnum9_nbr,piaac.data
-piaac_pvpsl1_nbr,piaac_pvpsl1_nbr,piaac.data
-piaac_pvpsl10_nbr,piaac_pvpsl10_nbr,piaac.data
-piaac_pvpsl2_nbr,piaac_pvpsl2_nbr,piaac.data
-piaac_pvpsl3_nbr,piaac_pvpsl3_nbr,piaac.data
-piaac_pvpsl4_nbr,piaac_pvpsl4_nbr,piaac.data
-piaac_pvpsl5_nbr,piaac_pvpsl5_nbr,piaac.data
-piaac_pvpsl6_nbr,piaac_pvpsl6_nbr,piaac.data
-piaac_pvpsl7_nbr,piaac_pvpsl7_nbr,piaac.data
-piaac_pvpsl8_nbr,piaac_pvpsl8_nbr,piaac.data
-piaac_pvpsl9_nbr,piaac_pvpsl9_nbr,piaac.data
-piaac_random_cba_module1_nbr,piaac_random_cba_module1_nbr,piaac.data
-piaac_random_cba_module1_st1_nbr,piaac_random_cba_module1_st1_nbr,piaac.data
-piaac_random_cba_module1_st2_nbr,piaac_random_cba_module1_st2_nbr,piaac.data
-piaac_random_cba_module2_nbr,piaac_random_cba_module2_nbr,piaac.data
-piaac_random_cba_module2_st1_nbr,piaac_random_cba_module2_st1_nbr,piaac.data
-piaac_random_cba_module2_st2_nbr,piaac_random_cba_module2_st2_nbr,piaac.data
-piaac_random_pp_nbr,piaac_random_pp_nbr,piaac.data
-piaac_readhome_nbr,piaac_readhome_nbr,piaac.data
-piaac_readhome_wle_ca_code,piaac_readhome_wle_ca_code,piaac.data
-piaac_readwork_nbr,piaac_readwork_nbr,piaac.data
-piaac_readwork_wle_ca_code,piaac_readwork_wle_ca_code,piaac.data
-piaac_readytolearn_nbr,piaac_readytolearn_nbr,piaac.data
-piaac_readytolearn_wle_ca_code,piaac_readytolearn_wle_ca_code,piaac.data
-piaac_reg_tl2_code,piaac_reg_tl2_code,piaac.data
-piaac_seclgrgn_code,piaac_seclgrgn_code,piaac.data
-piaac_spfwt0_nbr,piaac_spfwt0_nbr,piaac.data
-piaac_spfwt1_nbr,piaac_spfwt1_nbr,piaac.data
-piaac_spfwt10_nbr,piaac_spfwt10_nbr,piaac.data
-piaac_spfwt11_nbr,piaac_spfwt11_nbr,piaac.data
-piaac_spfwt12_nbr,piaac_spfwt12_nbr,piaac.data
-piaac_spfwt13_nbr,piaac_spfwt13_nbr,piaac.data
-piaac_spfwt14_nbr,piaac_spfwt14_nbr,piaac.data
-piaac_spfwt15_nbr,piaac_spfwt15_nbr,piaac.data
-piaac_spfwt16_nbr,piaac_spfwt16_nbr,piaac.data
-piaac_spfwt17_nbr,piaac_spfwt17_nbr,piaac.data
-piaac_spfwt18_nbr,piaac_spfwt18_nbr,piaac.data
-piaac_spfwt19_nbr,piaac_spfwt19_nbr,piaac.data
-piaac_spfwt2_nbr,piaac_spfwt2_nbr,piaac.data
-piaac_spfwt20_nbr,piaac_spfwt20_nbr,piaac.data
-piaac_spfwt21_nbr,piaac_spfwt21_nbr,piaac.data
-piaac_spfwt22_nbr,piaac_spfwt22_nbr,piaac.data
-piaac_spfwt23_nbr,piaac_spfwt23_nbr,piaac.data
-piaac_spfwt24_nbr,piaac_spfwt24_nbr,piaac.data
-piaac_spfwt25_nbr,piaac_spfwt25_nbr,piaac.data
-piaac_spfwt26_nbr,piaac_spfwt26_nbr,piaac.data
-piaac_spfwt27_nbr,piaac_spfwt27_nbr,piaac.data
-piaac_spfwt28_nbr,piaac_spfwt28_nbr,piaac.data
-piaac_spfwt29_nbr,piaac_spfwt29_nbr,piaac.data
-piaac_spfwt3_nbr,piaac_spfwt3_nbr,piaac.data
-piaac_spfwt30_nbr,piaac_spfwt30_nbr,piaac.data
-piaac_spfwt31_nbr,piaac_spfwt31_nbr,piaac.data
-piaac_spfwt32_nbr,piaac_spfwt32_nbr,piaac.data
-piaac_spfwt33_nbr,piaac_spfwt33_nbr,piaac.data
-piaac_spfwt34_nbr,piaac_spfwt34_nbr,piaac.data
-piaac_spfwt35_nbr,piaac_spfwt35_nbr,piaac.data
-piaac_spfwt36_nbr,piaac_spfwt36_nbr,piaac.data
-piaac_spfwt37_nbr,piaac_spfwt37_nbr,piaac.data
-piaac_spfwt38_nbr,piaac_spfwt38_nbr,piaac.data
-piaac_spfwt39_nbr,piaac_spfwt39_nbr,piaac.data
-piaac_spfwt4_nbr,piaac_spfwt4_nbr,piaac.data
-piaac_spfwt40_nbr,piaac_spfwt40_nbr,piaac.data
-piaac_spfwt41_nbr,piaac_spfwt41_nbr,piaac.data
-piaac_spfwt42_nbr,piaac_spfwt42_nbr,piaac.data
-piaac_spfwt43_nbr,piaac_spfwt43_nbr,piaac.data
-piaac_spfwt44_nbr,piaac_spfwt44_nbr,piaac.data
-piaac_spfwt45_nbr,piaac_spfwt45_nbr,piaac.data
-piaac_spfwt46_nbr,piaac_spfwt46_nbr,piaac.data
-piaac_spfwt47_nbr,piaac_spfwt47_nbr,piaac.data
-piaac_spfwt48_nbr,piaac_spfwt48_nbr,piaac.data
-piaac_spfwt49_nbr,piaac_spfwt49_nbr,piaac.data
-piaac_spfwt5_nbr,piaac_spfwt5_nbr,piaac.data
-piaac_spfwt50_nbr,piaac_spfwt50_nbr,piaac.data
-piaac_spfwt51_nbr,piaac_spfwt51_nbr,piaac.data
-piaac_spfwt52_nbr,piaac_spfwt52_nbr,piaac.data
-piaac_spfwt53_nbr,piaac_spfwt53_nbr,piaac.data
-piaac_spfwt54_nbr,piaac_spfwt54_nbr,piaac.data
-piaac_spfwt55_nbr,piaac_spfwt55_nbr,piaac.data
-piaac_spfwt56_nbr,piaac_spfwt56_nbr,piaac.data
-piaac_spfwt57_nbr,piaac_spfwt57_nbr,piaac.data
-piaac_spfwt58_nbr,piaac_spfwt58_nbr,piaac.data
-piaac_spfwt59_nbr,piaac_spfwt59_nbr,piaac.data
-piaac_spfwt6_nbr,piaac_spfwt6_nbr,piaac.data
-piaac_spfwt60_nbr,piaac_spfwt60_nbr,piaac.data
-piaac_spfwt61_nbr,piaac_spfwt61_nbr,piaac.data
-piaac_spfwt62_nbr,piaac_spfwt62_nbr,piaac.data
-piaac_spfwt63_nbr,piaac_spfwt63_nbr,piaac.data
-piaac_spfwt64_nbr,piaac_spfwt64_nbr,piaac.data
-piaac_spfwt65_nbr,piaac_spfwt65_nbr,piaac.data
-piaac_spfwt66_nbr,piaac_spfwt66_nbr,piaac.data
-piaac_spfwt67_nbr,piaac_spfwt67_nbr,piaac.data
-piaac_spfwt68_nbr,piaac_spfwt68_nbr,piaac.data
-piaac_spfwt69_nbr,piaac_spfwt69_nbr,piaac.data
-piaac_spfwt7_nbr,piaac_spfwt7_nbr,piaac.data
-piaac_spfwt70_nbr,piaac_spfwt70_nbr,piaac.data
-piaac_spfwt71_nbr,piaac_spfwt71_nbr,piaac.data
-piaac_spfwt72_nbr,piaac_spfwt72_nbr,piaac.data
-piaac_spfwt73_nbr,piaac_spfwt73_nbr,piaac.data
-piaac_spfwt74_nbr,piaac_spfwt74_nbr,piaac.data
-piaac_spfwt75_nbr,piaac_spfwt75_nbr,piaac.data
-piaac_spfwt76_nbr,piaac_spfwt76_nbr,piaac.data
-piaac_spfwt77_nbr,piaac_spfwt77_nbr,piaac.data
-piaac_spfwt78_nbr,piaac_spfwt78_nbr,piaac.data
-piaac_spfwt79_nbr,piaac_spfwt79_nbr,piaac.data
-piaac_spfwt8_nbr,piaac_spfwt8_nbr,piaac.data
-piaac_spfwt80_nbr,piaac_spfwt80_nbr,piaac.data
-piaac_spfwt9_nbr,piaac_spfwt9_nbr,piaac.data
-piaac_taskdisc_nbr,piaac_taskdisc_nbr,piaac.data
-piaac_taskdisc_wle_ca_code,piaac_taskdisc_wle_ca_code,piaac.data
-piaac_varstrat_nbr,piaac_varstrat_nbr,piaac.data
-piaac_varunit_nbr,piaac_varunit_nbr,piaac.data
-piaac_vefayfac_nbr,piaac_vefayfac_nbr,piaac.data
-piaac_vemethod_code,piaac_vemethod_code,piaac.data
-piaac_vemethodn_code,piaac_vemethodn_code,piaac.data
-piaac_venreps_nbr,piaac_venreps_nbr,piaac.data
-piaac_vet_ind,piaac_vet_ind,piaac.data
-piaac_writhome_nbr,piaac_writhome_nbr,piaac.data
-piaac_writhome_wle_ca_code,piaac_writhome_wle_ca_code,piaac.data
-piaac_writwork_nbr,piaac_writwork_nbr,piaac.data
-piaac_writwork_se_wle_nbr,piaac_writwork_se_wle_nbr,piaac.data
-piaac_writwork_wle_ca_code,piaac_writwork_wle_ca_code,piaac.data
-piaac_yearlyincpr_code,piaac_yearlyincpr_code,piaac.data
-piaac_yrsget_nbr,piaac_yrsget_nbr,piaac.data
-piaac_yrsqual_nbr,piaac_yrsqual_nbr,piaac.data
-piaac_yrsqual_t_nbr,piaac_yrsqual_t_nbr,piaac.data
-snz_idi_address_register_uid,snz_idi_address_register_uid,piaac.data
-snz_piaac_uid,snz_piaac_uid,piaac.data
-snz_uid,snz_uid,piaac.data
+piaac_match_meshblock_imputed_in,piaac_match_meshblock_imputed_in,piaac_clean.data
 moe_crs_compulsory_course_costs_,moe_crs_compulsory_course_costs_,moe_clean.course
 moe_crs_pbrf_course_complete_yea,moe_crs_pbrf_course_complete_yea,moe_clean.course
 moe_com_year_nbr,moe_com_year_nbr,moe_clean.qualification
@@ -3015,6 +2385,7 @@ moe_com_slf_rprtd_qacc_code,moe_com_slf_rprtd_qacc_code,moe_clean.qualification
 moe_ttr_orig_eligibility_reason_,moe_ttr_orig_eligibility_reason_,moe_clean.targeted_training
 organisation-code,organisation-code,idi_adhoc.clean_read_moe.tertiary_identifiable_organisations
 latest-year-of-consent,latest-year-of-consent,idi_adhoc.clean_read_moe.tertiary_identifiable_organisations
+event_snz_moh_uid,event_snz_moh_uid,moh_clean.cancer_registrations
 snz_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_nhi
 snz_spine_uid,Spine Unique Identifier,clean_read_moh_cir.moh_cir_nhi
 snz_moh_uid,MoH Unique Identifier,clean_read_moh_cir.moh_cir_nhi
@@ -3336,6 +2707,8 @@ linkedmwgt_rep96,linkedMwgt_rep96,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep97,linkedMwgt_rep97,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep98,linkedMwgt_rep98,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep99,linkedMwgt_rep99,clean_read_moh_nzhs.moh_nzhs_child
+event_snz_moh_uid,event_snz_moh_uid,moh_clean.pub_fund_hosp_discharges_event
+event_snz_moh_uid,event_snz_moh_uid,moh_clean.pharmaceutical
 nasclegalname_value,NASCLegalName_Value,clean_read_moh_socrates.moh_client_status_hist
 reasonforclientstatuschange_valu,ReasonForClientStatusChange_Valu,clean_read_moh_socrates.moh_client_status_hist
 snz_moh_uid,snz_moh_uid,clean_read_moh_socrates.ethnicity

@@ -41,6 +41,7 @@
     - IDI SLA IRD Consolidated Data Extract data
     - IDI SLA IRD Unit Record Monthly Data Extract data
     - IDI IR Full data
+    - IDI IR RESTRICT data
     - IDI IR Tax Estate or Trust Beneficiary Details (IR6B) data
 
 - id: MBIE
@@ -48,6 +49,7 @@
   collections:
     - IDI MBIE Immigration and Visa data
     - IDI MBIE Tenancy Bond data
+    - IDI MBIE Migration selections data
 
 - id: MOE
   name: Ministry of Education
@@ -107,9 +109,9 @@
 - id: NZPOL
   name: New Zealand Police
   collections:
-    - IDI NZ Police data
     - IDI NZ Police data NIA Links Data
     - IDI POL Recorded Crime Offenders data
+    - "IDI NZ Police data : Recorded Crime Victims (RCVS)"
 
 - id: NZR
   name: NZ Rugby
@@ -137,6 +139,7 @@
     - IDI HES Net Worth Supplement
     - IDI HLFS Supplements
     - IDI HLFS Wellbeing Supp
+    - IDI HLFS Wellbeing Supplement data
     - IDI Household Labour Force Survey data (HLFS) data
     - IDI Iwi Affiliation Census 2018
     - IDI Survey of Family Income and Employment data

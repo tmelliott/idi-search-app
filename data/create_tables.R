@@ -206,7 +206,8 @@ if (any(dup_ids > 1L)) {
             )
         )
     )
-    cli::cli_ul(dup_ids[dup_ids > 1])
+    dn <- names(dup_ids[dup_ids > 1])
+    cli::cli_ul(dn)
     stop()
 }
 
