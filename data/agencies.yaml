@@ -43,6 +43,7 @@
     - IDI IR Full data
     - IDI IR RESTRICT data
     - IDI IR Tax Estate or Trust Beneficiary Details (IR6B) data
+    - IDI Working for Families Research data
 
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
@@ -60,6 +61,8 @@
     - Tertiary Education Literacy and Numeracy Data
     - Programme for the International Assessment of Adult Competencies (PIAAC) 2014/15 Survey of Adult Life Skills
     - IDI SLA Student Loans Account Manager (SLAM) data
+    - IDI MOE PROGRAMME FOR INTERNATIONAL STUDENT ASSESSMENT (PISA) 2009
+    - IDI MOE Programme for International Student Assessment (PISA) 2018
 
 - id: MOH
   name: Ministry of Health
