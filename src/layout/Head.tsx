@@ -12,21 +12,19 @@ type HeadTagsProps = {
   description?: string;
 };
 
-export default function HeadTags({ title = "", description }: HeadTagsProps) {
+export default function HeadTags({ title, description }: HeadTagsProps) {
+  const pageTitle = "IDI Search | " + (title || HEAD_DATA.title);
   return (
     <Head>
       {/* <!-- Primary Meta Tags --> */}
-      <title>IDI Search | {title || HEAD_DATA.title}</title>
-      <meta name="title" content={"IDI Search | " + title || HEAD_DATA.title} />
+      <title>{pageTitle}</title>
+      <meta name="title" content={pageTitle} />
       <meta name="description" content={description || HEAD_DATA.description} />
 
       {/* <!-- Open Graph / Facebook --> */}
       <meta property="og:type" content="website" />
       <meta property="og:url" content={HEAD_DATA.url} />
-      <meta
-        property="og:title"
-        content={"IDI Search | " + title || HEAD_DATA.title}
-      />
+      <meta property="og:title" content={pageTitle} />
       <meta
         property="og:description"
         content={description || HEAD_DATA.description}
@@ -36,10 +34,7 @@ export default function HeadTags({ title = "", description }: HeadTagsProps) {
       {/* <!-- Twitter --> */}
       <meta property="twitter:card" content="summary_large_image" />
       <meta property="twitter:url" content={HEAD_DATA.url} />
-      <meta
-        property="twitter:title"
-        content={"IDI Search | " + title || HEAD_DATA.title}
-      />
+      <meta property="twitter:title" content={pageTitle} />
       <meta
         property="twitter:description"
         content={description || HEAD_DATA.description}

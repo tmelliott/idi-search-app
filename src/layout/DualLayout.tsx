@@ -1,5 +1,3 @@
-// import Footer from "./Footer"
-// import Header from "./Header"
 import { type PropsWithChildren, useState, useEffect } from "react";
 
 import Link from "next/link";
@@ -45,10 +43,10 @@ const DualLayout = ({ children }: PropsWithChildren) => {
           <div className="flex-1 overflow-y-scroll">
             {/* <Search /> */}
             {router.asPath !== "/" && (
-              <div className="text-sm flex items-center gap-1">
+              <Link href="/" className="text-sm flex items-center gap-1">
                 <ArrowLeftCircleIcon className="h-5" />
-                <Link href="/">Back</Link>
-              </div>
+                Back
+              </Link>
             )}
             {children}
           </div>
