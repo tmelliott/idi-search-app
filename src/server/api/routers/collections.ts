@@ -43,4 +43,26 @@ export const collectionsRouter = createTRPCRouter({
         },
       });
     }),
+  get: publicProcedure
+    .input(
+      z.object({
+        collection_id: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      return ctx.prisma.collections.findUnique({
+        where: { collection_id: input.collection_id },
+        select: {
+          collection_id: true,
+          collection_name: true,
+          agency: {
+            select: {
+              agency_name: true,
+              agency_id: true,
+            },
+          },
+          description: true,
+        },
+      });
+    }),
 });

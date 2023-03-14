@@ -22,6 +22,7 @@ import {
 
 type Props = {
   limit?: number;
+  collection_id?: string;
 };
 
 type Dataset = ArrayElement<RouterOutputs["datasets"]["all"]>;
@@ -56,7 +57,7 @@ const columns = [
   }),
 ];
 
-export default function Datasets({ limit }: Props) {
+export default function Datasets({ limit, collection_id }: Props) {
   const router = useRouter();
   const { query } = router;
   const {
@@ -65,6 +66,7 @@ export default function Datasets({ limit }: Props) {
     isError,
   } = api.datasets.all.useQuery({
     term: query.s as string,
+    collection_id,
   });
 
   const table = useReactTable({

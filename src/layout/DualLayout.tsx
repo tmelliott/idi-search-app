@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 
 import { ArrowLeftCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Agency from "~/components/Agencies/Agency";
+import Collection from "~/components/Collections/Collection";
 
 import MainLayout from "./MainLayout";
 
@@ -42,7 +43,7 @@ const DualLayout = ({ children }: PropsWithChildren) => {
         <div className="md:h-full flex md:overflow-x-hidden">
           <div className="flex-1 overflow-y-scroll">
             {/* <Search /> */}
-            {router.asPath !== "/" && (
+            {router.pathname !== "/" && (
               <Link href="/" className="text-sm flex items-center gap-1">
                 <ArrowLeftCircleIcon className="h-5" />
                 Back
@@ -71,6 +72,9 @@ const DualLayout = ({ children }: PropsWithChildren) => {
 
                 {router.query.v === "agency" && (
                   <Agency agency_id={router.query.id as string} />
+                )}
+                {router.query.v === "collection" && (
+                  <Collection collection_id={router.query.id as string} />
                 )}
 
                 {/* {type === "agency" && <Agency id={typeId} />}

@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
@@ -85,12 +86,25 @@ export default function Collections({ limit, agency_id }: Props) {
     );
   };
 
+  const TitleLink = ({
+    children,
+    href,
+  }: {
+    children: ReactNode;
+    href: string;
+  }) => {
+    if (router.asPath === "/agencies") return <>{children}</>;
+    return <Link href={href}>{children}</Link>;
+  };
+
   return (
     <section>
       <h3>
-        Collections
-        {agency_id && <> by this agency</>}
-        {collections && <> ({collections.length})</>}
+        <TitleLink href="/collections">
+          Collections
+          {agency_id && <> by this agency</>}
+          {collections && <> ({collections.length})</>}
+        </TitleLink>
       </h3>
 
       {isError ? (
