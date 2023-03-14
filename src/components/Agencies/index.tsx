@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { type ReactNode, useEffect } from "react";
 
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
@@ -73,11 +74,24 @@ export default function Agencies({ limit }: Props) {
     );
   };
 
+  const TitleLink = ({
+    children,
+    href,
+  }: {
+    children: ReactNode;
+    href: string;
+  }) => {
+    if (router.asPath === "/agencies") return <>{children}</>;
+    return <Link href={href}>{children}</Link>;
+  };
+
   return (
     <section>
       <h3>
-        Data Supply Agencies
-        {agencies && <> ({agencies.length})</>}
+        <TitleLink href="/agencies">
+          Data Supply Agencies
+          {agencies && <> ({agencies.length})</>}
+        </TitleLink>
       </h3>
 
       {isError ? (
