@@ -2,14 +2,17 @@
 // import Header from "./Header"
 import { type PropsWithChildren } from "react";
 
+import Footer from "./Footer";
+import Header from "./Header";
+
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
     <div className="md:h-screen flex flex-col">
       {/* <Header /> */}
-      <header>HEADER</header>
+      <Header />
       <main className="flex-1 md:overflow-y-scroll p-2">{children}</main>
       {/* <Footer /> */}
-      <footer>FOOTER</footer>
+      <Footer />
     </div>
   );
 };

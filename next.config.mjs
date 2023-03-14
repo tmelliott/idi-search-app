@@ -32,6 +32,9 @@ const config = {
     locales: ["en"],
     defaultLocale: "en",
   },
+  images: {
+    domains: ["terourou.org"],
+  },
 };
 // export default config;
 
