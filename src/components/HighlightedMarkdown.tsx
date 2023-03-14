@@ -20,7 +20,7 @@ const HighlightedMarkdown = ({
     } else {
       setOutput(text);
     }
-  }, [highlight]);
+  }, [highlight, text]);
 
   return <ReactMarkdown rehypePlugins={[rehypeRaw]}>{output}</ReactMarkdown>;
 };
