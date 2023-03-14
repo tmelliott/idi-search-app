@@ -12,7 +12,7 @@ type HeadTagsProps = {
   description?: string;
 };
 
-export default function HeadTags({ title, description }: HeadTagsProps) {
+export default function HeadTags({ title = "", description }: HeadTagsProps) {
   return (
     <Head>
       {/* <!-- Primary Meta Tags --> */}

@@ -21,7 +21,7 @@ function AgencyPage() {
 
   return (
     <>
-      <HeadTags title={("Agency | " + agency?.agency_name) as string} />
+      <HeadTags title={"Agency | " + (agency?.agency_name || "Unknown")} />
       <Agency agency_id={agency_id} />
     </>
   );

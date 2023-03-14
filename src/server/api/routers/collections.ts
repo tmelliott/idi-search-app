@@ -1,7 +1,6 @@
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { ArrayElement } from "~/types/types";
 
 export const collectionsRouter = createTRPCRouter({
   all: publicProcedure

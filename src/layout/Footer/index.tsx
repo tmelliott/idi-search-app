@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { type ReactNode } from "react";
 
 import Image from "next/image";
 
@@ -13,7 +13,7 @@ function Footer() {
           Elliott, Milne, Li, Simpson, and Sporle (2021).{` `}
           <em>
             IDI Search:
-            {` `}A web app for searching New Zealand's IDI.
+            {` `}A web app for searching New Zealand&apos;s IDI.
           </em>
           {` `}
           <A href="https://idisearch.terourou.org">
