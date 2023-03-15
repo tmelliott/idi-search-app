@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { ArrowLeftCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Agency from "~/components/Agencies/Agency";
 import Collection from "~/components/Collections/Collection";
+import Dataset from "~/components/Datasets/Dataset";
 
 import MainLayout from "./MainLayout";
 
@@ -75,6 +76,9 @@ const DualLayout = ({ children }: PropsWithChildren) => {
                 )}
                 {router.query.v === "collection" && (
                   <Collection collection_id={router.query.id as string} />
+                )}
+                {router.query.v === "dataset" && (
+                  <Dataset dataset_id={router.query.id as string} />
                 )}
 
                 {/* {type === "agency" && <Agency id={typeId} />}

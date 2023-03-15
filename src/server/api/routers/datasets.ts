@@ -49,4 +49,56 @@ export const datasetsRouter = createTRPCRouter({
         },
       });
     }),
+  get: publicProcedure
+    .input(
+      z.object({
+        dataset_id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const dataset = await ctx.prisma.datasets.findUnique({
+        where: { dataset_id: input.dataset_id },
+        include: {
+          collection: {
+            select: {
+              collection_id: true,
+              collection_name: true,
+              agency: {
+                select: {
+                  agency_name: true,
+                  agency_id: true,
+                },
+              },
+            },
+          },
+          variables: {
+            select: {
+              variable_id: true,
+              variable_name: true,
+              dataset_id: true,
+            },
+          },
+          alternate: {
+            select: {
+              match: true,
+            },
+          },
+          matches: {
+            select: {
+              table: true,
+            },
+          },
+        },
+      });
+
+      if (!dataset) return;
+
+      const { matches, alternate, ...ds } = dataset;
+      return {
+        ...ds,
+        matches: matches
+          .map((m) => m.table)
+          .concat(alternate.map((a) => a.match)),
+      };
+    }),
 });

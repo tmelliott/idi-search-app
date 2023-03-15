@@ -93,7 +93,7 @@ export default function Collections({ limit, agency_id }: Props) {
     children: ReactNode;
     href: string;
   }) => {
-    if (router.asPath === "/agencies") return <>{children}</>;
+    if (router.asPath === "/collections") return <>{children}</>;
     return <Link href={href}>{children}</Link>;
   };
 

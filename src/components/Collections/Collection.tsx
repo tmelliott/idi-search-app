@@ -34,8 +34,9 @@ export default function Collection({ collection_id }: Props) {
 
   return (
     <div className="prose max-w-none">
+      <div className="text-xs uppercase">Collection</div>
       <Link href={`/collections/${collection_id}`}>
-        <h2>{collection?.collection_name}</h2>
+        <h2 className="mt-0">{collection?.collection_name}</h2>
       </Link>
 
       {collection.agency && (

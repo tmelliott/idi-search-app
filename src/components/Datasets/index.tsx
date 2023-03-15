@@ -1,5 +1,6 @@
-import { useEffect } from "react";
+import { ReactNode, useEffect } from "react";
 
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
@@ -97,11 +98,25 @@ export default function Datasets({ limit, collection_id }: Props) {
     );
   };
 
+  const TitleLink = ({
+    children,
+    href,
+  }: {
+    children: ReactNode;
+    href: string;
+  }) => {
+    if (router.asPath === "/datasets") return <>{children}</>;
+    return <Link href={href}>{children}</Link>;
+  };
+
   return (
     <section>
       <h3>
-        Datasets
-        {datasets && <> ({datasets.length})</>}
+        <TitleLink href="/datasets">
+          Datasets
+          {collection_id && <> in this collection</>}
+          {datasets && <> ({datasets.length})</>}
+        </TitleLink>
       </h3>
 
       {isError ? (

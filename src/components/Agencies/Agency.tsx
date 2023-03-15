@@ -30,8 +30,9 @@ export default function Agency({ agency_id }: Props) {
 
   return (
     <div className="prose max-w-none">
+      <div className="text-xs uppercase">Agency</div>
       <Link href={`/agencies/${agency_id}`}>
-        <h2>{agency?.agency_name}</h2>
+        <h2 className="mt-0">{agency?.agency_name}</h2>
       </Link>
 
       <Collections agency_id={agency_id} limit={15} />

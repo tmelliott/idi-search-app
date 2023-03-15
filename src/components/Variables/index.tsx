@@ -1,5 +1,6 @@
-import { useEffect, useMemo, useState } from "react";
+import { ReactNode, useEffect, useMemo, useState } from "react";
 
+import Link from "next/link";
 import { useRouter } from "next/router";
 
 import { XCircleIcon } from "@heroicons/react/24/outline";
@@ -22,6 +23,7 @@ import {
 
 type Props = {
   limit?: number;
+  dataset_id?: string;
 };
 
 type Variable = ArrayElement<RouterOutputs["variables"]["all"]["variables"]>;
@@ -52,7 +54,7 @@ const columns = [
   }),
 ];
 
-export default function Variables({ limit }: Props) {
+export default function Variables({ limit, dataset_id }: Props) {
   const router = useRouter();
   const { query } = router;
 
@@ -66,6 +68,7 @@ export default function Variables({ limit }: Props) {
     term: query.s as string,
     limit: limit,
     page: pageIndex + 1,
+    dataset_id,
   });
 
   const variables = data?.variables;
@@ -112,11 +115,25 @@ export default function Variables({ limit }: Props) {
     );
   };
 
+  const TitleLink = ({
+    children,
+    href,
+  }: {
+    children: ReactNode;
+    href: string;
+  }) => {
+    if (router.asPath === "/variables") return <>{children}</>;
+    return <Link href={href}>{children}</Link>;
+  };
+
   return (
     <section>
       <h3>
-        Variables
-        {variables && <> ({nVariables})</>}
+        <TitleLink href="/variables">
+          Variables
+          {dataset_id && <> in this dataset</>}
+          {variables && <> ({nVariables})</>}
+        </TitleLink>
       </h3>
 
       {isError ? (
