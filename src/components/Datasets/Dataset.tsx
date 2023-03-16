@@ -27,7 +27,7 @@ function Dataset({ dataset_id }: Props) {
   if (isError)
     return (
       <p>
-        Error loading collection with id <pre>{dataset_id}</pre>.
+        Error loading dataset with id <pre>{dataset_id}</pre>.
       </p>
     );
 

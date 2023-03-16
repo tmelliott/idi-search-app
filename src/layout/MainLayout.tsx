@@ -7,7 +7,7 @@ import Header from "./Header";
 
 const MainLayout = ({ children }: PropsWithChildren) => {
   return (
-    <div className="md:h-screen flex flex-col">
+    <div className="min-h-screen md:h-screen flex flex-col">
       <Header />
       <main className="flex-1 md:overflow-y-scroll p-2">{children}</main>
       <Footer />

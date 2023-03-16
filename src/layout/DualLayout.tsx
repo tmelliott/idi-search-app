@@ -7,27 +7,9 @@ import { ArrowLeftCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
 import Agency from "~/components/Agencies/Agency";
 import Collection from "~/components/Collections/Collection";
 import Dataset from "~/components/Datasets/Dataset";
+import Variable from "~/components/Variables/Variable";
 
 import MainLayout from "./MainLayout";
-
-// const components = [
-//   {
-//     value: "agency",
-//     component: Agency,
-//   },
-//   // {
-//   //   value: "collection",
-//   //   component: Collection,
-//   // },
-//   // {
-//   //   value: "dataset",
-//   //   component: Dataset,
-//   // },
-//   // {
-//   //   value: "variable",
-//   //   component: Variable,
-//   // },
-// ];
 
 const DualLayout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
@@ -80,13 +62,12 @@ const DualLayout = ({ children }: PropsWithChildren) => {
                 {router.query.v === "dataset" && (
                   <Dataset dataset_id={router.query.id as string} />
                 )}
-
-                {/* {type === "agency" && <Agency id={typeId} />}
-                {type === "collection" && <Collection id={typeId} />}
-                {type === "dataset" && <Dataset id={typeId} />}
-                {type === "variable" && (
-                  <Variable d_id={router.query.d} v_id={typeId} />
-                )} */}
+                {router.query.v === "variable" && (
+                  <Variable
+                    variable_id={router.query.id as string}
+                    dataset_id={router.query.d_id as string}
+                  />
+                )}
               </>
             )}
           </div>

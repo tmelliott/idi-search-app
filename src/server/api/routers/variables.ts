@@ -2,6 +2,18 @@ import { Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
+const current_refreshes = [
+  "20200120",
+  "20200720",
+  "20201020",
+  "20210420",
+  "20210720",
+  "20211020",
+  "202203",
+  "202206",
+  "202210",
+];
+
 export const variablesRouter = createTRPCRouter({
   all: publicProcedure
     .input(
@@ -44,6 +56,7 @@ export const variablesRouter = createTRPCRouter({
         select: {
           variable_id: true,
           variable_name: true,
+          dataset_id: true,
           dataset: {
             select: {
               dataset_name: true,
@@ -64,6 +77,100 @@ export const variablesRouter = createTRPCRouter({
           variables,
         };
       });
+    }),
+  get: publicProcedure
+    .input(
+      z.object({
+        variable_id: z.string(),
+        dataset_id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const { variable_id, dataset_id } = input;
+      const variable = await ctx.prisma.variables.findUnique({
+        where: {
+          v_id: {
+            dataset_id: dataset_id,
+            variable_id: variable_id,
+          },
+        },
+        include: {
+          dataset: {
+            select: {
+              dataset_id: true,
+              dataset_name: true,
+              collection: {
+                select: {
+                  collection_id: true,
+                  collection_name: true,
+                  agency: {
+                    select: {
+                      agency_id: true,
+                      agency_name: true,
+                    },
+                  },
+                },
+              },
+              alternate: {
+                select: {
+                  match: true,
+                },
+              },
+              matches: {
+                select: {
+                  table: true,
+                },
+              },
+            },
+          },
+          alternate: {
+            select: {
+              table_id: true,
+              alt_variable_id: true,
+            },
+          },
+          matches: {
+            select: {
+              table_id: true,
+              variable_id: true,
+            },
+          },
+        },
+      });
+
+      if (!variable) return null;
+
+      const refreshes_raw = variable.refreshes || null;
+      const refreshes =
+        refreshes_raw && refreshes_raw.length
+          ? current_refreshes.map((r) => ({
+              refresh: r,
+              available: refreshes_raw.match(r) !== null,
+            }))
+          : null;
+
+      const { matches, alternate, dataset, ...vble } = variable;
+      const { matches: tmatch, alternate: talt, ...tbl } = variable.dataset;
+
+      return {
+        ...vble,
+        dataset: {
+          ...tbl,
+          matches: tmatch.map((m) => m.table).concat(talt.map((a) => a.match)),
+        },
+        matches: matches.concat(
+          alternate.map((a) => ({
+            table_id: a.table_id,
+            variable_id: a.alt_variable_id,
+          }))
+        ),
+        database: variable.refreshes
+          ? variable.refreshes.match("Adhoc|RnD|Metadata")
+            ? variable.refreshes
+            : "IDI Clean"
+          : null,
+        refreshes: refreshes,
+      };
     }),
   links: publicProcedure
     .input(

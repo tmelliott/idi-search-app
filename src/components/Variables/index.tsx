@@ -75,6 +75,13 @@ export default function Variables({ limit, dataset_id }: Props) {
   const nVariables = data?.count;
 
   useEffect(() => {
+    setPagination((prev) => ({
+      pageIndex: 0,
+      pageSize: limit ?? 10,
+    }));
+  }, [limit]);
+
+  useEffect(() => {
     if (nVariables) {
       setPageCount(Math.ceil(nVariables / pageSize));
     }
@@ -108,6 +115,7 @@ export default function Variables({ limit, dataset_id }: Props) {
           ...router.query,
           v: "variable",
           id: variable.variable_id,
+          d_id: variable.dataset_id,
         },
       },
       undefined,
