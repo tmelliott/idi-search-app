@@ -94,3 +94,10 @@ model variable_matches {
     @@index([table_id, alt_variable_id])
     @@index([table_id, variable_id])
 }
+
+// this model is for writing weekly to prevent planetscale db
+// from being put to sleep
+model temp {
+    id    Int    @id @default(autoincrement())
+    value String
+}
