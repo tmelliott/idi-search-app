@@ -7,8 +7,8 @@ import {
   InformationCircleIcon,
   MagnifyingGlassCircleIcon,
 } from "@heroicons/react/24/outline";
-import { inferRouterOutputs } from "@trpc/server";
-import { AppRouter } from "~/server/api/root";
+import { type inferRouterOutputs } from "@trpc/server";
+import { type AppRouter } from "~/server/api/root";
 import { api } from "~/utils/api";
 
 type VType = NonNullable<
@@ -47,7 +47,7 @@ const Links = ({ dataset_id, variables }: LinksProps) => {
       </div>
       <ul>
         {variables.map((v) => (
-          <li className="flex">
+          <li className="flex" key={v.variable_id}>
             <Link
               key={v.variable_id}
               href={`/variables?s=${v.variable_id}&v=dataset&id=${dataset_id}`}

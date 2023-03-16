@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useMemo, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -75,7 +75,7 @@ export default function Variables({ limit, dataset_id }: Props) {
   const nVariables = data?.count;
 
   useEffect(() => {
-    setPagination((prev) => ({
+    setPagination(() => ({
       pageIndex: 0,
       pageSize: limit ?? 10,
     }));

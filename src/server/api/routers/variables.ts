@@ -1,4 +1,4 @@
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
 
@@ -24,7 +24,7 @@ export const variablesRouter = createTRPCRouter({
         dataset_id: z.string().optional(),
       })
     )
-    .query(({ ctx, input }) => {
+    .query(async ({ ctx, input }) => {
       let where: Prisma.variablesFindManyArgs["where"] = input.term
         ? {
             OR: [
@@ -45,11 +45,11 @@ export const variablesRouter = createTRPCRouter({
       const limit = input.limit || 10;
       const page = input.page || 1;
 
-      const count = ctx.prisma.variables.count({
+      const count = await ctx.prisma.variables.count({
         where: where,
       });
 
-      const variables = ctx.prisma.variables.findMany({
+      const variables = await ctx.prisma.variables.findMany({
         where: where,
         take: input.limit,
         skip: limit * (page - 1),
@@ -71,12 +71,10 @@ export const variablesRouter = createTRPCRouter({
         },
       });
 
-      return Promise.all([count, variables]).then(([count, variables]) => {
-        return {
-          count,
-          variables,
-        };
-      });
+      return {
+        count,
+        variables,
+      };
     }),
   get: publicProcedure
     .input(
@@ -150,7 +148,7 @@ export const variablesRouter = createTRPCRouter({
           : null;
 
       const { matches, alternate, dataset, ...vble } = variable;
-      const { matches: tmatch, alternate: talt, ...tbl } = variable.dataset;
+      const { matches: tmatch, alternate: talt, ...tbl } = dataset;
 
       return {
         ...vble,

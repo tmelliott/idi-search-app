@@ -136,11 +136,8 @@ function Variable({ dataset_id, variable_id }: Props) {
           <h4>This variable may have a different name in other refreshes:</h4>
           <ul>
             {variable.matches.map((v) => (
-              <li>
-                <Link
-                  key={v.variable_id + "_" + v.table_id}
-                  href={`/?v=variable&d=${v.table_id}&id=${v.variable_id}`}
-                >
+              <li key={v.variable_id + "_" + v.table_id}>
+                <Link href={`/?v=variable&d=${v.table_id}&id=${v.variable_id}`}>
                   {v.variable_id}
                 </Link>
               </li>
@@ -157,10 +154,8 @@ function Variable({ dataset_id, variable_id }: Props) {
           </h4>
           <ul>
             {variable.dataset.matches.map((d) => (
-              <li>
-                <Link key={d.dataset_id} href={`/datasets/${d.dataset_id}`}>
-                  {d.dataset_name}
-                </Link>
+              <li key={d.dataset_id}>
+                <Link href={`/datasets/${d.dataset_id}`}>{d.dataset_name}</Link>
               </li>
             ))}
           </ul>
