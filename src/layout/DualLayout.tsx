@@ -1,9 +1,8 @@
 import { type PropsWithChildren, useState, useEffect } from "react";
 
-import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { ArrowLeftCircleIcon, XCircleIcon } from "@heroicons/react/24/outline";
+import { XCircleIcon } from "@heroicons/react/24/outline";
 import Agency from "~/components/Agencies/Agency";
 import Collection from "~/components/Collections/Collection";
 import Dataset from "~/components/Datasets/Dataset";

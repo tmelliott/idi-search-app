@@ -35,6 +35,7 @@ const config = {
   images: {
     domains: ["terourou.org"],
   },
+  pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 };
 // export default config;
 
