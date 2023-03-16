@@ -26,12 +26,12 @@ const DualLayout = ({ children }: PropsWithChildren) => {
         <div className="md:h-full flex md:overflow-x-hidden">
           <div className="flex-1 overflow-y-scroll">
             {/* <Search /> */}
-            {router.pathname !== "/" && (
+            {/* {router.pathname !== "/" && (
               <Link href="/" className="text-sm flex items-center gap-1">
                 <ArrowLeftCircleIcon className="h-5" />
                 Back
               </Link>
-            )}
+            )} */}
             {children}
           </div>
 
