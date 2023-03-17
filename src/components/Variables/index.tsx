@@ -66,6 +66,8 @@ export default function Variables({ limit, dataset_id }: Props) {
 
   const { data, isFetching, isError } = api.variables.all.useQuery({
     term: query.s as string,
+    include: query.include as string,
+    exact: query.exact === "true",
     limit: limit,
     page: pageIndex + 1,
     dataset_id,

@@ -19,21 +19,50 @@ export const variablesRouter = createTRPCRouter({
     .input(
       z.object({
         term: z.string().optional(),
+        include: z.string().optional(),
+        exact: z.boolean().default(false),
         limit: z.number().optional(),
         page: z.number().optional(),
         dataset_id: z.string().optional(),
       })
     )
     .query(async ({ ctx, input }) => {
+      const searchTerm =
+        input.term
+          ?.split(" ")
+          .map((x) => (x.length ? "+" + x : x))
+          .join(" ") || "";
+
       let where: Prisma.variablesFindManyArgs["where"] = input.term
-        ? {
-            OR: [
-              { variable_id: { contains: input.term } },
-              { variable_name: { contains: input.term } },
-              { description: { contains: input.term } },
-            ],
-          }
+        ? input.exact
+          ? {
+              OR: [
+                { variable_name: { contains: input.term } },
+                { variable_id: { contains: input.term } },
+                { description: { contains: input.term } },
+              ],
+            }
+          : {
+              OR: [
+                {
+                  AND: [
+                    {
+                      variable_name: {
+                        search: searchTerm,
+                      },
+                    },
+                    {
+                      description: {
+                        search: searchTerm,
+                      },
+                    },
+                  ],
+                },
+                { variable_id: { contains: input.term } },
+              ],
+            }
         : {};
+      console.log(where);
 
       if (input.dataset_id) {
         where = {
@@ -41,6 +70,24 @@ export const variablesRouter = createTRPCRouter({
           dataset_id: input.dataset_id,
         };
       }
+      console.log(where);
+      if (input.include) {
+        const inc = input.include.split(",");
+        const incs = inc
+          .map((d) => (d === "refreshes" ? current_refreshes : "Adhoc"))
+          .flat();
+        const incsWhere = incs.map((inc) => ({
+          refreshes: {
+            contains: inc,
+          },
+        }));
+        where = {
+          AND: { ...(where || null) },
+          OR: incsWhere,
+        };
+      }
+
+      console.log(where);
 
       const limit = input.limit || 10;
       const page = input.page || 1;

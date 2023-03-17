@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import { XCircleIcon } from "@heroicons/react/24/outline";
 import Agency from "~/components/Agencies/Agency";
 import Collection from "~/components/Collections/Collection";
+import Config from "~/components/Config";
 import Dataset from "~/components/Datasets/Dataset";
 import Variable from "~/components/Variables/Variable";
 
@@ -24,7 +25,7 @@ const DualLayout = ({ children }: PropsWithChildren) => {
       <div className="h-full">
         <div className="md:h-full flex md:overflow-x-hidden">
           <div className="flex-1 overflow-y-scroll">
-            {/* <Search /> */}
+            <Config />
             {/* {router.pathname !== "/" && (
               <Link href="/" className="text-sm flex items-center gap-1">
                 <ArrowLeftCircleIcon className="h-5" />
