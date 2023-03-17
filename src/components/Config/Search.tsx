@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 
 import { Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/solid";
 
-const EXPORT_FORMATS = ["CSV", "JSON"];
+// const EXPORT_FORMATS = ["CSV", "JSON"];
 
 const Search = () => {
   const router = useRouter();
@@ -13,7 +13,11 @@ const Search = () => {
   const [value, setValue] = useState("");
   const search = () => {
     const { s, ...q } = router.query;
-    router.push(
+
+    if (value === "" && s === undefined) return;
+    if (s === value) return;
+
+    void router.push(
       {
         pathname: router.pathname,
         query:
@@ -33,6 +37,8 @@ const Search = () => {
   const [searchRefreshes, setSearchRefreshes] = useState(true);
   const [searchAdhoc, setSearchAdhoc] = useState(true);
   useEffect(() => {
+    if (!router.isReady) return;
+
     const { include, ...q } = router.query;
 
     const includes = [];
@@ -41,7 +47,10 @@ const Search = () => {
       if (searchAdhoc) includes.push("adhoc");
     }
 
-    router.push(
+    if (includes.length === 0 && include === undefined) return;
+    if (include && includes.join("_") === include) return;
+
+    void router.push(
       {
         pathname: router.pathname,
         query:
@@ -55,12 +64,16 @@ const Search = () => {
       undefined,
       { shallow: true }
     );
-  }, [searchRefreshes, searchAdhoc]);
+  }, [searchRefreshes, searchAdhoc, router]);
 
   const [exactSearch, setExactSearch] = useState(false);
   useEffect(() => {
+    if (!router.isReady) return;
+
     const { exact, ...q } = router.query;
-    router.push(
+    if (exactSearch === (exact === "true")) return;
+
+    void router.push(
       {
         pathname: router.pathname,
         query: exactSearch
@@ -73,7 +86,7 @@ const Search = () => {
       undefined,
       { shallow: true }
     );
-  }, [exactSearch]);
+  }, [exactSearch, router]);
 
   return (
     <div className="@container">

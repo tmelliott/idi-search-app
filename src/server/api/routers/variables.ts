@@ -62,7 +62,6 @@ export const variablesRouter = createTRPCRouter({
               ],
             }
         : {};
-      console.log(where);
 
       if (input.dataset_id) {
         where = {
@@ -70,7 +69,7 @@ export const variablesRouter = createTRPCRouter({
           dataset_id: input.dataset_id,
         };
       }
-      console.log(where);
+
       if (input.include) {
         const inc = input.include.split(",");
         const incs = inc
@@ -86,8 +85,6 @@ export const variablesRouter = createTRPCRouter({
           OR: incsWhere,
         };
       }
-
-      console.log(where);
 
       const limit = input.limit || 10;
       const page = input.page || 1;
