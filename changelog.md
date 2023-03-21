@@ -1,4 +1,4 @@
-# version 0.4.0 (2)
+# version 0.4.0
 
 **Updated 22 March 2023**
 
