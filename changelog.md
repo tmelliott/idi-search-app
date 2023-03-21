@@ -1,6 +1,6 @@
 # version 0.4.0
 
-**Updated 23 March 2023**
+**Updated 22 March 2023**
 
 - Adds March 2023 refresh data, plus some more dictionaries
 - Add export functionality (JSON or CSV format) - found under the search bar, far-right
