@@ -160,7 +160,7 @@ if (any(table(collections$collection_name) > 1L)) {
     tbl <- table(collections$collection_name)
     tbl <- tbl[tbl > 1L]
     cli::cli_alert_danger("Bad collection names")
-    cli::cli_ul(tbl[tbl > 1L])
+    cli::cli_ul(names(tbl[tbl > 1L]))
     stop()
 }
 

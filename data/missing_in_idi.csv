@@ -2387,7 +2387,6 @@ moe_com_slf_rprtd_qacc_code,moe_com_slf_rprtd_qacc_code,moe_clean.qualification
 moe_ttr_orig_eligibility_reason_,moe_ttr_orig_eligibility_reason_,moe_clean.targeted_training
 organisation-code,organisation-code,idi_adhoc.clean_read_moe.tertiary_identifiable_organisations
 latest-year-of-consent,latest-year-of-consent,idi_adhoc.clean_read_moe.tertiary_identifiable_organisations
-event_snz_moh_uid,event_snz_moh_uid,moh_clean.cancer_registrations
 snz_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_nhi
 snz_spine_uid,Spine Unique Identifier,clean_read_moh_cir.moh_cir_nhi
 snz_moh_uid,MoH Unique Identifier,clean_read_moh_cir.moh_cir_nhi
@@ -2431,6 +2430,54 @@ fully_vaccinated_activity_date,Date fully vaccinated,clean_read_moh_cir.moh_cir_
 first_additional_dose_date,Date of first additional dose,clean_read_moh_cir.moh_cir_vaccination_status
 first_booster_activity_date,Date of first booster dose,clean_read_moh_cir.moh_cir_vaccination_status
 last_vacc_activity_date,Date of latest vaccination,clean_read_moh_cir.moh_cir_vaccination_status
+snz_moh_uid,Stats NZ unique identifier for MOH data,clean_read_moh_hsu.hsu_202210
+hsu_year,Year,clean_read_moh_hsu.hsu_202210
+hsu_period_start_date,Reference period start,clean_read_moh_hsu.hsu_202210
+hsu_period_end_date,Reference period end,clean_read_moh_hsu.hsu_202210
+alive_at_period_end_date,Person is alive at the end of the reference period,clean_read_moh_hsu.hsu_202210
+month_of_birth,Month of birth,clean_read_moh_hsu.hsu_202210
+year_of_birth,Year of birth,clean_read_moh_hsu.hsu_202210
+month_of_death,Month of death,clean_read_moh_hsu.hsu_202210
+year_of_death,Year of death,clean_read_moh_hsu.hsu_202210
+gender_code,Gender (Sex),clean_read_moh_hsu.hsu_202210
+ethnic_code_1,Total response ethnic group code 1,clean_read_moh_hsu.hsu_202210
+ethnic_code_2,Total response ethnic group code 2,clean_read_moh_hsu.hsu_202210
+ethnic_code_3,Total response ethnic group code 3,clean_read_moh_hsu.hsu_202210
+ethnicity_priority,Prioritised ethnic group,clean_read_moh_hsu.hsu_202210
+ethnicity_mpao,Prioritised ethnic group,clean_read_moh_hsu.hsu_202210
+ethnicity_is_maori,Belongs to the Māori ethnic group,clean_read_moh_hsu.hsu_202210
+ethnicity_is_pacific,Belongs to the Pacific ethnic group,clean_read_moh_hsu.hsu_202210
+ethnicity_is_asian,Belongs to the Asian ethnic group,clean_read_moh_hsu.hsu_202210
+ethnicity_is_melaa,Belongs to the MELAA ethnic group,clean_read_moh_hsu.hsu_202210
+ethnicity_is_euro,Belongs to the European ethnic group (including NZ European),clean_read_moh_hsu.hsu_202210
+ethnicity_is_other,Belongs to the Other ethnic group,clean_read_moh_hsu.hsu_202210
+ethnicity_is_missing,No ethnic group recorded,clean_read_moh_hsu.hsu_202210
+dhb_domicile_code,DHB of domicile code,clean_read_moh_hsu.hsu_202210
+dhb_domicile_name,DHB of domicile name,clean_read_moh_hsu.hsu_202210
+dhb_pho_service_code,The DHB name of the PHO the NHI is enrolled with.,clean_read_moh_hsu.hsu_202210
+dhb_pho_service_name,The DHB name of the PHO the NHI is enrolled with.,clean_read_moh_hsu.hsu_202210
+meshblock_person_addr_code,"The meshblock associated with the NHI's last known address (closest to the end of the year), as recorded anywhere in the health system.",clean_read_moh_hsu.hsu_202210
+domicile_person_addr_code,"The domicile code associated with the NHI's last known address (closest to the end of the year), as recorded anywhere in the health system.",clean_read_moh_hsu.hsu_202210
+nzdep13_decile,NZDep2013 decile,clean_read_moh_hsu.hsu_202210
+nzdep13_quintile,NZDep2013 quintile,clean_read_moh_hsu.hsu_202210
+pho_enrol,Indicator of whether the NHI was enrolled with a PHO in the year of interest,clean_read_moh_hsu.hsu_202210
+pho_cons,Indicator of whether the NHI had a consultation with their PHO in the year of interest,clean_read_moh_hsu.hsu_202210
+can,Indicator of whether the NHI was diagnosed with cancer in the reference period,clean_read_moh_hsu.hsu_202210
+labs,Indicator of whether the NHI had a lab test in the reference period,clean_read_moh_hsu.hsu_202210
+hosp_priv,Indicator of whether the NHI was admitted to a public hospital in the reference period,clean_read_moh_hsu.hsu_202210
+hosp_pub,Indicator of whether the NHI was admitted to a public hospital in the reference period,clean_read_moh_hsu.hsu_202210
+npac,Indicator of whether the NHI had a non-admitted event in the reference period,clean_read_moh_hsu.hsu_202210
+gms,Indicator of whether the NHI received a General Medical Subsidy in the perod of interest,clean_read_moh_hsu.hsu_202210
+mort,Indicator of whether the NHI died within the reference period,clean_read_moh_hsu.hsu_202210
+pharm,Indicator of whether the NHI was dispensed a publically funded pharmaceutical prescription in the reference period.,clean_read_moh_hsu.hsu_202210
+nir,Indicator of whether the NHI received a vaccination in the reference period.,clean_read_moh_hsu.hsu_202210
+mat_mum,Indicator of whether the NHI delivered a baby in the reference period,clean_read_moh_hsu.hsu_202210
+mat_ch,Indicator of whether the NHI was a live birth (ie they were born alive) in the reference period,clean_read_moh_hsu.hsu_202210
+primhd_act,Indicator of whether the NHI had a PRIMHD activity in the reference period,clean_read_moh_hsu.hsu_202210
+primhd_ref,Indicator of whether the NHI had a PRIMHD referral in the reference period,clean_read_moh_hsu.hsu_202210
+cir,Indicator of whether the NHI had a COVID-19 Immunisation,clean_read_moh_hsu.hsu_202210
+oseas_hosp,The NHI is not resident in New Zealand as recorded in their hospital event,clean_read_moh_hsu.hsu_202210
+pho_only_flg,"The NHI is ONLY enrolled with a PHO, and has no other reported health events in our system",clean_read_moh_hsu.hsu_202210
 snz_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_hsu_datestamp
 snz_spine_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_hsu_datestamp
 snz_moh_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_hsu_datestamp
@@ -2709,8 +2756,6 @@ linkedmwgt_rep96,linkedMwgt_rep96,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep97,linkedMwgt_rep97,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep98,linkedMwgt_rep98,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep99,linkedMwgt_rep99,clean_read_moh_nzhs.moh_nzhs_child
-event_snz_moh_uid,event_snz_moh_uid,moh_clean.pub_fund_hosp_discharges_event
-event_snz_moh_uid,event_snz_moh_uid,moh_clean.pharmaceutical
 nasclegalname_value,NASCLegalName_Value,clean_read_moh_socrates.moh_client_status_hist
 reasonforclientstatuschange_valu,ReasonForClientStatusChange_Valu,clean_read_moh_socrates.moh_client_status_hist
 snz_moh_uid,snz_moh_uid,clean_read_moh_socrates.ethnicity
