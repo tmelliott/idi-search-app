@@ -9,7 +9,6 @@ import Refreshes from "./Refreshes"
 import { useEffect, useState } from "react"
 
 function Variable({ d_id, v_id }) {
-  console.log(d_id, v_id)
   const router = useRouter()
   const { variable, isLoading, error } = useVariable(d_id, v_id)
   const [highlight, setHighlight] = useState("")
@@ -24,7 +23,6 @@ function Variable({ d_id, v_id }) {
   let description = variable.description || ""
   if (highlight) {
     const searchMask = `(${highlight.replaceAll(" ", "|")})`
-    console.log(searchMask)
     const regEx = new RegExp(searchMask, "ig")
     const replaceMask = "<mark>$1</mark>"
     description = description.replace(regEx, replaceMask)

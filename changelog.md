@@ -1,3 +1,12 @@
+# version 0.4.0
+
+**Updated 22 March 2023**
+
+- Adds March 2023 refresh data, plus some more dictionaries
+- Add export functionality (JSON or CSV format) - found under the search bar, far-right
+- On 'linking variables', display the number of links, and move (expanded) information to a tooltip
+- Add search options: exact search to make it easier to find specific variables/terms
+
 # version 0.3.0
 
 **Updated 19 October 2022**

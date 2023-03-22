@@ -46,7 +46,8 @@ link_refresh_data <- function() {
                     select(
                         TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
                         COLUMN_NAME, DATA_TYPE
-                    )
+                    ) |>
+                    dplyr::filter(TABLE_CATALOG != "TABLE_CATALOG")
             }) |>
                 bind_rows()
         })

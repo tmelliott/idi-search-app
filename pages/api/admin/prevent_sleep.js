@@ -11,12 +11,10 @@ export default async function preventSleep(req, res) {
       agency_name: "Test Agency",
     },
   })
-  console.log("Created: ", newAgency)
   const dropAgency = await prisma.agencies.delete({
     where: {
       agency_id: "test",
     },
   })
-  console.log("Deleted: ", dropAgency)
-  res.status(200).json("OK")
+  res.status(200).json("OK - database stimulated successfully!")
 }

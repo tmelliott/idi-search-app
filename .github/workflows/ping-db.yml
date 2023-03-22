@@ -1,0 +1,24 @@
+# new gh workflow on dev branch running weekly
+name: Ping DB
+on:
+  schedule:
+    - cron: "0 0 * * 0"
+  push:
+    paths:
+      - .github/workflows/ping-db.yml
+  workflow_dispatch:
+
+jobs:
+  # ping the API 'https://idisearch.terourou.org/api/admin/prevent_sleep'
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping API
+        id: request
+        uses: fjogeleit/http-request-action@v1
+        with:
+          url: https://idisearch.terourou.org/api/admin/prevent_sleep
+          method: GET
+      - name: Show Response
+        run: |
+          echo ${{ steps.request.outputs.response }}

@@ -1,6 +1,6 @@
 import { prisma } from "../../lib/db"
 
-async function main(query, include, datasetId, page, size) {
+async function main(query, include, datasetId, page, size, exact, description) {
   let args = {
     select: {
       variable_id: true,
@@ -27,24 +27,36 @@ async function main(query, include, datasetId, page, size) {
   }
 
   if (query !== undefined && query !== "") {
-    const searchTerms = query
-      .split(" ")
-      .map((x) => (x.length ? "+" + x : x))
-      .join(" ")
-
-    args = {
-      ...args,
-      where: {
-        OR: [
-          {
-            AND: [
-              { variable_name: { search: searchTerms } },
-              { description: { search: searchTerms } },
-            ],
-          },
-          { variable_id: { contains: query } },
-        ],
-      },
+    if (exact) {
+      args = {
+        ...args,
+        where: {
+          OR: [
+            { variable_name: { contains: query } },
+            { variable_id: { contains: query } },
+            { description: { contains: query } },
+          ],
+        },
+      }
+    } else {
+      const searchTerms = query
+        .split(" ")
+        .map((x) => (x.length ? "+" + x : x))
+        .join(" ")
+      args = {
+        ...args,
+        where: {
+          OR: [
+            {
+              AND: [
+                { variable_name: { search: searchTerms } },
+                { description: { search: searchTerms } },
+              ],
+            },
+            { variable_id: { contains: query } },
+          ],
+        },
+      }
     }
   }
 
@@ -68,6 +80,7 @@ async function main(query, include, datasetId, page, size) {
     "202203",
     "202206",
     "202210",
+    "202303",
   ]
 
   if (include !== "all") {
@@ -107,11 +120,17 @@ async function main(query, include, datasetId, page, size) {
     ...args,
   })
 
+  const keepDescription = description
+
   return {
     vars: variables.map((v) => ({
       ...v,
       v_id: v.variable_id + "_" + v.dataset_id,
-      description: v.description ? true : false,
+      description: keepDescription
+        ? v.description
+        : v.description
+        ? true
+        : false,
     })),
     n,
   }
@@ -122,9 +141,19 @@ export default async function getVariables(
   include = "all",
   datasetId = "",
   page = 1,
-  size = 10000
+  size = 10000,
+  exact = false,
+  description = false
 ) {
-  const variables = await main(query, include, datasetId, page, size)
+  const variables = await main(
+    query,
+    include,
+    datasetId,
+    page,
+    size,
+    exact,
+    description
+  )
     .catch((e) => {
       throw e
     })

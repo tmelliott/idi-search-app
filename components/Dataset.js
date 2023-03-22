@@ -1,4 +1,9 @@
-import { CogIcon } from "@heroicons/react/outline"
+import {
+  CogIcon,
+  ExternalLinkIcon,
+  InformationCircleIcon,
+  SearchCircleIcon,
+} from "@heroicons/react/outline"
 import { useRouter } from "next/router"
 import Link from "next/link"
 import { useEffect, useState } from "react"
@@ -6,20 +11,59 @@ import ReactMarkdown from "react-markdown"
 import rehypeRaw from "rehype-raw"
 import useDataset from "./hooks/useDataset"
 import Variables from "./Variables"
+import Loading from "./Loading"
 
 function Dataset({ id, term }) {
   const router = useRouter()
   const { dataset, isLoading, error } = useDataset(id)
   const [highlight, setHighlight] = useState("")
 
+  const [showLinkInfo, setShowLinkInfo] = useState(false)
+
+  const [linkingVariables, setLinkingVariables] = useState([])
+  const [countingLinks, setCountingLinks] = useState(false)
+
   useEffect(() => {
     setHighlight(router.query.s || "")
   }, [router.query])
 
+  useEffect(() => {
+    if (!dataset) return
+    let linkVars = dataset.variables.filter((v) =>
+      v.variable_id.includes("uid")
+    )
+
+    setCountingLinks(true)
+    setLinkingVariables(linkVars.map((v) => ({ ...v, links: "loading" })))
+
+    // count the number of datasets that link to this one
+    // asyncronously, and update linkingVariables as each request completes
+    linkVars.map((v, i) => {
+      fetch(
+        `/api/links?variable_id=${v.variable_id}&dataset_id=${v.dataset_id}`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setLinkingVariables((old) => {
+            const newVars = [...old]
+            newVars[i] = {
+              ...newVars[i],
+              links: data,
+            }
+            return newVars
+          })
+        })
+    })
+    setCountingLinks(false)
+
+    return () => {
+      setCountingLinks(false)
+      setLinkingVariables([])
+    }
+  }, [dataset])
+
   if (isLoading) return <CogIcon className="h-10 animate-spin-slow mb-4" />
   if (error) return <>Error ...</>
-
-  console.log(dataset)
 
   let description = dataset.description || ""
   if (highlight) {
@@ -28,10 +72,6 @@ function Dataset({ id, term }) {
     const replaceMask = "<mark>$1</mark>"
     description = description.replace(regEx, replaceMask)
   }
-
-  const linkingVars = dataset.variables.filter((v) =>
-    v.variable_id.includes("uid")
-  )
 
   return (
     <div className="prose">
@@ -62,17 +102,41 @@ function Dataset({ id, term }) {
       )}
       <ReactMarkdown rehypePlugins={[rehypeRaw]}>{description}</ReactMarkdown>
 
-      {linkingVars.length > 0 && (
+      {linkingVariables.length && (
         <div>
-          <h4>Linking variables</h4>
-          <p>These variables can be used to link to other datasets.</p>
+          <h4 className="flex items-center">
+            Linking variables
+            <InformationCircleIcon
+              className="h-4 w-4 ml-2 cursor-pointer hover:text-blue-700"
+              onMouseEnter={() => setShowLinkInfo(true)}
+              onMouseLeave={() => setShowLinkInfo(false)}
+              // onClick={() => setShowLinkInfo(!showLinkInfo)}
+            />
+          </h4>
+          <div className="relative">
+            {showLinkInfo && (
+              <p className="absolute bg-gray-100 px-4 py-2 my-0 shadow">
+                The variables can be used to link to other datasets. The number
+                in brackets shows the number of links possible. Clicking a
+                variable will display a list of all matching variables.
+              </p>
+            )}
+          </div>
           <ul>
-            {linkingVars.map((v) => (
+            {linkingVariables.map((v) => (
               <Link
                 key={v.variable_id}
                 href={`/variables?s=${v.variable_id}&v=dataset&id=${dataset.dataset_id}`}
               >
-                <li className="cursor-pointer">{v.variable_id}</li>
+                <li className="cursor-pointer flex items-center gap-2 underline hover:text-blue-600">
+                  <SearchCircleIcon className="h-4 w-4" />
+                  {v.variable_id}
+                  {v.links === "loading" ? (
+                    <Loading />
+                  ) : (
+                    <span>({v.links.length})</span>
+                  )}
+                </li>
               </Link>
             ))}
           </ul>
@@ -101,7 +165,6 @@ function Dataset({ id, term }) {
       )}
 
       <Variables
-        term={term}
         datasetId={dataset.dataset_id}
         title="Variables in this dataset"
         paginate={5}
