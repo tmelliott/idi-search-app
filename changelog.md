@@ -4,7 +4,9 @@
 
 - add export functionality (JSON or CSV format)
 - on 'linking variables', display the number of links, and move (expanded) information to a tooltip
-- add search options: exact search
+- Search changes:
+  - the default search is now an unmodified 'SQL Fulltext Search', so multiple words are searched using 'AND' unless modifiers are used (e.g., search +all +words, or this -not -that)
+  - add search options: exact search
 
 # version 0.3.0
 

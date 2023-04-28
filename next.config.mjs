@@ -1,4 +1,5 @@
 import mdx from "@next/mdx";
+import gfm from "remark-gfm";
 
 // @ts-check
 
@@ -11,7 +12,7 @@ import mdx from "@next/mdx";
 const withMDX = mdx({
   extension: /\.mdx?$/,
   options: {
-    remarkPlugins: [],
+    remarkPlugins: [gfm],
     rehypePlugins: [],
     // If you use `MDXProvider`, uncomment the following line.
     providerImportSource: "@mdx-js/react",
