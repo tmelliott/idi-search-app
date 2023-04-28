@@ -56,6 +56,7 @@ export default function Collections({ limit, agency_id }: Props) {
   } = api.collections.all.useQuery({
     term: query.s as string,
     agency_id,
+    exact: query.exact === "true",
   });
 
   const table = useReactTable({

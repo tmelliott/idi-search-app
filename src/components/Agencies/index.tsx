@@ -44,6 +44,7 @@ export default function Agencies({ limit }: Props) {
     isError,
   } = api.agencies.all.useQuery({
     term: query.s as string,
+    exact: query.exact === "true",
   });
 
   const table = useReactTable({

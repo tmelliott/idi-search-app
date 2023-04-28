@@ -14,7 +14,14 @@ const HighlightedMarkdown = ({
 
   useEffect(() => {
     if (highlight) {
-      const regex = new RegExp(`(${highlight.replaceAll(" ", "|")})`, "gi");
+      const str = highlight
+        // remove plus/minus
+        .replace(new RegExp(`[+-]`, "gi"), "")
+        // replace * with regex expr
+        .replace(new RegExp(`[*]`, "gi"), "[a-zA-Z]*");
+      console.log(str);
+
+      const regex = new RegExp(`(${str.replaceAll(" ", "|")})`, "gi");
       const highlighted = text.replace(regex, "<mark>$1</mark>");
       setOutput(highlighted);
     } else {

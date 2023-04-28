@@ -8,18 +8,42 @@ export const collectionsRouter = createTRPCRouter({
       z.object({
         term: z.string().optional(),
         limit: z.number().optional(),
+        exact: z.boolean().optional(),
         agency_id: z.string().optional(),
       })
     )
     .query(({ ctx, input }) => {
-      let where: Prisma.collectionsFindManyArgs["where"] = input.term
-        ? {
-            OR: [
-              { collection_name: { contains: input.term } },
-              { collection_id: { contains: input.term } },
-            ],
-          }
-        : {};
+      let where: Prisma.collectionsFindManyArgs["where"] = {};
+
+      if (input.term) {
+        where = input.exact
+          ? {
+              OR: [
+                {
+                  collection_name: { contains: input.term },
+                },
+                {
+                  description: { contains: input.term },
+                },
+                { collection_id: { contains: input.term } },
+              ],
+            }
+          : {
+              OR: [
+                {
+                  AND: [
+                    {
+                      collection_name: { search: input.term },
+                    },
+                    {
+                      description: { search: input.term },
+                    },
+                  ],
+                },
+                { collection_id: { contains: input.term } },
+              ],
+            };
+      }
 
       if (input.agency_id) {
         where = {
