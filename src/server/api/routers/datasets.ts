@@ -8,19 +8,33 @@ export const datasetsRouter = createTRPCRouter({
       z.object({
         term: z.string().optional(),
         limit: z.number().optional(),
+        exact: z.boolean().optional(),
         collection_id: z.string().optional(),
       })
     )
     .query(({ ctx, input }) => {
-      let where: Prisma.datasetsFindManyArgs["where"] = input.term
-        ? {
-            OR: [
-              { dataset_id: { contains: input.term } },
-              { dataset_name: { contains: input.term } },
-              { description: { contains: input.term } },
-            ],
-          }
-        : {};
+      let where: Prisma.datasetsFindManyArgs["where"] = {};
+
+      if (input.term)
+        where = input.exact
+          ? {
+              OR: [
+                { dataset_id: { contains: input.term } },
+                { dataset_name: { contains: input.term } },
+                { description: { contains: input.term } },
+              ],
+            }
+          : {
+              OR: [
+                { dataset_id: { contains: input.term } },
+                {
+                  AND: [
+                    { dataset_name: { search: input.term } },
+                    { description: { search: input.term } },
+                  ],
+                },
+              ],
+            };
 
       if (input.collection_id) {
         where = {

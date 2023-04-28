@@ -65,7 +65,7 @@ export default function Variables({ limit, dataset_id }: Props) {
   const [pageCount, setPageCount] = useState(0);
 
   const { data, isFetching, isError } = api.variables.all.useQuery({
-    term: query.s as string,
+    term: dataset_id ? "" : (query.s as string),
     include: query.include as string,
     exact: query.exact === "true",
     limit: limit,
@@ -132,14 +132,14 @@ export default function Variables({ limit, dataset_id }: Props) {
     children: ReactNode;
     href: string;
   }) => {
-    if (router.asPath === "/variables") return <>{children}</>;
+    if (href === "" || router.asPath === "/variables") return <>{children}</>;
     return <Link href={href}>{children}</Link>;
   };
 
   return (
     <section>
       <h3>
-        <TitleLink href="/variables">
+        <TitleLink href={dataset_id ? "" : "/variables"}>
           Variables
           {dataset_id && <> in this dataset</>}
           {variables && <> ({nVariables})</>}

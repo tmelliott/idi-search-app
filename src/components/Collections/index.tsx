@@ -94,14 +94,14 @@ export default function Collections({ limit, agency_id }: Props) {
     children: ReactNode;
     href: string;
   }) => {
-    if (router.asPath === "/collections") return <>{children}</>;
+    if (href === "" || router.asPath === "/collections") return <>{children}</>;
     return <Link href={href}>{children}</Link>;
   };
 
   return (
     <section>
       <h3>
-        <TitleLink href="/collections">
+        <TitleLink href={agency_id ? "" : "/collections"}>
           Collections
           {agency_id && <> by this agency</>}
           {collections && <> ({collections.length})</>}

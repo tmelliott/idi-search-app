@@ -27,14 +27,10 @@ export const variablesRouter = createTRPCRouter({
       })
     )
     .query(async ({ ctx, input }) => {
-      const searchTerm =
-        input.term
-          ?.split(" ")
-          .map((x) => (x.length ? "+" + x : x))
-          .join(" ") || "";
+      let where: Prisma.variablesFindManyArgs["where"] = {};
 
-      let where: Prisma.variablesFindManyArgs["where"] = input.term
-        ? input.exact
+      if (input.term)
+        where = input.exact
           ? {
               OR: [
                 { variable_name: { contains: input.term } },
@@ -48,20 +44,19 @@ export const variablesRouter = createTRPCRouter({
                   AND: [
                     {
                       variable_name: {
-                        search: searchTerm,
+                        search: input.term,
                       },
                     },
                     {
                       description: {
-                        search: searchTerm,
+                        search: input.term,
                       },
                     },
                   ],
                 },
                 { variable_id: { contains: input.term } },
               ],
-            }
-        : {};
+            };
 
       if (input.dataset_id) {
         where = {
