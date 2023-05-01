@@ -83,7 +83,16 @@ export default function Agencies({ limit }: Props) {
     href: string;
   }) => {
     if (router.asPath === "/agencies") return <>{children}</>;
-    return <Link href={href}>{children}</Link>;
+    return (
+      <Link
+        href={{
+          pathname: href,
+          query: router.query,
+        }}
+      >
+        {children}
+      </Link>
+    );
   };
 
   return (

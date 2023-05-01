@@ -67,7 +67,6 @@ export default function Datasets({ limit, collection_id }: Props) {
     isError,
   } = api.datasets.all.useQuery({
     term: query.s as string,
-    limit,
     exact: query.exact === "true",
     collection_id,
   });
@@ -108,7 +107,16 @@ export default function Datasets({ limit, collection_id }: Props) {
     href: string;
   }) => {
     if (href === "" || router.asPath === "/datasets") return <>{children}</>;
-    return <Link href={href}>{children}</Link>;
+    return (
+      <Link
+        href={{
+          pathname: href,
+          query: router.query,
+        }}
+      >
+        {children}
+      </Link>
+    );
   };
 
   return (

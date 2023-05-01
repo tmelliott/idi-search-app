@@ -95,7 +95,16 @@ export default function Collections({ limit, agency_id }: Props) {
     href: string;
   }) => {
     if (href === "" || router.asPath === "/collections") return <>{children}</>;
-    return <Link href={href}>{children}</Link>;
+    return (
+      <Link
+        href={{
+          pathname: href,
+          query: router.query,
+        }}
+      >
+        {children}
+      </Link>
+    );
   };
 
   return (
