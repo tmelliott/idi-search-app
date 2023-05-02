@@ -7,6 +7,7 @@
 - Search changes:
   - the default search is now an unmodified 'SQL Fulltext Search', so multiple words are searched using 'AND' unless modifiers are used (e.g., search +all +words, or this -not -that)
   - add search options: exact search
+- use regex to match date/time-stamped datasets, and store a list of versions to display
 
 # version 0.3.0
 
