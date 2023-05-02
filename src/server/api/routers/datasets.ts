@@ -115,4 +115,17 @@ export const datasetsRouter = createTRPCRouter({
           .concat(alternate.map((a) => a.match)),
       };
     }),
+  regexMatches: publicProcedure
+    .input(
+      z.object({
+        dataset_id: z.string(),
+      })
+    )
+    .query(async ({ ctx, input }) => {
+      const matches = await ctx.prisma.datasets_regex.findMany({
+        where: { regex_id: input.dataset_id },
+      });
+
+      return matches;
+    }),
 });

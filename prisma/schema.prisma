@@ -42,8 +42,9 @@ model datasets {
     collection       collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
     variables        variables[]
 
-    alternate table_matches[] @relation("alt_table")
-    matches   table_matches[] @relation("match_table")
+    alternate table_matches[]  @relation("alt_table")
+    matches   table_matches[]  @relation("match_table")
+    regexes   datasets_regex[] @relation("datasets_regex")
 
     @@index([collection_id])
     @@fulltext([dataset_name, description])
@@ -93,6 +94,15 @@ model variable_matches {
     @@id([table_id, variable_id, alt_variable_id])
     @@index([table_id, alt_variable_id])
     @@index([table_id, variable_id])
+}
+
+model datasets_regex {
+    dataset_id String
+    regex_id   String
+    dataset    datasets @relation("datasets_regex", fields: [regex_id], references: [dataset_id])
+
+    @@id([dataset_id, regex_id])
+    @@index([regex_id])
 }
 
 // this model is for writing weekly to prevent planetscale db

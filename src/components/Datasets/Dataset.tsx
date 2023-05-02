@@ -1,7 +1,9 @@
+import { useState } from "react";
+
 import Link from "next/link";
 import { useRouter } from "next/router";
 
-import { CogIcon } from "@heroicons/react/24/outline";
+import { CogIcon, InformationCircleIcon } from "@heroicons/react/24/outline";
 import { api } from "~/utils/api";
 
 import HighlightedMarkdown from "../HighlightedMarkdown";
@@ -61,6 +63,7 @@ function Dataset({ dataset_id }: Props) {
           </Link>
         </div>
       )}
+
       {dataset.description && (
         <HighlightedMarkdown
           text={dataset.description}
@@ -74,6 +77,8 @@ function Dataset({ dataset_id }: Props) {
           v.variable_id.includes("uid")
         )}
       />
+
+      <RegexMatches dataset_id={dataset.dataset_id} />
 
       {dataset.matches.length > 0 && (
         <div>
@@ -106,3 +111,41 @@ function Dataset({ dataset_id }: Props) {
 }
 
 export default Dataset;
+
+const RegexMatches = ({ dataset_id }: { dataset_id: string }) => {
+  const [showInfo, setShowInfo] = useState(false);
+
+  const { data: matches } = api.datasets.regexMatches.useQuery({ dataset_id });
+
+  if (!matches) return <></>;
+
+  return (
+    <div>
+      <h4 className="flex items-center">
+        Versions of this dataset
+        <InformationCircleIcon
+          className="h-4 w-4 ml-2 cursor-pointer hover:text-blue-700"
+          onMouseEnter={() => setShowInfo(true)}
+          onMouseLeave={() => setShowInfo(false)}
+          // onClick={() => setShowLinkInfo(!showLinkInfo)}
+        />
+      </h4>
+      <div className="relative">
+        {showInfo && (
+          <p className="absolute bg-gray-100 px-4 py-2 my-0 shadow z-20">
+            This dataset is updated regularly. Each time it is updated, a new
+            version is created with a unique ID. This list shows all instances
+            of this variable in the IDI.
+          </p>
+        )}
+      </div>
+      <ul className="max-h-48 overflow-scroll">
+        {matches.map((d) => (
+          <li key={d.dataset_id} className="m-0">
+            {d.dataset_id}
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+};

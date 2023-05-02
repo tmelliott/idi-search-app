@@ -361,9 +361,6 @@ av <- all_variables |>
     )
 all_variables <- av
 
-## TODO: store variable of 'instances' (i.e., different versions of this variable/dataset)
-
-
 cli::cli_progress_step("Merging datasets")
 datasets <- datasets |>
     right_join(
@@ -648,6 +645,9 @@ readr::write_csv(all_collections, "data/out/collections.csv")
 readr::write_csv(all_agencies, "data/out/agencies.csv")
 readr::write_csv(match_variables, "data/out/variable_matches.csv")
 readr::write_csv(match_tables, "data/out/table_matches.csv")
+readr::write_csv(
+    regex_matched_datasets |> setNames(c("dataset_id", "dataset_id_regex")),
+    "data/out/datasets_regex.csv")
 
 cli::cli_progress_done()
 

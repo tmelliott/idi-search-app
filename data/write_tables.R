@@ -119,6 +119,22 @@ write_tables <- function() {
                 )
             )
         )
+
+        dataset_regex <- readr::read_csv("data/out/datasets_regex.csv")
+        dbExecute(con, "DELETE FROM datasets_regex;")
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO datasets_regex VALUES",
+                glue::glue_sql_collapse(
+                    with(
+                        dataset_regex,
+                        glue::glue_sql("({dataset_id}, {dataset_id_regex})", .con = con)
+                    ),
+                    ", "
+                )
+            )
+        )
     })
 }
 
