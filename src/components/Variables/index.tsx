@@ -21,12 +21,17 @@ import {
   TablePaginator,
 } from "../Table";
 
+type Variable = ArrayElement<RouterOutputs["variables"]["all"]["variables"]>;
+
+type DataType = {
+  variables: Variable[];
+  count: number;
+};
 type Props = {
   limit?: number;
   dataset_id?: string;
+  data?: DataType;
 };
-
-type Variable = ArrayElement<RouterOutputs["variables"]["all"]["variables"]>;
 
 const columnHelper = createColumnHelper<Variable>();
 const columns = [
@@ -54,7 +59,7 @@ const columns = [
   }),
 ];
 
-export default function Variables({ limit, dataset_id }: Props) {
+export default function Variables({ limit, dataset_id, data }: Props) {
   const router = useRouter();
   const { query } = router;
 
@@ -64,17 +69,33 @@ export default function Variables({ limit, dataset_id }: Props) {
   });
   const [pageCount, setPageCount] = useState(0);
 
-  const { data, isFetching, isError } = api.variables.all.useQuery({
-    term: dataset_id ? "" : (query.s as string),
-    include: query.include as string,
-    exact: query.exact === "true",
-    limit: limit,
-    page: pageIndex + 1,
-    dataset_id,
-  });
+  const [placeholder, setPlaceholder] = useState(data);
 
-  const variables = data?.variables;
-  const nVariables = data?.count;
+  const {
+    data: varData,
+    fetchStatus,
+    status,
+  } = api.variables.all.useQuery(
+    {
+      term: dataset_id ? "" : (query.s as string),
+      include: query.include as string,
+      exact: query.exact === "true",
+      limit: limit,
+      page: pageIndex + 1,
+      dataset_id,
+    },
+    {
+      placeholderData: placeholder,
+    }
+  );
+
+  const variables = varData?.variables;
+  const nVariables = varData?.count;
+
+  useEffect(() => {
+    if (fetchStatus === "idle" && status === "success")
+      setPlaceholder(undefined);
+  }, [status, fetchStatus]);
 
   useEffect(() => {
     setPagination(() => ({
@@ -155,7 +176,7 @@ export default function Variables({ limit, dataset_id }: Props) {
         </TitleLink>
       </h3>
 
-      {isError ? (
+      {status === "error" ? (
         <p className="flex items-center text-red-600 text-sm my-2">
           <XCircleIcon className="w-5 h-5 mr-2" />
           Failed to load variables - please refresh the page and contact us if
@@ -166,7 +187,7 @@ export default function Variables({ limit, dataset_id }: Props) {
           <table className="w-full text-left table-fixed">
             <TableHeader table={table} />
             <tbody>
-              {isFetching ? (
+              {!variables ? (
                 <PlaceholderRows
                   n={limit ?? 5}
                   m={table.getLeafHeaders().length}
@@ -199,7 +220,12 @@ export default function Variables({ limit, dataset_id }: Props) {
               )}
             </tbody>
           </table>
-          {limit && <TablePaginator loading={isFetching} table={table} />}
+          {limit && (
+            <TablePaginator
+              loading={fetchStatus === "fetching"}
+              table={table}
+            />
+          )}
         </div>
       )}
     </section>

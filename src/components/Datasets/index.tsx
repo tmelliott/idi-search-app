@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,12 +21,13 @@ import {
   TablePaginator,
 } from "../Table";
 
+type Dataset = ArrayElement<RouterOutputs["datasets"]["all"]>;
+
 type Props = {
   limit?: number;
   collection_id?: string;
+  data?: Dataset[];
 };
-
-type Dataset = ArrayElement<RouterOutputs["datasets"]["all"]>;
 
 const columnHelper = createColumnHelper<Dataset>();
 const columns = [
@@ -58,18 +59,24 @@ const columns = [
   }),
 ];
 
-export default function Datasets({ limit, collection_id }: Props) {
+export default function Datasets({ limit, collection_id, data }: Props) {
   const router = useRouter();
   const { query } = router;
+  const [placeholder, setPlaceholder] = useState(data);
   const {
     data: datasets,
-    isFetching,
-    isError,
-  } = api.datasets.all.useQuery({
-    term: query.s as string,
-    exact: query.exact === "true",
-    collection_id,
-  });
+    status,
+    fetchStatus,
+  } = api.datasets.all.useQuery(
+    {
+      term: query.s as string,
+      exact: query.exact === "true",
+      collection_id,
+    },
+    {
+      placeholderData: placeholder,
+    }
+  );
 
   const table = useReactTable({
     data: datasets || [],
@@ -77,6 +84,11 @@ export default function Datasets({ limit, collection_id }: Props) {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  useEffect(() => {
+    if (fetchStatus === "idle" && status === "success")
+      setPlaceholder(undefined);
+  }, [status, fetchStatus]);
 
   useEffect(() => {
     if (limit) table.setPageSize(limit);
@@ -125,11 +137,11 @@ export default function Datasets({ limit, collection_id }: Props) {
         <TitleLink href={collection_id ? "" : "/datasets"}>
           Datasets
           {collection_id && <> in this collection</>}
-          {datasets && <> ({datasets.length})</>}
+          {datasets && fetchStatus === "idle" && <> ({datasets.length})</>}
         </TitleLink>
       </h3>
 
-      {isError ? (
+      {status === "error" ? (
         <p className="flex items-center text-red-600 text-sm my-2">
           <XCircleIcon className="w-5 h-5 mr-2" />
           Failed to load datasets - please refresh the page and contact us if
@@ -140,7 +152,7 @@ export default function Datasets({ limit, collection_id }: Props) {
           <table className="w-full text-left table-fixed">
             <TableHeader table={table} />
             <tbody>
-              {isFetching ? (
+              {!datasets ? (
                 <PlaceholderRows
                   n={limit ?? 5}
                   m={table.getLeafHeaders().length}
@@ -173,7 +185,12 @@ export default function Datasets({ limit, collection_id }: Props) {
               )}
             </tbody>
           </table>
-          {limit && <TablePaginator loading={isFetching} table={table} />}
+          {limit && (
+            <TablePaginator
+              loading={fetchStatus === "fetching"}
+              table={table}
+            />
+          )}
         </div>
       )}
     </section>

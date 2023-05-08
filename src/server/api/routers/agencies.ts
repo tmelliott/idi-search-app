@@ -1,14 +1,13 @@
-import { Prisma } from "@prisma/client";
+import { type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
-import { splitSearchTerm } from "~/utils/searchTerm";
 
 export const agenciesRouter = createTRPCRouter({
   all: publicProcedure
     .input(
       z.object({
         term: z.string().optional(),
-        // limit: z.number().optional(),
+        limit: z.number().optional(),
         exact: z.boolean().optional(),
       })
     )
@@ -29,7 +28,7 @@ export const agenciesRouter = createTRPCRouter({
 
       return ctx.prisma.agencies.findMany({
         where: where,
-        // take: input.limit,
+        take: input.limit,
       });
     }),
   get: publicProcedure

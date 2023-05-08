@@ -6,6 +6,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { type Table } from "@tanstack/react-table";
 
+import { PulseLoader } from "../Loaders";
+
 // TODO: add page jumping
 
 export default function TablePaginator<T>({
@@ -35,13 +37,15 @@ export default function TablePaginator<T>({
           </button>
         </div>
         <div>
-          {table.getPageCount() ? (
+          {loading ? (
+            <PulseLoader n={3} />
+          ) : table.getPageCount() ? (
             <>
               Page {table.getState().pagination.pageIndex + 1} of{" "}
               {table.getPageCount()}
             </>
           ) : (
-            <>{loading ? "Loading ..." : "No data"}</>
+            <>No data</>
           )}
         </div>
         <div className="flex items-center gap-2">

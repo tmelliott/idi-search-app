@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -21,11 +21,12 @@ import {
   TablePaginator,
 } from "../Table";
 
+type Agency = Prisma.agencies;
+
 type Props = {
   limit?: number;
+  data?: Agency[];
 };
-
-type Agency = Prisma.agencies;
 
 const columnHelper = createColumnHelper<Agency>();
 const columns = [
@@ -35,17 +36,23 @@ const columns = [
   }),
 ];
 
-export default function Agencies({ limit }: Props) {
+export default function Agencies({ limit, data }: Props) {
   const router = useRouter();
   const { query } = router;
+  const [placeholder, setPlaceholder] = useState(data);
   const {
     data: agencies,
-    isFetching,
-    isError,
-  } = api.agencies.all.useQuery({
-    term: query.s as string,
-    exact: query.exact === "true",
-  });
+    status,
+    fetchStatus,
+  } = api.agencies.all.useQuery(
+    {
+      term: query.s as string,
+      exact: query.exact === "true",
+    },
+    {
+      placeholderData: placeholder,
+    }
+  );
 
   const table = useReactTable({
     data: agencies || [],
@@ -53,6 +60,11 @@ export default function Agencies({ limit }: Props) {
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
   });
+
+  useEffect(() => {
+    if (fetchStatus === "idle" && status === "success")
+      setPlaceholder(undefined);
+  }, [fetchStatus, status]);
 
   useEffect(() => {
     if (limit) table.setPageSize(limit);
@@ -100,11 +112,11 @@ export default function Agencies({ limit }: Props) {
       <h3>
         <TitleLink href="/agencies">
           Data Supply Agencies
-          {agencies && <> ({agencies.length})</>}
+          {agencies && fetchStatus === "idle" && <> ({agencies.length})</>}
         </TitleLink>
       </h3>
 
-      {isError ? (
+      {status === "error" ? (
         <p className="flex items-center text-red-600 text-sm my-2">
           <XCircleIcon className="w-5 h-5 mr-2" />
           Failed to load agencies - please refresh the page and contact us if
@@ -115,7 +127,7 @@ export default function Agencies({ limit }: Props) {
           <table className="w-full text-left">
             <TableHeader table={table} />
             <tbody>
-              {isFetching ? (
+              {!agencies ? (
                 <PlaceholderRows n={limit ?? 5} m={columns.length}>
                   ...
                 </PlaceholderRows>
@@ -142,7 +154,12 @@ export default function Agencies({ limit }: Props) {
               )}
             </tbody>
           </table>
-          {limit && <TablePaginator loading={isFetching} table={table} />}
+          {limit && (
+            <TablePaginator
+              loading={fetchStatus === "fetching"}
+              table={table}
+            />
+          )}
         </div>
       )}
     </section>
