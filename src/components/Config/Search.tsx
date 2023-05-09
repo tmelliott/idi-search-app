@@ -2,8 +2,8 @@ import { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
 
-import { Cog8ToothIcon } from "@heroicons/react/24/outline";
-import { FunnelIcon, XMarkIcon } from "@heroicons/react/24/solid";
+import { FunnelIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 // const EXPORT_FORMATS = ["CSV", "JSON"];
 
@@ -97,8 +97,8 @@ const Search = () => {
           search();
         }}
       >
-        <div className="bg-gray-400 hidden @md:flex py-2 px-3 justify-center items-center">
-          <FunnelIcon className="h-5 text-gray-50 group-focus-within:text-black" />
+        <div className=" hidden @md:flex py-2 px-3 justify-center items-center">
+          <FunnelIcon className="h-5 text-gray-600 group-focus-within:text-black" />
         </div>
         <div className="flex-1">
           <input
@@ -115,7 +115,7 @@ const Search = () => {
         </div>
         <div className="flex bg-gray-200 border-t border-t-gray-400 @md:border-t-0">
           <button
-            className="bg-gray-300 px-2 @md:px-4 py-2 flex-1 @md:border-l border-l-gray-400 hover:bg-gray-400"
+            className="bg-gray-100 px-2 @md:px-4 py-2 flex-1 @md:border-l border-l-gray-400 hover:bg-gray-200"
             // disabled={disabled}
             type="submit"
           >
@@ -123,7 +123,7 @@ const Search = () => {
           </button>
           <button
             type="submit"
-            className="flex-1 py-2 px-2 @md:px-4 bg-gray-300 border-l border-l-gray-400 hover:bg-gray-400"
+            className="flex-1 py-2 px-2 @md:px-4 bg-gray-100 border-l border-l-gray-400 hover:bg-gray-200"
             onClick={() => {
               setValue("");
               search();
@@ -132,7 +132,7 @@ const Search = () => {
             Clear
           </button>
           <button
-            className="flex items-center justify-center px-2 @lg:px-4 bg-gray-300 border-l border-l-gray-400 hover:bg-gray-400"
+            className="flex items-center justify-center px-2 @lg:px-4 bg-gray-100 border-l border-l-gray-400 hover:bg-gray-200"
             onClick={() => setShowConfig((prev) => !prev)}
           >
             {showConfig ? (
