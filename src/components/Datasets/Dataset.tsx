@@ -117,7 +117,7 @@ const RegexMatches = ({ dataset_id }: { dataset_id: string }) => {
 
   const { data: matches } = api.datasets.regexMatches.useQuery({ dataset_id });
 
-  if (!matches) return <></>;
+  if (!matches || matches.length === 0) return <></>;
 
   return (
     <div>
