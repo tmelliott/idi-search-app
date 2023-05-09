@@ -352,12 +352,23 @@ if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> tab
     stop("Duplicate variables (after join)")
 }
 
+## some instances of datasets with different types across versions
+most_common <- function(x) {
+    if (length(unique(x)) == 1)
+        return(unique(x))
+
+    names(sort(table(x), decreasing = TRUE))[1]
+}
+
 ## replace dataset_id with dd_dataset_id if it exists
 av <- all_variables |>
     filter(dataset_id %in% regex_matched_datasets$dataset_id) |>
     left_join(regex_matched_datasets, by = "dataset_id") |>
     mutate(dataset_id = dd_dataset_id) |>
     select(-dd_dataset_id) |>
+    group_by(across(-type)) |>
+    summarize(type = most_common(type)) |>
+    ungroup() |>
     distinct() |>
     bind_rows(
         all_variables |>
