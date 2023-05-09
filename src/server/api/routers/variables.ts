@@ -1,18 +1,9 @@
 import { type Prisma } from "@prisma/client";
 import { z } from "zod";
 import { createTRPCRouter, publicProcedure } from "~/server/api/trpc";
+import currentRefreshes from "~/utils/refreshes";
 
-const current_refreshes = [
-  "20200120",
-  "20200720",
-  "20201020",
-  "20210420",
-  "20210720",
-  "20211020",
-  "202203",
-  "202206",
-  "202210",
-];
+const REFRESH_PROM = currentRefreshes();
 
 export const variablesRouter = createTRPCRouter({
   all: publicProcedure
@@ -66,6 +57,7 @@ export const variablesRouter = createTRPCRouter({
       }
 
       if (input.include) {
+        const current_refreshes = await REFRESH_PROM;
         const inc = input.include.split(",");
         const incs = inc
           .map((d) => (d === "refreshes" ? current_refreshes : "Adhoc"))
@@ -178,6 +170,7 @@ export const variablesRouter = createTRPCRouter({
       if (!variable) return null;
 
       const refreshes_raw = variable.refreshes || null;
+      const current_refreshes = await REFRESH_PROM;
       const refreshes =
         refreshes_raw && refreshes_raw.length
           ? current_refreshes.map((r) => ({
