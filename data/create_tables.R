@@ -313,7 +313,11 @@ drive_download(
 cli::cli_progress_step("Reading regex matches file")
 regex_matches <-
     readxl::read_excel(file.path(fdir, "regex_matches.xlsx")) |>
-    setNames(c("dd_name", "regex_name"))
+    setNames(c("dd_name", "regex_name")) |>
+    dplyr::mutate(
+        dd_name = tolower(dd_name),
+        regex_name = tolower(regex_name)
+    )
 
 ## REFRESH variables and their REGEX matched dictionary
 regex_matched_datasets <- apply(regex_matches, 1L, \(x) {
