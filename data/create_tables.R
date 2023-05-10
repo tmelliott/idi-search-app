@@ -160,7 +160,7 @@ if (any(table(collections$collection_name) > 1L)) {
     tbl <- table(collections$collection_name)
     tbl <- tbl[tbl > 1L]
     cli::cli_alert_danger("Bad collection names")
-    cli::cli_ul(names(tbl[tbl > 1L]))
+    cli::cli_ul(tbl[tbl > 1L])
     stop()
 }
 
@@ -206,8 +206,7 @@ if (any(dup_ids > 1L)) {
             )
         )
     )
-    dn <- names(dup_ids[dup_ids > 1])
-    cli::cli_ul(dn)
+    cli::cli_ul(dup_ids[dup_ids > 1])
     stop()
 }
 
@@ -303,6 +302,34 @@ cli::cli_progress_step("Loading")
 source("data/link_refresh_data.R")
 refresh_vars <- link_refresh_data()
 
+cli::cli_progress_step("Downloading regex matches file")
+cs_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
+    filter(name == "Regex matches")
+drive_download(
+    cs_file$id[1],
+    path = file.path(fdir, "regex_matches.xlsx")
+)
+
+cli::cli_progress_step("Reading regex matches file")
+regex_matches <-
+    readxl::read_excel(file.path(fdir, "regex_matches.xlsx")) |>
+    setNames(c("dd_name", "regex_name")) |>
+    dplyr::mutate(
+        dd_name = tolower(dd_name),
+        regex_name = tolower(regex_name)
+    )
+
+## REFRESH variables and their REGEX matched dictionary
+regex_matched_datasets <- apply(regex_matches, 1L, \(x) {
+    refresh_vars[grep(x[["regex_name"]], refresh_vars$dataset_id),] |>
+        mutate(
+            dd_dataset_id = x[["dd_name"]]
+        ) |>
+        select(dataset_id, dd_dataset_id) |>
+        distinct()
+}) |> bind_rows()
+
+
 # saveRDS(refresh_vars, "data/cache/refresh_vars.rda")
 # refresh_vars <- readRDS("data/cache/refresh_vars.rda")
 
@@ -324,6 +351,30 @@ all_variables <- variables |>
 if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
     stop("Duplicate variables (after join)")
 }
+
+## some instances of datasets with different types across versions
+most_common <- function(x) {
+    if (length(unique(x)) == 1)
+        return(unique(x))
+
+    names(sort(table(x), decreasing = TRUE))[1]
+}
+
+## replace dataset_id with dd_dataset_id if it exists
+av <- all_variables |>
+    filter(dataset_id %in% regex_matched_datasets$dataset_id) |>
+    left_join(regex_matched_datasets, by = "dataset_id") |>
+    mutate(dataset_id = dd_dataset_id) |>
+    select(-dd_dataset_id) |>
+    group_by(across(-type)) |>
+    summarize(type = most_common(type)) |>
+    ungroup() |>
+    distinct() |>
+    bind_rows(
+        all_variables |>
+            filter(!dataset_id %in% regex_matched_datasets$dataset_id)
+    )
+all_variables <- av
 
 cli::cli_progress_step("Merging datasets")
 datasets <- datasets |>
@@ -609,6 +660,9 @@ readr::write_csv(all_collections, "data/out/collections.csv")
 readr::write_csv(all_agencies, "data/out/agencies.csv")
 readr::write_csv(match_variables, "data/out/variable_matches.csv")
 readr::write_csv(match_tables, "data/out/table_matches.csv")
+readr::write_csv(
+    regex_matched_datasets |> setNames(c("dataset_id", "dataset_id_regex")),
+    "data/out/datasets_regex.csv")
 
 cli::cli_progress_done()
 

@@ -8571,6 +8571,7 @@ sla_clean.ird_post_code_historic,ir_apc_post_code,varchar,"20201020,20210420,202
 sla_clean.ird_post_code_historic,ir_apc_address_status_code,char,"20201020,20210420,20210720,20211020,202203,202206,202210,202303"
 sla_clean.ird_post_code_historic,ir_apc_region_code,char,"20201020,20210420,20210720,20211020,202203,202206,202210,202303"
 sla_clean.ird_post_code_historic,ir_apc_ta_code,char,"20201020,20210420,20210720,20211020,202203,202206,202210,202303"
+table_schema.table_name,column_name,DATA_TYPE,"TABLE_CATALOG,202210"
 cen_clean.census_individual_2018,cen_ind_ptnrship_stus_rel_imp_fl,char,"20210420,20210720,20211020,202203,202206,202210,202303"
 cen_clean.census_individual_2018,cn_snz_idi_address_register_uid,int,"20210420,20210720,20211020,202203,202206,202210,202303"
 cen_clean.census_individual_2018,ur_snz_idi_address_register_uid,int,"20210420,20210720,20211020,202203,202206,202210,202303"
@@ -26878,7 +26879,6 @@ sofie_clean.dob_v,sofie_dob_snz_unique_nbr,bigint,202210
 sofie_clean.dob_v,sofie_dob_birth_year_nbr,int,202210
 sofie_clean.dob_v,sofie_dob_birth_month_nbr,int,202210
 sofie_clean.dob_v,sofie_dob_sex_snz_code,varchar,202210
-table_schema.table_name,column_name,DATA_TYPE,202210
 wff_clean.fam_adjustments_v,wff_adj_total_ctc_amt,decimal,202210
 wff_clean.fam_adjustments_v,wff_adj_total_ptc_amt,decimal,202210
 wff_clean.fam_adjustments_v,wff_adj_est_tot_salary_wage_amt,decimal,202210

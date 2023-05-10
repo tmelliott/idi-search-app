@@ -1,0 +1,83 @@
+import { Mermaid } from "mdx-mermaid/Mermaid";
+import ProseLayout from "~/layout/ProseLayout";
+
+export const meta = {
+  title: "Help | IDI Search App",
+};
+
+# User Guide
+
+## Searching IDI variables
+
+Typing a keyword(s) in the search box will list all agencies, collections, datasets, or variables containing the term in any of the information associated with it.
+
+Click on ‘Data Supply Agencies’, ‘Collections’, ‘Datasets’ or ‘Variables’ if you want to search for keywords within those fields.
+
+Currently, the search only does an 'AND' search by simply separating search terms with spaces. For example, "social housing" will find results that match both "social" and "housing".
+
+## Exploring variables
+
+Click on rows in the table to view structural metadata about each variable, including the schema and table names required for SQL queries. The green dot beside collections, datasets, and variables indicates that metadata describing the data are available in the Search App.
+
+### Search conditions
+
+When 'exact search' is _disabled_, the search uses MySQL "Fulltext" search on several fields. The table below shows what fields are searched in each of the four levels.
+
+| Table      | Full-text columns            | Exact columns |
+| ---------- | ---------------------------- | ------------- |
+| Agency     | Agency name                  | agency_id     |
+| Collection | Collection name, Description | collection_id |
+| Dataset    | Dataset name, Description    | dataset_id    |
+| Variable   | Variable name, Description   | variable_id   |
+
+The 'Exact columns' are _always searched_ (using an 'OR' condition), but only use exact search.
+
+By default, the search uses 'OR' for multiple terms. The following table demonstrates some search modifiers you can use in the search box:
+
+| Modifier | Description                                 | Example           | Result                                                                                        |
+| -------- | ------------------------------------------- | ----------------- | --------------------------------------------------------------------------------------------- |
+|          | Default, search for any of the words        | iwi&nbsp;health   | Return all results that contain either the word 'iwi' OR the word 'health'                    |
+| +        | (prefix) results must include this word     | +iwi&nbsp;+health | Returns all results that contain both the word 'iwi' AND the word 'health'                    |
+| -        | (prefix) results must NOT include this word | iwi&nbsp;-health  | Returns all results taht contain the word 'iwi', but DO NOT contain the word 'health'         |
+| \*       | (suffix) search for words with this prefix  | hous\*            | Return all results that contain a word _starting with_ 'hous', for example 'house', 'housing' |
+
+## Navigating the app
+
+You can also look for information of your interest by manually navigating through the four tables: Data Supply Agencies, Collections, Datasets and Variables. Click a table name, and you will first see the top-level information for that table. When you further click the rows within the table, it will take you to the next level down.
+
+The information is nested in the following way:
+
+<Mermaid
+  chart={`flowchart TB;
+  A[Data Supply Agencies]-->B[Collections];
+  B-->C[Datasets];
+  C-->D[Variables];
+`}
+/>
+
+#### Data Supply Agencies
+
+Lists the names of agencies that have supplied the data added to the Integrated Data Infrastructure. By clicking an agency, you can view all the collections of datasets that the specific agency supplies.
+
+#### Collections
+
+Lists the names of collections, which represents datasets that are grouped together under the same set or collection. The collection names are taken directly from the Data Dictionary or are given a sensible name if the Data Dictionary is unavailable. By clicking a collection, you can view all datasets that sit under the collection.
+
+#### Datasets
+
+Lists the datasets that are present in the latest refresh and the IDI_Adhoc database as of the latest extract by Stats NZ. By clicking a dataset, you can view all variables for that dataset.
+
+#### Variables
+
+Lists the variables contained in all the datasets extracted from the IDI.
+
+## Get in Touch
+
+If you have any questions or feedback, please contact us at:
+
+- [terourounz@gmail.com](mailto:terourounz@gmail.com) for your app-related feedback, or
+- [access2microdata@stats.govt.nz](mailto:access2microdata@stats.govt.nz) for questions or inquiries about the metadata included in or missing from the app.
+
+export default ({ children }) => (
+  <ProseLayout meta={meta}>{children}</ProseLayout>
+);

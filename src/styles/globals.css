@@ -1,0 +1,73 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  .header {
+    @apply flex justify-between bg-white px-4 py-1 drop-shadow-sm;
+  }
+  .header > div {
+    @apply gap-x-1;
+  }
+  .header .link {
+    @apply flex items-center rounded bg-white p-2 text-xs hover:bg-gray-100;
+  }
+  .header .link svg {
+    @apply mr-1 h-5;
+  }
+
+  /* main :not(.prose) h1 {
+    @apply text-xl mb-4;
+  }
+  main :not(.prose) h2 {
+    @apply text-lg font-bold mb-2 mt-4;
+  }*/
+  main :not(.prose) h3 {
+    @apply mb-0 mt-2 font-bold;
+  }
+  /*
+  main :not(.prose) p {
+    @apply mb-2;
+  }
+  main p > a {
+    @apply text-blue-800 hover:text-blue-600;
+  } */
+
+  .vartable-container {
+    min-width: 800px;
+  }
+
+  .text-xxs {
+    font-size: 0.6rem;
+    line-height: 0.9rem;
+  }
+
+  .app-table {
+    @apply text-sm;
+  }
+  .app-table table {
+    @apply w-full table-fixed divide-y divide-gray-200;
+  }
+  .app-table table th,
+  .app-table table td {
+    @apply px-2 py-1 text-left;
+    vertical-align: top;
+  }
+  .app-table table tbody {
+    @apply divide-y divide-gray-200 bg-white;
+  }
+  .app-table tr.clickable {
+    @apply cursor-pointer text-xs hover:bg-gray-50;
+  }
+  .app-table tr td {
+    @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
+  }
+  .app-table tr td div {
+    @apply overflow-hidden overflow-ellipsis whitespace-nowrap;
+  }
+
+  .blur-xs {
+    --tw-blur: blur(1px);
+    filter: var(--tw-filter);
+  }
+}
