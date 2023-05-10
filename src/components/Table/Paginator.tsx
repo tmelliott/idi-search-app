@@ -7,11 +7,8 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import { type Table } from "@tanstack/react-table";
-import { set } from "zod";
 
 import { PulseLoader } from "../Loaders";
-
-// TODO: add page jumping
 
 export default function TablePaginator<T>({
   table,
@@ -20,19 +17,17 @@ export default function TablePaginator<T>({
   table: Table<T>;
   loading: boolean;
 }) {
-  const [targetPage, setTargetPage] = useState<number | null>(
-    table.getState().pagination.pageIndex + 1
-  );
+  const tablePage = table.getState().pagination.pageIndex;
+  const [targetPage, setTargetPage] = useState<number | null>(tablePage + 1);
 
   const setPage = () => {
-    if (targetPage === null)
-      setTargetPage(table.getState().pagination.pageIndex + 1);
+    if (targetPage === null) setTargetPage(tablePage + 1);
     else table.setPageIndex(targetPage - 1);
   };
 
   useEffect(() => {
-    setTargetPage(table.getState().pagination.pageIndex + 1);
-  }, [table.getState().pagination.pageIndex]);
+    setTargetPage(tablePage + 1);
+  }, [tablePage]);
 
   return (
     <div className="border-t-2 text-sm border-b-2">
