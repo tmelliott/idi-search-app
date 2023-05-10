@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 import {
   ChevronDoubleLeftIcon,
   ChevronDoubleRightIcon,
@@ -5,6 +7,7 @@ import {
   ChevronRightIcon,
 } from "@heroicons/react/24/outline";
 import { type Table } from "@tanstack/react-table";
+import { set } from "zod";
 
 import { PulseLoader } from "../Loaders";
 
@@ -17,6 +20,20 @@ export default function TablePaginator<T>({
   table: Table<T>;
   loading: boolean;
 }) {
+  const [targetPage, setTargetPage] = useState<number | null>(
+    table.getState().pagination.pageIndex + 1
+  );
+
+  const setPage = () => {
+    if (targetPage === null)
+      setTargetPage(table.getState().pagination.pageIndex + 1);
+    else table.setPageIndex(targetPage - 1);
+  };
+
+  useEffect(() => {
+    setTargetPage(table.getState().pagination.pageIndex + 1);
+  }, [table.getState().pagination.pageIndex]);
+
   return (
     <div className="border-t-2 text-sm border-b-2">
       <div className="px-4 py-1 flex justify-between items-center">
@@ -40,10 +57,31 @@ export default function TablePaginator<T>({
           {loading ? (
             <PulseLoader n={3} />
           ) : table.getPageCount() ? (
-            <>
-              Page {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                setPage();
+              }}
+            >
+              Page
+              <input
+                className="w-8 h-6 text-center border border-gray-300 rounded-md mx-1"
+                type="text"
+                value={targetPage || ""}
+                onChange={(e) => {
+                  if (e.target.value === "") {
+                    setTargetPage(null);
+                    return;
+                  }
+                  const n = Number(e.target.value);
+                  if (isNaN(n)) return;
+                  const p = Math.min(table.getPageCount(), Math.max(1, n));
+                  setTargetPage(p);
+                }}
+                onBlur={setPage}
+              />{" "}
+              of {table.getPageCount()}
+            </form>
           ) : (
             <>No data</>
           )}
