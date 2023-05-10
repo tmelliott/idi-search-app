@@ -77,7 +77,7 @@ export default function Variables({ limit, dataset_id, data }: Props) {
     status,
   } = api.variables.all.useQuery(
     {
-      term: dataset_id ? "" : (query.s as string),
+      term: dataset_id ? undefined : (query.s as string),
       include: query.include as string,
       exact: query.exact === "true",
       limit: limit,

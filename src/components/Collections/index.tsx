@@ -57,7 +57,7 @@ export default function Collections({ limit, agency_id, data }: Props) {
     fetchStatus,
   } = api.collections.all.useQuery(
     {
-      term: query.s as string,
+      term: agency_id ? undefined : (query.s as string),
       agency_id,
       exact: query.exact === "true",
     },

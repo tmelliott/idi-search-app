@@ -69,7 +69,7 @@ export default function Datasets({ limit, collection_id, data }: Props) {
     fetchStatus,
   } = api.datasets.all.useQuery(
     {
-      term: query.s as string,
+      term: collection_id ? undefined : (query.s as string),
       exact: query.exact === "true",
       collection_id,
     },
