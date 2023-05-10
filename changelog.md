@@ -1,6 +1,8 @@
 # version 1.0.0
 
-- MAJOR CHANGE: refactored app using Typescript and TRPC, which should reduce bugs and make future development significantly easier
+This is a major release, featuring a refactored app using Typescript and TRPC. This should reduce bugs and make future development significantly easier.
+
+Other changes in the interface:
 
 - add export functionality (JSON or CSV format)
 - on 'linking variables', display the number of links, and move (expanded) information to a tooltip
