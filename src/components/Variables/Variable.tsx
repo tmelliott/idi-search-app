@@ -149,7 +149,7 @@ function Variable({ dataset_id, variable_id }: Props) {
       {variable.dataset.matches.length > 0 && (
         <>
           <h4>
-            This variable may be available in other refreshes in a difference
+            This variable may be available in other refreshes in a different
             dataset:
           </h4>
           <ul>
