@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 
 import HighlightedMarkdown from "../HighlightedMarkdown";
 import Links from "../Variables/Links";
+import CodeValues from "./CodeValues";
 import Refreshes from "./Refreshes";
 
 type Props = {
@@ -115,6 +116,8 @@ function Variable({ dataset_id, variable_id }: Props) {
             </tr>
           </tbody>
         </table>
+
+        <CodeValues variable_id={variable.variable_id} />
 
         {variable.database === "IDI Clean" &&
           variable.refreshes &&

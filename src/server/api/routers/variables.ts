@@ -229,4 +229,22 @@ export const variablesRouter = createTRPCRouter({
         },
       });
     }),
+  codes: publicProcedure
+    .input(
+      z.object({
+        variable_id: z.string(),
+      })
+    )
+    .query(({ ctx, input }) => {
+      const { variable_id } = input;
+      return ctx.prisma.code_values.findMany({
+        where: {
+          variable_id: variable_id,
+        },
+        select: {
+          code: true,
+          label: true,
+        },
+      });
+    }),
 });
