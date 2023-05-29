@@ -67,7 +67,6 @@ write_tables <- function() {
     N <- ceiling(nrow(variables) / n)
     pb <- txtProgressBar(max = N, style = 3L)
     for (i in 1:N) {
-        setTxtProgressBar(pb, i)
         ii <- 1:n + n * (i - 1)
         ii <- ii[ii <= nrow(variables)]
         dbExecute(
@@ -83,6 +82,7 @@ write_tables <- function() {
                 )
             )
         )
+        setTxtProgressBar(pb, i)
     }
     close(pb)
 
@@ -136,6 +136,32 @@ write_tables <- function() {
             )
         )
     })
+
+    code_values <- readr::read_csv("data/out/code_values.csv")
+    dbExecute(con, "DELETE FROM code_values;")
+    dbExecute(con, "ALTER TABLE code_values AUTO_INCREMENT = 1;")
+    n <- 5000
+    N <- ceiling(nrow(code_values) / n)
+    pb <- txtProgressBar(max = N, style = 3L)
+    for (i in 1:N) {
+        ii <- 1:n + n * (i - 1)
+        ii <- ii[ii <= nrow(code_values)]
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO code_values (variable_id, code, label) VALUES ",
+                glue::glue_sql_collapse(
+                    with(
+                        code_values[ii, ],
+                        glue::glue_sql("({variable_id}, {code}, {label})", .con = con)
+                    ),
+                    ", "
+                )
+            )
+        )
+        setTxtProgressBar(pb, i)
+    }
+    close(pb)
 }
 
 write_tables()

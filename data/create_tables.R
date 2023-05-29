@@ -85,9 +85,9 @@ fixTableNames <- function(names) {
 cli::cli_progress_step("Processing dictionaries")
 suppressMessages({
     collection_tables <- files |>
-        lapply(\(x) {
+        lapply(\(file) {
             # cat("\r* Processing dictionary", x, "...")
-            x <- readxl::read_excel(x, sheet = "Index")
+            x <- readxl::read_excel(file, sheet = "Index")
             di <- grep("Dataset Name", x$Index)
             dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
             tables <- x[(di + 1):dj, ]
@@ -105,6 +105,28 @@ suppressMessages({
             }
             tables <- tables[!is.na(tables[[3]]), ]
             colnames(tables) <- fixTableNames(colnames(tables))
+
+            # is there a 'Codes & Values' sheet?
+            sheet_names <- readxl::excel_sheets(file)
+            has_codes <- stringr::str_detect(tolower(sheet_names),
+                "codes.+values")
+            codes <- NULL
+            if (sum(has_codes) == 1) {
+                codes <- readxl::read_excel(file,
+                    sheet = sheet_names[has_codes])
+                code_cols <- tolower(colnames(codes))
+                variable_col <- grep("variable.+name", code_cols)[1]
+                code_col <- which(grepl("code", code_cols) &
+                    !grepl("label", code_cols))[1]
+                label_col <- grep("label", code_cols)[1]
+
+                codes <- tibble::tibble(
+                    variable_id = tolower(trimws(codes[[variable_col]])),
+                    code = tolower(trimws(codes[[code_col]])),
+                    label = tolower(trimws(codes[[label_col]]))
+                )
+            }
+
             list(
                 collection = tibble(
                     collection_schema = schema[2],
@@ -117,7 +139,8 @@ suppressMessages({
                         collection_name = col,
                         dataset_id =
                             gsub("\\[|\\]", "", tables$idi.table.name)
-                    )
+                    ),
+                codes = codes
             )
         })
 })
@@ -209,6 +232,15 @@ if (any(dup_ids > 1L)) {
     cli::cli_ul(dup_ids[dup_ids > 1])
     stop()
 }
+
+cli::cli_progress_step("Extracing codes and values")
+codes <- map(collection_tables, "codes") |>
+    bind_rows() |>
+    mutate(
+        variable_id = str_replace_all(variable_id, "\\[|\\]", "")
+    ) |>
+    filter(!is.na(code) & !is.na(label))
+
 
 repair_colnames <- function(x, expr, name) {
     if (any(grepl(expr, x))) x[grep(expr, x)] <- name
@@ -663,6 +695,7 @@ readr::write_csv(match_tables, "data/out/table_matches.csv")
 readr::write_csv(
     regex_matched_datasets |> setNames(c("dataset_id", "dataset_id_regex")),
     "data/out/datasets_regex.csv")
+readr::write_csv(codes, "data/out/code_values.csv", quote = "all")
 
 cli::cli_progress_done()
 

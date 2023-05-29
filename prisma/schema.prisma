@@ -105,6 +105,13 @@ model datasets_regex {
     @@index([regex_id])
 }
 
+model code_values {
+    id          Int    @id @default(autoincrement())
+    variable_id String
+    code        String
+    label       String @db.LongText
+}
+
 // this model is for writing weekly to prevent planetscale db
 // from being put to sleep
 model temp {
