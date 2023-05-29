@@ -11,6 +11,7 @@ Other changes in the interface:
   - add search options: exact search
 - use regex to match date/time-stamped datasets, and store a list of versions to display
 - dynamically fetch the list of available refreshes
+- display codes and values, where available
 
 # version 0.3.0
 
