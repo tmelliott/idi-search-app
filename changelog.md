@@ -2,6 +2,8 @@
 
 This is a major release, featuring a refactored app using Typescript and TRPC. This should reduce bugs and make future development significantly easier.
 
+Updated with June 2023 refresh data.
+
 Other changes in the interface:
 
 - add export functionality (JSON or CSV format)
