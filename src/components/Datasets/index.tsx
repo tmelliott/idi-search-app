@@ -78,6 +78,8 @@ export default function Datasets({ limit, collection_id, data }: Props) {
     }
   );
 
+  const [sortBy, setSortBy] = useState<"order" | "name">("order");
+
   const table = useReactTable({
     data: datasets || [],
     columns,
@@ -149,6 +151,32 @@ export default function Datasets({ limit, collection_id, data }: Props) {
         </p>
       ) : (
         <div className="p-2">
+          {collection_id && (
+            <div className="flex justify-end items-center text-sm gap-2">
+              <span>Sort by:</span>
+              <span
+                className={
+                  sortBy === "order"
+                    ? "border-b border-gray-500"
+                    : "cursor-pointer"
+                }
+                onClick={() => setSortBy("order")}
+              >
+                Dictionary order
+              </span>
+              <span>|</span>
+              <span
+                className={
+                  sortBy === "name"
+                    ? "border-b border-gray-500"
+                    : "cursor-pointer"
+                }
+                onClick={() => setSortBy("name")}
+              >
+                Name
+              </span>
+            </div>
+          )}
           <table className="w-full text-left table-fixed">
             <TableHeader table={table} />
             <tbody>
@@ -165,22 +193,35 @@ export default function Datasets({ limit, collection_id, data }: Props) {
               ) : (
                 <>
                   {/* TODO: move this to a component also */}
-                  {table.getRowModel().rows.map((row) => (
-                    <tr
-                      key={row.id}
-                      className="border-b text-sm hover:bg-gray-50 cursor-pointer"
-                      onClick={() => viewDataset(row.original)}
-                    >
-                      {row.getVisibleCells().map((cell) => (
-                        <td key={cell.id} className="py-1">
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      ))}
-                    </tr>
-                  ))}
+                  {table
+                    .getRowModel()
+                    .rows.sort((r1, r2) => {
+                      if (sortBy === "order")
+                        return r1.original.dd_order - r2.original.dd_order;
+                      const r1_name =
+                        r1.original.dataset_name || r1.original.dataset_id;
+                      const r2_name =
+                        r2.original.dataset_name || r2.original.dataset_id;
+                      return r1_name.localeCompare(r2_name, undefined, {
+                        sensitivity: "base",
+                      });
+                    })
+                    .map((row) => (
+                      <tr
+                        key={row.id}
+                        className="border-b text-sm hover:bg-gray-50 cursor-pointer"
+                        onClick={() => viewDataset(row.original)}
+                      >
+                        {row.getVisibleCells().map((cell) => (
+                          <td key={cell.id} className="py-1">
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        ))}
+                      </tr>
+                    ))}
                 </>
               )}
             </tbody>

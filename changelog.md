@@ -14,6 +14,7 @@ Other changes in the interface:
 - use regex to match date/time-stamped datasets, and store a list of versions to display
 - dynamically fetch the list of available refreshes
 - display codes and values, where available
+- store dictionary order of datasets and variables in collections and datasets, respectively, and allow users to choose between order or name order
 
 # version 0.3.0
 

@@ -70,6 +70,7 @@ export default function Variables({ limit, dataset_id, data }: Props) {
   const [pageCount, setPageCount] = useState(0);
 
   const [placeholder, setPlaceholder] = useState(data);
+  const [sortBy, setSortBy] = useState<"order" | "name">("order");
 
   const {
     data: varData,
@@ -83,6 +84,7 @@ export default function Variables({ limit, dataset_id, data }: Props) {
       limit: limit,
       page: pageIndex + 1,
       dataset_id,
+      sort: sortBy,
     },
     {
       placeholderData: placeholder,
@@ -184,6 +186,32 @@ export default function Variables({ limit, dataset_id, data }: Props) {
         </p>
       ) : (
         <div className="p-2">
+          {dataset_id && (
+            <div className="flex justify-end items-center text-sm gap-2">
+              <span>Sort by:</span>
+              <span
+                className={
+                  sortBy === "order"
+                    ? "border-b border-gray-500"
+                    : "cursor-pointer"
+                }
+                onClick={() => setSortBy("order")}
+              >
+                Dictionary order
+              </span>
+              <span>|</span>
+              <span
+                className={
+                  sortBy === "name"
+                    ? "border-b border-gray-500"
+                    : "cursor-pointer"
+                }
+                onClick={() => setSortBy("name")}
+              >
+                Name
+              </span>
+            </div>
+          )}
           <table className="w-full text-left table-fixed">
             <TableHeader table={table} />
             <tbody>

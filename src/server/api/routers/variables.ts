@@ -15,6 +15,7 @@ export const variablesRouter = createTRPCRouter({
         limit: z.number().optional(),
         page: z.number().optional(),
         dataset_id: z.string().optional(),
+        sort: z.enum(["order", "name"]).default("order"),
       })
     )
     .query(async ({ ctx, input }) => {
@@ -102,19 +103,17 @@ export const variablesRouter = createTRPCRouter({
           description: true,
         },
         orderBy: input.dataset_id
-          ? [
-              {
-                dataset: {
-                  collection_id: "asc",
+          ? input.sort === "name"
+            ? [
+                {
+                  variable_name: "asc",
                 },
-              },
-              {
-                dataset: {
+              ]
+            : [
+                {
                   dd_order: "asc",
                 },
-              },
-              { dd_order: "asc" },
-            ]
+              ]
           : undefined,
       });
 
