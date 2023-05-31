@@ -138,7 +138,8 @@ suppressMessages({
                     mutate(
                         collection_name = col,
                         dataset_id =
-                            gsub("\\[|\\]", "", tables$idi.table.name)
+                            gsub("\\[|\\]", "", tables$idi.table.name),
+                        dd_order = seq_len(n())
                     ),
                 codes = codes
             )
@@ -201,7 +202,7 @@ datasets <- suppressMessages(
             dataset_name = gsub("*", "", dataset_name, fixed = TRUE),
             dataset_id = gsub("^\\[?IDI\\_Adhoc\\]?\\.", "", dataset_id)
         ) |>
-        select(dataset_id, dataset_name, collection_name, description, reference_period) |>
+        select(dataset_id, dataset_name, collection_name, dd_order, description, reference_period) |>
         mutate(dataset_id = stringr::str_trim(tolower(dataset_id)))
 )
 
@@ -277,12 +278,16 @@ variables <- sheets |>
         }
 
         x |>
-            mutate(size = as.integer(size)) |>
+            mutate(
+                size = as.integer(size),
+                dd_order = seq_len(n())
+            ) |>
             select(
                 any_of(
                     c(
                         "schema", "variable_id", "variable_name", "type",
-                        "size", "description", "information", "primary_key"
+                        "size", "description", "information", "primary_key",
+                        "dd_order"
                     )
                 )
             )
@@ -305,21 +310,23 @@ variables <- variables |>
         )
     ) |>
     select(
-        variable_id, variable_name, dataset_id, database_id, description, information,
-        primary_key, type, size
+        variable_id, variable_name, dataset_id, database_id,
+        description, information, primary_key, type, size, dd_order
     ) |>
     mutate(
         variable_id = stringr::str_trim(tolower(variable_id)),
         dataset_id = stringr::str_trim(tolower(dataset_id))
     ) |>
-    distinct()
+    distinct(variable_id, variable_name, dataset_id, database_id,
+        description, information, primary_key, type, size,
+        .keep_all = TRUE)
 
 vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
     tolower() |>
     table()
 if (any(vid_tab > 1L)) {
     cli::cli_alert_danger("Duplicate variable-dataset IDs")
-    cli::cli_ul(vid[vid > 1L])
+    cli::cli_ul(vid_tab[vid_tab > 1L])
     stop("Duplicate IDs")
 }
 
@@ -378,7 +385,8 @@ all_variables <- variables |>
     ) |>
     mutate(
         database_id = ifelse(grepl("Adhoc", refreshes), "Adhoc", "Clean")
-    )
+    ) |>
+    mutate(dd_order = ifelse(is.na(dd_order), 0, dd_order))
 
 if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
     stop("Duplicate variables (after join)")
@@ -413,6 +421,9 @@ datasets <- datasets |>
     right_join(
         all_variables |> select(dataset_id, database_id) |> distinct(),
         by = "dataset_id"
+    ) |>
+    mutate(
+        dd_order = ifelse(is.na(dd_order), 0, dd_order),
     )
 
 cli::cli_progress_step("Merging collections")
@@ -451,7 +462,7 @@ datasets <- datasets |>
     left_join(collections |> select(collection_name, collection_id),
         by = "collection_name"
     ) |>
-    select(dataset_id, dataset_name, collection_id, description, reference_period)
+    select(dataset_id, dataset_name, collection_id, dd_order, description, reference_period)
 
 # add datasets from all_variables missing:
 datasets <- datasets |>
@@ -588,12 +599,13 @@ missing_collection_datasets <- datasets |>
         dataset_id = dataset_id.x,
         collection_id = collection_id.x
     ) |>
-    select(dataset_id, dataset_name, collection_id, description, reference_period) |>
+    select(dataset_id, dataset_name, collection_id, dd_order, description, reference_period) |>
     mutate(
         dataset_name = ifelse(is.na(dataset_name),
             gsub(".+\\.", "", dataset_id),
             dataset_name
-        )
+        ),
+        dd_order = ifelse(is.na(dd_order), 0, dd_order)
     )
 
 cli::cli_progress_step("Adding missing datasets and collections")

@@ -37,6 +37,8 @@ model datasets {
     dataset_id       String       @id
     dataset_name     String?
     collection_id    String?
+    // order of dataset in data dictionary
+    dd_order         Int          @default(0)
     description      String?      @db.LongText
     reference_period String?
     collection       collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
@@ -54,6 +56,8 @@ model variables {
     variable_id   String
     variable_name String?
     dataset_id    String
+    // order of variable in data dictionary
+    dd_order      Int      @default(0)
     description   String?  @db.LongText
     information   String?  @db.LongText
     primary_key   Boolean?

@@ -46,11 +46,12 @@ write_tables <- function() {
         dbExecute(
             con,
             paste(
-                "INSERT INTO datasets VALUES",
+                "INSERT INTO datasets (dataset_id, dataset_name, collection_id, dd_order, description, reference_period)",
+                "VALUES",
                 glue::glue_sql_collapse(
                     with(
                         datasets,
-                        glue::glue_sql("({dataset_id}, {dataset_name}, {collection_id}, {description}, {reference_period})", .con = con)
+                        glue::glue_sql("({dataset_id}, {dataset_name}, {collection_id}, {dd_order}, {description}, {reference_period})", .con = con)
                     ),
                     ", "
                 )
@@ -72,11 +73,12 @@ write_tables <- function() {
         dbExecute(
             con,
             paste(
-                "INSERT INTO variables VALUES",
+                "INSERT INTO variables (variable_id, variable_name, dataset_id, dd_order, description, information, primary_key, type, size, refreshes)",
+                "VALUES",
                 glue::glue_sql_collapse(
                     with(
                         variables[ii, ],
-                        glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
+                        glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {dd_order}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
                     ),
                     ", "
                 )
