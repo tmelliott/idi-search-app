@@ -98,8 +98,24 @@ export const variablesRouter = createTRPCRouter({
               },
             },
           },
+          dd_order: true,
           description: true,
         },
+        orderBy: input.dataset_id
+          ? [
+              {
+                dataset: {
+                  collection_id: "asc",
+                },
+              },
+              {
+                dataset: {
+                  dd_order: "asc",
+                },
+              },
+              { dd_order: "asc" },
+            ]
+          : undefined,
       });
 
       return {

@@ -59,8 +59,21 @@ export const datasetsRouter = createTRPCRouter({
               },
             },
           },
+          dd_order: true,
           description: true,
         },
+        orderBy: input.collection_id
+          ? [
+              {
+                collection: {
+                  collection_name: "asc",
+                },
+              },
+              {
+                dd_order: "asc",
+              },
+            ]
+          : undefined,
       });
     }),
   get: publicProcedure
