@@ -71,6 +71,11 @@ link_refresh_data <- function() {
         ) |>
         distinct()
 
+    # Delete datasets in 'to_delete.yaml'
+    to_delete <- yaml::read_yaml("data/to_delete.yaml")
+    all_vars <- all_vars |>
+        filter(!dataset_id %in% to_delete$datasets)
+
     ## fix up duplicates
     cli::cli_progress_step("Removing duplicates")
     all_vars <- all_vars |>

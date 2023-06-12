@@ -108,12 +108,15 @@ suppressMessages({
 
             # is there a 'Codes & Values' sheet?
             sheet_names <- readxl::excel_sheets(file)
-            has_codes <- stringr::str_detect(tolower(sheet_names),
-                "codes.+values")
+            has_codes <- stringr::str_detect(
+                tolower(sheet_names),
+                "codes.+values"
+            )
             codes <- NULL
             if (sum(has_codes) == 1) {
                 codes <- readxl::read_excel(file,
-                    sheet = sheet_names[has_codes])
+                    sheet = sheet_names[has_codes]
+                )
                 code_cols <- tolower(colnames(codes))
                 variable_col <- grep("variable.+name", code_cols)[1]
                 code_col <- which(grepl("code", code_cols) &
@@ -319,7 +322,8 @@ variables <- variables |>
     ) |>
     distinct(variable_id, variable_name, dataset_id, database_id,
         description, information, primary_key, type, size,
-        .keep_all = TRUE)
+        .keep_all = TRUE
+    )
 
 vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
     tolower() |>
@@ -360,7 +364,7 @@ regex_matches <-
 
 ## REFRESH variables and their REGEX matched dictionary
 regex_matched_datasets <- apply(regex_matches, 1L, \(x) {
-    refresh_vars[grep(x[["regex_name"]], refresh_vars$dataset_id),] |>
+    refresh_vars[grep(x[["regex_name"]], refresh_vars$dataset_id), ] |>
         mutate(
             dd_dataset_id = x[["dd_name"]]
         ) |>
@@ -394,8 +398,9 @@ if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> tab
 
 ## some instances of datasets with different types across versions
 most_common <- function(x) {
-    if (length(unique(x)) == 1)
+    if (length(unique(x)) == 1) {
         return(unique(x))
+    }
 
     names(sort(table(x), decreasing = TRUE))[1]
 }
@@ -706,7 +711,8 @@ readr::write_csv(match_variables, "data/out/variable_matches.csv")
 readr::write_csv(match_tables, "data/out/table_matches.csv")
 readr::write_csv(
     regex_matched_datasets |> setNames(c("dataset_id", "dataset_id_regex")),
-    "data/out/datasets_regex.csv")
+    "data/out/datasets_regex.csv"
+)
 readr::write_csv(codes, "data/out/code_values.csv", quote = "all")
 
 cli::cli_progress_done()
