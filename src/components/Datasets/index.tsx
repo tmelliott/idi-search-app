@@ -14,6 +14,7 @@ import {
 import { type ArrayElement } from "~/types/types";
 import { api, type RouterOutputs } from "~/utils/api";
 
+import Download from "../Download";
 import {
   PlaceholderRows,
   TableCell,
@@ -135,12 +136,13 @@ export default function Datasets({ limit, collection_id, data }: Props) {
 
   return (
     <section>
-      <h3>
+      <h3 className="flex justify-between">
         <TitleLink href={collection_id ? "" : "/datasets"}>
           Datasets
           {collection_id && <> in this collection</>}
           {datasets && fetchStatus === "idle" && <> ({datasets.length})</>}
         </TitleLink>
+        {datasets && <Download data={datasets} />}
       </h3>
 
       {status === "error" ? (

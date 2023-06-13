@@ -14,6 +14,7 @@ import {
 import { type ArrayElement } from "~/types/types";
 import { api, type RouterOutputs } from "~/utils/api";
 
+import Download from "../Download";
 import {
   PlaceholderRows,
   TableCell,
@@ -121,7 +122,7 @@ export default function Collections({ limit, agency_id, data }: Props) {
 
   return (
     <section>
-      <h3>
+      <h3 className="flex justify-between">
         <TitleLink href={agency_id ? "" : "/collections"}>
           Collections
           {agency_id && <> by this agency</>}
@@ -129,6 +130,7 @@ export default function Collections({ limit, agency_id, data }: Props) {
             <> ({collections.length})</>
           )}
         </TitleLink>
+        {collections && <Download data={collections} />}
       </h3>
 
       {status === "error" ? (

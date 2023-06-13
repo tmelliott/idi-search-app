@@ -15,6 +15,7 @@ Other changes in the interface:
 - dynamically fetch the list of available refreshes
 - display codes and values, where available
 - store dictionary order of datasets and variables in collections and datasets, respectively, and allow users to choose between order or name order
+- download results now per-group, so both CSV and JSON can be downloaded from any page listing them
 
 # version 0.3.0
 

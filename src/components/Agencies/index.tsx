@@ -14,6 +14,7 @@ import {
 } from "@tanstack/react-table";
 import { api } from "~/utils/api";
 
+import Download from "../Download";
 import {
   PlaceholderRows,
   TableCell,
@@ -109,11 +110,13 @@ export default function Agencies({ limit, data }: Props) {
 
   return (
     <section>
-      <h3>
+      <h3 className="flex justify-between">
         <TitleLink href="/agencies">
           Data Supply Agencies
           {agencies && fetchStatus === "idle" && <> ({agencies.length})</>}
         </TitleLink>
+
+        {agencies && <Download data={agencies} />}
       </h3>
 
       {status === "error" ? (
