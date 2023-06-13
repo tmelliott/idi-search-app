@@ -84,7 +84,6 @@ export const getStaticProps = async () => {
       variableStats,
       dbStats,
     },
-    revalidate: 600,
   };
 };
 
