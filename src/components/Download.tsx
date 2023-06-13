@@ -1,5 +1,5 @@
 import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
-import { agencies } from "@prisma/client";
+import { type agencies } from "@prisma/client";
 import { type ArrayElement } from "~/types/types";
 import { type RouterOutputs } from "~/utils/api";
 
@@ -10,13 +10,19 @@ type DownloadType = {
   data: agencies[] | Collection[] | Dataset[] | "variables";
 };
 
-function isAgencies(data: any): data is agencies[] {
+function isAgencies(data: DownloadType["data"]): data is agencies[] {
+  if (typeof data === "string") return false;
+  if (!data[0]) return false;
   return data[0].hasOwnProperty("agency_id");
 }
-function isCollections(data: any): data is Collection[] {
+function isCollections(data: DownloadType["data"]): data is Collection[] {
+  if (typeof data === "string") return false;
+  if (!data[0]) return false;
   return data[0].hasOwnProperty("collection_id");
 }
-function isDatasets(data: any): data is Dataset[] {
+function isDatasets(data: DownloadType["data"]): data is Dataset[] {
+  if (typeof data === "string") return false;
+  if (!data[0]) return false;
   return data[0].hasOwnProperty("dataset_id");
 }
 
@@ -35,14 +41,14 @@ const Download = ({ data }: DownloadType) => {
       return;
     }
 
-    if (!data[0]) return;
-
     // if data is an agencies array
     if (isAgencies(data)) {
       name = "agencies";
       headers = ["agency_id", "agency_name"];
       rows = data.map((d) => [d.agency_id, d.agency_name || ""]);
-    } else if (isCollections(data)) {
+    }
+
+    if (isCollections(data)) {
       name = "collections";
       headers = [
         "collection_id",
@@ -56,7 +62,9 @@ const Download = ({ data }: DownloadType) => {
         d.description ? '"' + d.description + '"' : "",
         d.agency?.agency_name || "",
       ]);
-    } else if (isDatasets(data)) {
+    }
+
+    if (isDatasets(data)) {
       name = "datasets";
       headers = [
         "dataset_id",
@@ -72,9 +80,9 @@ const Download = ({ data }: DownloadType) => {
         d.collection?.agency?.agency_name || "",
         d.description ? '"' + d.description + '"' : "",
       ]);
-    } else {
-      return;
     }
+
+    if (!headers.length || !rows.length) return;
 
     const csvData = rows.map((row) => {
       return row.join(",");
