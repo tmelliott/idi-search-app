@@ -1,13 +1,22 @@
-import { CloudArrowDownIcon } from "@heroicons/react/24/outline";
+import { useEffect, useRef, useState } from "react";
+
+import { CloudArrowDownIcon, Cog6ToothIcon } from "@heroicons/react/24/outline";
 import { type agencies } from "@prisma/client";
 import { type ArrayElement } from "~/types/types";
-import { type RouterOutputs } from "~/utils/api";
+import { api, type RouterOutputs } from "~/utils/api";
 
 type Collection = ArrayElement<RouterOutputs["collections"]["all"]>;
 type Dataset = ArrayElement<RouterOutputs["datasets"]["all"]>;
 
 type DownloadType = {
   data: agencies[] | Collection[] | Dataset[] | "variables";
+  query?: {
+    term: string | undefined;
+    include: string;
+    exact: boolean;
+    dataset_id: string | undefined;
+    sort: "name" | "order";
+  };
 };
 
 function isAgencies(data: DownloadType["data"]): data is agencies[] {
@@ -25,20 +34,70 @@ function isDatasets(data: DownloadType["data"]): data is Dataset[] {
   if (!data[0]) return false;
   return data[0].hasOwnProperty("dataset_id");
 }
+function isVariables(data: DownloadType["data"]): data is "variables" {
+  return data === "variables";
+}
 
-const Download = ({ data }: DownloadType) => {
-  if (data === "variables") {
-    return <>(not ready)</>;
+const Download = ({ data, query }: DownloadType) => {
+  const [downloading, setDownloading] = useState(false);
+
+  const {
+    data: varData,
+    status,
+    fetchStatus,
+    refetch,
+  } = api.variables.all.useQuery(
+    {
+      term: query?.dataset_id ? undefined : query?.term,
+      include: query?.include,
+      exact: query?.exact,
+      dataset_id: query?.dataset_id,
+      sort: query?.sort,
+    },
+    {
+      enabled: false,
+    }
+  );
+  const state =
+    useRef<(value: string | PromiseLike<string>) => void | undefined>();
+
+  useEffect(() => {
+    if (!state.current) return;
+    if (status === "success" && fetchStatus === "idle") {
+      void state.current("success");
+      state.current = undefined;
+    } else if (status === "error") {
+      state.current(Promise.reject(new Error("failure")));
+      state.current = undefined;
+    }
+  }, [status, fetchStatus]);
+
+  function getVariableData(): Promise<string> {
+    return new Promise<string>((resolve) => {
+      state.current = resolve;
+      void refetch();
+    });
   }
 
-  const downloadCsv = () => {
+  const downloadCsv = async () => {
+    setDownloading(true);
+
     let headers: string[] = [];
     let rows: string[][] = [];
     let name = "";
 
-    if (typeof data === "string" && data === "variables") {
-      name = "variables";
-      return;
+    if (isVariables(data)) {
+      await getVariableData();
+      if (varData && varData.variables && varData.variables.length) {
+        name = "variables";
+        headers = ["variable_id", "variable_name", "dataset_id", "description"];
+        rows = varData.variables.map((d) => [
+          d.variable_id,
+          d.variable_name || "",
+          d.dataset_id,
+          d.description ? '"' + d.description + '"' : "",
+        ]);
+      }
     }
 
     // if data is an agencies array
@@ -93,12 +152,21 @@ const Download = ({ data }: DownloadType) => {
       fileName: `idi-search-results-${name}.csv`,
       fileType: "text/csv",
     });
+    setDownloading(false);
   };
 
-  const downloadJson = () => {
-    let name = "";
-    if (typeof data === "string" && data === "variables") {
-      name = "variables";
+  const downloadJson = async () => {
+    setDownloading(true);
+    let name = "",
+      dataString = "";
+    if (isVariables(data)) {
+      await getVariableData();
+      if (varData && varData.variables && varData.variables.length) {
+        name = "variables";
+        dataString = JSON.stringify(varData.variables);
+      }
+    } else {
+      dataString = JSON.stringify(data);
     }
     if (isAgencies(data)) {
       name = "agencies";
@@ -111,21 +179,28 @@ const Download = ({ data }: DownloadType) => {
     }
 
     downloadFile({
-      data: JSON.stringify(data),
+      data: dataString,
       fileName: `idi-search-results-${name}.json`,
       fileType: "text/json",
     });
+    setDownloading(false);
   };
 
   return (
     <div className="flex items-center gap-2 text-xs mr-4">
-      <CloudArrowDownIcon className="w-4 h-4" />
-      <span onClick={downloadCsv} className="cursor-pointer">
-        CSV
-      </span>
-      <span onClick={downloadJson} className="cursor-pointer">
-        JSON
-      </span>
+      {downloading ? (
+        <Cog6ToothIcon className="w-4 h-4 animate-spin" />
+      ) : (
+        <>
+          <CloudArrowDownIcon className="w-4 h-4" />
+          <span onClick={() => void downloadCsv()} className="cursor-pointer">
+            CSV
+          </span>
+          <span onClick={() => void downloadJson()} className="cursor-pointer">
+            JSON
+          </span>
+        </>
+      )}
     </div>
   );
 };

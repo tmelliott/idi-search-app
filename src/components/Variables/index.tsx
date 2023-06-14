@@ -14,6 +14,7 @@ import {
 import { type ArrayElement } from "~/types/types";
 import { api, type RouterOutputs } from "~/utils/api";
 
+import Download from "../Download";
 import {
   PlaceholderRows,
   TableCell,
@@ -170,12 +171,24 @@ export default function Variables({ limit, dataset_id, data }: Props) {
 
   return (
     <section>
-      <h3>
+      <h3 className="flex justify-between">
         <TitleLink href={dataset_id ? "" : "/variables"}>
           Variables
           {dataset_id && <> in this dataset</>}
           {variables && <> ({nVariables})</>}
         </TitleLink>
+        {nVariables && nVariables < 1000 && (
+          <Download
+            data="variables"
+            query={{
+              term: dataset_id ? undefined : (query.s as string),
+              include: query.include as string,
+              exact: query.exact === "true",
+              dataset_id,
+              sort: sortBy,
+            }}
+          />
+        )}
       </h3>
 
       {status === "error" ? (
