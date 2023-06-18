@@ -7,6 +7,7 @@ import Agency from "~/components/Agencies/Agency";
 import Collection from "~/components/Collections/Collection";
 import Config from "~/components/Config";
 import Dataset from "~/components/Datasets/Dataset";
+import LandingPage from "~/components/Landing";
 import Variable from "~/components/Variables/Variable";
 
 import MainLayout from "./MainLayout";
@@ -14,10 +15,12 @@ import MainLayout from "./MainLayout";
 const DualLayout = ({ children }: PropsWithChildren) => {
   const router = useRouter();
   const [info, setInfo] = useState(false);
+  const [landing, setLanding] = useState(false);
 
   useEffect(() => {
     const { v } = router.query;
     setInfo(v ? true : false);
+    setLanding(!v && router.pathname === "/");
   }, [router.query]);
 
   return (
@@ -35,6 +38,12 @@ const DualLayout = ({ children }: PropsWithChildren) => {
             {children}
           </div>
 
+          {landing && (
+            <div className="absolute w-1/2 right-0 p-4 hidden md:block">
+              <LandingPage />
+            </div>
+          )}
+
           <div
             className={`flex-1 p-4 shadow-md bg-gray-50 overflow-x-hidden ${
               info ? "opacity-100 translate-x-0" : "opacity-0 translate-x-full"
@@ -46,7 +55,17 @@ const DualLayout = ({ children }: PropsWithChildren) => {
                 <div className="flex flex-row justify-end w-full">
                   <div
                     className="flex flex-row text-xs items-center cursor-pointer hover:opacity-70"
-                    onClick={() => setInfo(false)}
+                    onClick={() => {
+                      const { v, id, d_id, ...rest } = router.query;
+                      router.push(
+                        {
+                          pathname: router.pathname,
+                          query: rest,
+                        },
+                        undefined,
+                        { shallow: true }
+                      );
+                    }}
                   >
                     Close
                     <XCircleIcon className="h-6 ml-2" />

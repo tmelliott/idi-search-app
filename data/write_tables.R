@@ -164,6 +164,22 @@ write_tables <- function() {
         setTxtProgressBar(pb, i)
     }
     close(pb)
+
+    # figure out latest refresh
+    vs <- unique(do.call(c, strsplit(variables$refreshes, ",")))
+    vs <- suppressWarnings(as.integer(substr(vs, 1, 6)))
+    vs <- vs[!is.na(vs)]
+    db_date <- format(as.Date(as.character(max(vs)), "%Y%M"), "%B %Y")
+
+    ## insert or update db info
+    dbExecute(
+        con,
+        paste(
+            "INSERT INTO db_info (id, db_updated, db_refresh)",
+            glue::glue_sql("VALUES (1, NOW(), {db_date})", .con = con),
+            "ON DUPLICATE KEY UPDATE db_updated = VALUES(db_updated), db_refresh = VALUES(db_refresh)"
+        )
+    )
 }
 
 write_tables()

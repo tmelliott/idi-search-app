@@ -122,3 +122,9 @@ model temp {
     id    Int    @id @default(autoincrement())
     value String
 }
+
+model db_info {
+    id         Int      @id
+    db_updated DateTime @updatedAt
+    db_refresh String
+}
