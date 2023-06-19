@@ -46,8 +46,7 @@ link_refresh_data <- function() {
                     select(
                         TABLE_CATALOG, TABLE_SCHEMA, TABLE_NAME,
                         COLUMN_NAME, DATA_TYPE
-                    ) |>
-                    dplyr::filter(TABLE_CATALOG != "TABLE_CATALOG")
+                    )
             }) |>
                 bind_rows()
         })
@@ -71,6 +70,11 @@ link_refresh_data <- function() {
             dataset_id = stringr::str_trim(tolower(dataset_id))
         ) |>
         distinct()
+
+    # Delete datasets in 'to_delete.yaml'
+    to_delete <- yaml::read_yaml("data/to_delete.yaml")
+    all_vars <- all_vars |>
+        filter(!dataset_id %in% to_delete$datasets)
 
     ## fix up duplicates
     cli::cli_progress_step("Removing duplicates")

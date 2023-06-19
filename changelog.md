@@ -1,11 +1,21 @@
-# version 0.4.0
+# version 1.0.0
 
-**Updated 22 March 2023**
+This is a major release, featuring a refactored app using Typescript and TRPC. This should reduce bugs and make future development significantly easier.
 
-- Adds March 2023 refresh data, plus some more dictionaries
-- Add export functionality (JSON or CSV format) - found under the search bar, far-right
-- On 'linking variables', display the number of links, and move (expanded) information to a tooltip
-- Add search options: exact search to make it easier to find specific variables/terms
+Updated with June 2023 refresh data.
+
+Other changes in the interface:
+
+- add export functionality (JSON or CSV format)
+- on 'linking variables', display the number of links, and move (expanded) information to a tooltip
+- Search changes:
+  - the default search is now an unmodified 'SQL Fulltext Search', so multiple words are searched using 'AND' unless modifiers are used (e.g., search +all +words, or this -not -that)
+  - add search options: exact search
+- use regex to match date/time-stamped datasets, and store a list of versions to display
+- dynamically fetch the list of available refreshes
+- display codes and values, where available
+- store dictionary order of datasets and variables in collections and datasets, respectively, and allow users to choose between order or name order
+- download results now per-group, so both CSV and JSON can be downloaded from any page listing them
 
 # version 0.3.0
 

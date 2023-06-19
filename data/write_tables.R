@@ -46,11 +46,12 @@ write_tables <- function() {
         dbExecute(
             con,
             paste(
-                "INSERT INTO datasets VALUES",
+                "INSERT INTO datasets (dataset_id, dataset_name, collection_id, dd_order, description, reference_period)",
+                "VALUES",
                 glue::glue_sql_collapse(
                     with(
                         datasets,
-                        glue::glue_sql("({dataset_id}, {dataset_name}, {collection_id}, {description}, {reference_period})", .con = con)
+                        glue::glue_sql("({dataset_id}, {dataset_name}, {collection_id}, {dd_order}, {description}, {reference_period})", .con = con)
                     ),
                     ", "
                 )
@@ -67,22 +68,23 @@ write_tables <- function() {
     N <- ceiling(nrow(variables) / n)
     pb <- txtProgressBar(max = N, style = 3L)
     for (i in 1:N) {
-        setTxtProgressBar(pb, i)
         ii <- 1:n + n * (i - 1)
         ii <- ii[ii <= nrow(variables)]
         dbExecute(
             con,
             paste(
-                "INSERT INTO variables VALUES",
+                "INSERT INTO variables (variable_id, variable_name, dataset_id, dd_order, description, information, primary_key, type, size, refreshes)",
+                "VALUES",
                 glue::glue_sql_collapse(
                     with(
                         variables[ii, ],
-                        glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
+                        glue::glue_sql("({variable_id}, {variable_name}, {dataset_id}, {dd_order}, {description}, {information}, {primary_key}, {type}, {size}, {refreshes})", .con = con)
                     ),
                     ", "
                 )
             )
         )
+        setTxtProgressBar(pb, i)
     }
     close(pb)
 
@@ -119,7 +121,65 @@ write_tables <- function() {
                 )
             )
         )
+
+        dataset_regex <- readr::read_csv("data/out/datasets_regex.csv")
+        dbExecute(con, "DELETE FROM datasets_regex;")
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO datasets_regex VALUES",
+                glue::glue_sql_collapse(
+                    with(
+                        dataset_regex,
+                        glue::glue_sql("({dataset_id}, {dataset_id_regex})", .con = con)
+                    ),
+                    ", "
+                )
+            )
+        )
     })
+
+    code_values <- readr::read_csv("data/out/code_values.csv")
+    dbExecute(con, "DELETE FROM code_values;")
+    dbExecute(con, "ALTER TABLE code_values AUTO_INCREMENT = 1;")
+    n <- 5000
+    N <- ceiling(nrow(code_values) / n)
+    pb <- txtProgressBar(max = N, style = 3L)
+    for (i in 1:N) {
+        ii <- 1:n + n * (i - 1)
+        ii <- ii[ii <= nrow(code_values)]
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO code_values (variable_id, code, label) VALUES ",
+                glue::glue_sql_collapse(
+                    with(
+                        code_values[ii, ],
+                        glue::glue_sql("({variable_id}, {code}, {label})", .con = con)
+                    ),
+                    ", "
+                )
+            )
+        )
+        setTxtProgressBar(pb, i)
+    }
+    close(pb)
+
+    # figure out latest refresh
+    vs <- unique(do.call(c, strsplit(variables$refreshes, ",")))
+    vs <- suppressWarnings(as.integer(substr(vs, 1, 6)))
+    vs <- vs[!is.na(vs)]
+    db_date <- format(as.Date(as.character(max(vs)), "%Y%M"), "%B %Y")
+
+    ## insert or update db info
+    dbExecute(
+        con,
+        paste(
+            "INSERT INTO db_info (id, db_updated, db_refresh)",
+            glue::glue_sql("VALUES (1, NOW(), {db_date})", .con = con),
+            "ON DUPLICATE KEY UPDATE db_updated = VALUES(db_updated), db_refresh = VALUES(db_refresh)"
+        )
+    )
 }
 
 write_tables()

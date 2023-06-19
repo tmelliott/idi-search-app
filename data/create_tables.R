@@ -85,9 +85,9 @@ fixTableNames <- function(names) {
 cli::cli_progress_step("Processing dictionaries")
 suppressMessages({
     collection_tables <- files |>
-        lapply(\(x) {
+        lapply(\(file) {
             # cat("\r* Processing dictionary", x, "...")
-            x <- readxl::read_excel(x, sheet = "Index")
+            x <- readxl::read_excel(file, sheet = "Index")
             di <- grep("Dataset Name", x$Index)
             dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
             tables <- x[(di + 1):dj, ]
@@ -105,6 +105,31 @@ suppressMessages({
             }
             tables <- tables[!is.na(tables[[3]]), ]
             colnames(tables) <- fixTableNames(colnames(tables))
+
+            # is there a 'Codes & Values' sheet?
+            sheet_names <- readxl::excel_sheets(file)
+            has_codes <- stringr::str_detect(
+                tolower(sheet_names),
+                "codes.+values"
+            )
+            codes <- NULL
+            if (sum(has_codes) == 1) {
+                codes <- readxl::read_excel(file,
+                    sheet = sheet_names[has_codes]
+                )
+                code_cols <- tolower(colnames(codes))
+                variable_col <- grep("variable.+name", code_cols)[1]
+                code_col <- which(grepl("code", code_cols) &
+                    !grepl("label", code_cols))[1]
+                label_col <- grep("label", code_cols)[1]
+
+                codes <- tibble::tibble(
+                    variable_id = tolower(trimws(codes[[variable_col]])),
+                    code = tolower(trimws(codes[[code_col]])),
+                    label = tolower(trimws(codes[[label_col]]))
+                )
+            }
+
             list(
                 collection = tibble(
                     collection_schema = schema[2],
@@ -116,8 +141,10 @@ suppressMessages({
                     mutate(
                         collection_name = col,
                         dataset_id =
-                            gsub("\\[|\\]", "", tables$idi.table.name)
-                    )
+                            gsub("\\[|\\]", "", tables$idi.table.name),
+                        dd_order = seq_len(n())
+                    ),
+                codes = codes
             )
         })
 })
@@ -160,7 +187,7 @@ if (any(table(collections$collection_name) > 1L)) {
     tbl <- table(collections$collection_name)
     tbl <- tbl[tbl > 1L]
     cli::cli_alert_danger("Bad collection names")
-    cli::cli_ul(names(tbl[tbl > 1L]))
+    cli::cli_ul(tbl[tbl > 1L])
     stop()
 }
 
@@ -178,7 +205,7 @@ datasets <- suppressMessages(
             dataset_name = gsub("*", "", dataset_name, fixed = TRUE),
             dataset_id = gsub("^\\[?IDI\\_Adhoc\\]?\\.", "", dataset_id)
         ) |>
-        select(dataset_id, dataset_name, collection_name, description, reference_period) |>
+        select(dataset_id, dataset_name, collection_name, dd_order, description, reference_period) |>
         mutate(dataset_id = stringr::str_trim(tolower(dataset_id)))
 )
 
@@ -206,10 +233,18 @@ if (any(dup_ids > 1L)) {
             )
         )
     )
-    dn <- names(dup_ids[dup_ids > 1])
-    cli::cli_ul(dn)
+    cli::cli_ul(dup_ids[dup_ids > 1])
     stop()
 }
+
+cli::cli_progress_step("Extracing codes and values")
+codes <- map(collection_tables, "codes") |>
+    bind_rows() |>
+    mutate(
+        variable_id = str_replace_all(variable_id, "\\[|\\]", "")
+    ) |>
+    filter(!is.na(code) & !is.na(label))
+
 
 repair_colnames <- function(x, expr, name) {
     if (any(grepl(expr, x))) x[grep(expr, x)] <- name
@@ -246,12 +281,16 @@ variables <- sheets |>
         }
 
         x |>
-            mutate(size = as.integer(size)) |>
+            mutate(
+                size = as.integer(size),
+                dd_order = seq_len(n())
+            ) |>
             select(
                 any_of(
                     c(
                         "schema", "variable_id", "variable_name", "type",
-                        "size", "description", "information", "primary_key"
+                        "size", "description", "information", "primary_key",
+                        "dd_order"
                     )
                 )
             )
@@ -274,21 +313,24 @@ variables <- variables |>
         )
     ) |>
     select(
-        variable_id, variable_name, dataset_id, database_id, description, information,
-        primary_key, type, size
+        variable_id, variable_name, dataset_id, database_id,
+        description, information, primary_key, type, size, dd_order
     ) |>
     mutate(
         variable_id = stringr::str_trim(tolower(variable_id)),
         dataset_id = stringr::str_trim(tolower(dataset_id))
     ) |>
-    distinct()
+    distinct(variable_id, variable_name, dataset_id, database_id,
+        description, information, primary_key, type, size,
+        .keep_all = TRUE
+    )
 
 vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
     tolower() |>
     table()
 if (any(vid_tab > 1L)) {
     cli::cli_alert_danger("Duplicate variable-dataset IDs")
-    cli::cli_ul(vid[vid > 1L])
+    cli::cli_ul(vid_tab[vid_tab > 1L])
     stop("Duplicate IDs")
 }
 
@@ -302,6 +344,34 @@ cli::cli_h1("Loading IDI variable lists")
 cli::cli_progress_step("Loading")
 source("data/link_refresh_data.R")
 refresh_vars <- link_refresh_data()
+
+cli::cli_progress_step("Downloading regex matches file")
+cs_file <- drive_ls(file.path(Sys.getenv("GOOGLE_PATH"))) |>
+    filter(name == "Regex matches")
+drive_download(
+    cs_file$id[1],
+    path = file.path(fdir, "regex_matches.xlsx")
+)
+
+cli::cli_progress_step("Reading regex matches file")
+regex_matches <-
+    readxl::read_excel(file.path(fdir, "regex_matches.xlsx")) |>
+    setNames(c("dd_name", "regex_name")) |>
+    dplyr::mutate(
+        dd_name = tolower(dd_name),
+        regex_name = tolower(regex_name)
+    )
+
+## REFRESH variables and their REGEX matched dictionary
+regex_matched_datasets <- apply(regex_matches, 1L, \(x) {
+    refresh_vars[grep(x[["regex_name"]], refresh_vars$dataset_id), ] |>
+        mutate(
+            dd_dataset_id = x[["dd_name"]]
+        ) |>
+        select(dataset_id, dd_dataset_id) |>
+        distinct()
+}) |> bind_rows()
+
 
 # saveRDS(refresh_vars, "data/cache/refresh_vars.rda")
 # refresh_vars <- readRDS("data/cache/refresh_vars.rda")
@@ -319,17 +389,46 @@ all_variables <- variables |>
     ) |>
     mutate(
         database_id = ifelse(grepl("Adhoc", refreshes), "Adhoc", "Clean")
-    )
+    ) |>
+    mutate(dd_order = ifelse(is.na(dd_order), 0, dd_order))
 
 if (any((with(all_variables, paste(variable_id, dataset_id)) |> tolower() |> table()) > 1)) {
     stop("Duplicate variables (after join)")
 }
+
+## some instances of datasets with different types across versions
+most_common <- function(x) {
+    if (length(unique(x)) == 1) {
+        return(unique(x))
+    }
+
+    names(sort(table(x), decreasing = TRUE))[1]
+}
+
+## replace dataset_id with dd_dataset_id if it exists
+av <- all_variables |>
+    filter(dataset_id %in% regex_matched_datasets$dataset_id) |>
+    left_join(regex_matched_datasets, by = "dataset_id") |>
+    mutate(dataset_id = dd_dataset_id) |>
+    select(-dd_dataset_id) |>
+    group_by(across(-type)) |>
+    summarize(type = most_common(type)) |>
+    ungroup() |>
+    distinct() |>
+    bind_rows(
+        all_variables |>
+            filter(!dataset_id %in% regex_matched_datasets$dataset_id)
+    )
+all_variables <- av
 
 cli::cli_progress_step("Merging datasets")
 datasets <- datasets |>
     right_join(
         all_variables |> select(dataset_id, database_id) |> distinct(),
         by = "dataset_id"
+    ) |>
+    mutate(
+        dd_order = ifelse(is.na(dd_order), 0, dd_order),
     )
 
 cli::cli_progress_step("Merging collections")
@@ -368,7 +467,7 @@ datasets <- datasets |>
     left_join(collections |> select(collection_name, collection_id),
         by = "collection_name"
     ) |>
-    select(dataset_id, dataset_name, collection_id, description, reference_period)
+    select(dataset_id, dataset_name, collection_id, dd_order, description, reference_period)
 
 # add datasets from all_variables missing:
 datasets <- datasets |>
@@ -505,12 +604,13 @@ missing_collection_datasets <- datasets |>
         dataset_id = dataset_id.x,
         collection_id = collection_id.x
     ) |>
-    select(dataset_id, dataset_name, collection_id, description, reference_period) |>
+    select(dataset_id, dataset_name, collection_id, dd_order, description, reference_period) |>
     mutate(
         dataset_name = ifelse(is.na(dataset_name),
             gsub(".+\\.", "", dataset_id),
             dataset_name
-        )
+        ),
+        dd_order = ifelse(is.na(dd_order), 0, dd_order)
     )
 
 cli::cli_progress_step("Adding missing datasets and collections")
@@ -609,6 +709,11 @@ readr::write_csv(all_collections, "data/out/collections.csv")
 readr::write_csv(all_agencies, "data/out/agencies.csv")
 readr::write_csv(match_variables, "data/out/variable_matches.csv")
 readr::write_csv(match_tables, "data/out/table_matches.csv")
+readr::write_csv(
+    regex_matched_datasets |> setNames(c("dataset_id", "dataset_id_regex")),
+    "data/out/datasets_regex.csv"
+)
+readr::write_csv(codes, "data/out/code_values.csv", quote = "all")
 
 cli::cli_progress_done()
 
