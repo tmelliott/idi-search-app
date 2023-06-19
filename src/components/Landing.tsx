@@ -26,8 +26,11 @@ const LandingPage = () => {
     <div className="prose">
       <h2 className="">Welcome to the IDI Search App</h2>
       <p>
-        The IDI Search App is a tool for searching and browsing the data
-        contained within the Stats NZ IDI. For help navigating the app, click{" "}
+        The IDI Search App allows researchers to search for variables that are
+        available in the IDI and, in some cases, metadata about these variables.
+        The app uses data from IDI variables and Data Dictionaries shared with
+        us by Stats NZ. The data are stored in a database which can then be
+        searched using the web app. For help navigating the app, click{" "}
         <strong>Help</strong> in the top right corner.
       </p>
       <p>
