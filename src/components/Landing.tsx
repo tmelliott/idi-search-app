@@ -33,15 +33,16 @@ const LandingPage = () => {
       <p>
         Use the search box to enter terms to filter. To search multiple terms,
         prefix each word with a plus (+) sign. For example, to search for
-        records that contain both the words "income" and "employment", enter
-        "+income +employment". See Help for more information.
+        records that contain both the words &ldquo;income&rdquo; and
+        &ldquo;employment&rdquo;, enter &ldquo;+income +employment&rdquo;. See
+        Help for more information.
       </p>
       <hr />
       <table className="ml-8">
         <tbody>
           {stats &&
             stats.map((stat) => (
-              <tr className="border-0">
+              <tr className="border-0" key={stat.name}>
                 <td className="w-0 py-0 whitespace-nowrap text-right font-bold">
                   {stat.name}
                 </td>
