@@ -6,6 +6,7 @@ import { api } from "~/utils/api";
 const LandingPage = () => {
   const { data: info } = api.db_info.get.useQuery();
   console.log(process.env.NEXT_PUBLIC_UPDATED_AT);
+  console.log(dayjs(process.env.NEXT_PUBLIC_UPDATED_AT));
   const stats = info
     ? [
         {
