@@ -1,8 +1,12 @@
 library(RMySQL)
 library(dbplyr)
 library(pbapply)
+library(cli)
 
 write_tables <- function() {
+    cli_h1("Writing tables to database")
+
+    cli_progress_step("Connecting to database")
     con <- dbConnect(
         MySQL(),
         user = "root",
@@ -10,10 +14,17 @@ write_tables <- function() {
         port = 3309,
         dbname = "idisearchapp"
     )
+    cli_process_done()
 
     DBI::dbWithTransaction(con, {
-        agencies <- readr::read_csv("data/out/agencies.csv")
+        cli_h3("Agencies")
+        cli_progress_step("Read")
+        agencies <- readr::read_csv("data/out/agencies.csv",
+            show_col_types = FALSE
+        )
+        cli_progress_step("Delete")
         dbExecute(con, "DELETE FROM agencies;")
+        cli_progress_step("Write")
         dbExecute(
             con,
             glue::glue_sql(
@@ -24,9 +35,16 @@ write_tables <- function() {
                 )
             )
         )
+        cli_progress_done()
 
-        collections <- readr::read_csv("data/out/collections.csv")
+        cli_h3("Collections")
+        cli_progress_step("Read")
+        collections <- readr::read_csv("data/out/collections.csv",
+            show_col_types = FALSE
+        )
+        cli_progress_step("Delete")
         dbExecute(con, "DELETE FROM collections;")
+        cli_progress_step("Write")
         dbExecute(
             con,
             glue::glue_sql(
@@ -40,9 +58,16 @@ write_tables <- function() {
                 )
             )
         )
+        cli_progress_done()
 
-        datasets <- readr::read_csv("data/out/datasets.csv")
+        cli_h3("Datasets")
+        cli_progress_step("Read")
+        datasets <- readr::read_csv("data/out/datasets.csv",
+            show_col_types = FALSE
+        )
+        cli_progress_step("Delete")
         dbExecute(con, "DELETE FROM datasets;")
+        cli_progress_step("Write")
         dbExecute(
             con,
             paste(
@@ -57,16 +82,22 @@ write_tables <- function() {
                 )
             )
         )
+        cli_progress_done()
     })
 
     ## TODO: refactor this to use UPDATE, INSERT, and DELETE instad of DELETE + INSERT
     ## (for better maintenance downtime)
 
-    variables <- readr::read_csv("data/out/variables.csv")
+    cli_h3("Variables")
+    cli_progress_step("Read")
+    variables <- readr::read_csv("data/out/variables.csv",
+        show_col_types = FALSE
+    )
+    cli_progress_step("Delete")
     dbExecute(con, "DELETE FROM variables;")
     n <- 5000
     N <- ceiling(nrow(variables) / n)
-    pb <- txtProgressBar(max = N, style = 3L)
+    cli_progress_bar("Write", total = N)
     for (i in 1:N) {
         ii <- 1:n + n * (i - 1)
         ii <- ii[ii <= nrow(variables)]
@@ -84,14 +115,20 @@ write_tables <- function() {
                 )
             )
         )
-        setTxtProgressBar(pb, i)
+        cli_progress_update()
     }
-    close(pb)
+    cli_progress_done()
 
 
     DBI::dbWithTransaction(con, {
-        table_matches <- readr::read_csv("data/out/table_matches.csv")
+        cli_h3("Table matches")
+        cli_progress_step("Read")
+        table_matches <- readr::read_csv("data/out/table_matches.csv",
+            show_col_types = FALSE
+        )
+        cli_progress_step("Delete")
         dbExecute(con, "DELETE FROM table_matches;")
+        cli_progress_step("Write")
         dbExecute(
             con,
             paste(
@@ -105,9 +142,16 @@ write_tables <- function() {
                 )
             )
         )
+        cli_progress_done()
 
-        variable_matches <- readr::read_csv("data/out/variable_matches.csv")
+        cli_h3("Variable matches")
+        cli_progress_step("Read")
+        variable_matches <- readr::read_csv("data/out/variable_matches.csv",
+            show_col_types = FALSE
+        )
+        cli_progress_step("Delete")
         dbExecute(con, "DELETE FROM variable_matches;")
+        cli_progress_step("Write")
         dbExecute(
             con,
             paste(
@@ -121,9 +165,16 @@ write_tables <- function() {
                 )
             )
         )
+        cli_progress_done()
 
-        dataset_regex <- readr::read_csv("data/out/datasets_regex.csv")
+        cli_h3("Table regex")
+        cli_progress_step("Read")
+        dataset_regex <- readr::read_csv("data/out/datasets_regex.csv",
+            show_col_types = FALSE
+        )
+        cli_progress_step("Delete")
         dbExecute(con, "DELETE FROM datasets_regex;")
+        cli_progress_step("Write")
         dbExecute(
             con,
             paste(
@@ -137,14 +188,20 @@ write_tables <- function() {
                 )
             )
         )
+        cli_progress_done()
     })
 
-    code_values <- readr::read_csv("data/out/code_values.csv")
+    cli_h3("Code values")
+    cli_progress_step("Read")
+    code_values <- readr::read_csv("data/out/code_values.csv",
+        show_col_types = FALSE
+    )
+    cli_progress_step("Delete")
     dbExecute(con, "DELETE FROM code_values;")
-    dbExecute(con, "ALTER TABLE code_values AUTO_INCREMENT = 1;")
+    # dbExecute(con, "ALTER TABLE code_values AUTO_INCREMENT = 1;")
     n <- 5000
     N <- ceiling(nrow(code_values) / n)
-    pb <- txtProgressBar(max = N, style = 3L)
+    cli_progress_bar("Write", total = N)
     for (i in 1:N) {
         ii <- 1:n + n * (i - 1)
         ii <- ii[ii <= nrow(code_values)]
@@ -161,17 +218,20 @@ write_tables <- function() {
                 )
             )
         )
-        setTxtProgressBar(pb, i)
+        cli_progress_update()
     }
-    close(pb)
+    cli_progress_done()
 
+    cli_h3("DB info")
     # figure out latest refresh
+    cli_progress_step("Fetching info")
     vs <- unique(do.call(c, strsplit(variables$refreshes, ",")))
     vs <- suppressWarnings(as.integer(substr(vs, 1, 6)))
     vs <- vs[!is.na(vs)]
     db_date <- format(as.Date(as.character(max(vs)), "%Y%M"), "%B %Y")
 
     ## insert or update db info
+    cli_progress_step("Write")
     dbExecute(
         con,
         paste(
@@ -180,6 +240,9 @@ write_tables <- function() {
             "ON DUPLICATE KEY UPDATE db_updated = VALUES(db_updated), db_refresh = VALUES(db_refresh)"
         )
     )
+    cli_progress_done()
+
+    cli_rule()
 }
 
 write_tables()
