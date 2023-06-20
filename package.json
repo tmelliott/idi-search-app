@@ -4,8 +4,8 @@
   "description": "Explore the datasets available in New Zealand's IDI",
   "private": true,
   "scripts": {
-    "build": "NEXT_PUBLIC_UPDATED_AT=$(date +%Y-%m-%d) next build",
-    "dev": "NEXT_PUBLIC_UPDATED_AT=$(date +%Y-%m-%d) next dev",
+    "build": "NEXT_PUBLIC_UPDATED_AT=$(date +\"%Y-%m-%dT%H:%M:%S%:z\") next build",
+    "dev": "NEXT_PUBLIC_UPDATED_AT=$(date +\"%Y-%m-%dT%H:%M:%S%:z\") next dev",
     "postinstall": "prisma generate",
     "lint": "next lint",
     "start": "next start",
