@@ -31,7 +31,7 @@ function Footer() {
             COMPASS
           </A>
           ,{` `}
-          <A href="https://wgtn.ac.nz">Victoria University of Auckland</A>,{` `}
+          <A href="https://wgtn.ac.nz">Victoria University of Wellington</A>,{` `}
           and <A href="https://auckland.ac.nz">The University of Auckland</A>.
           Funded by <A href="https://mbie.govt.nz">MBIE</A>.
         </p>
