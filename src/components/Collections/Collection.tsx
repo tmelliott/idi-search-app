@@ -58,6 +58,19 @@ export default function Collection({ collection_id }: Props) {
         />
       )}
 
+      {collection.collection_keywords && (
+        <>
+          <h5 className="font-bold">Keywords</h5>
+          <ul className="flex gap-x-4 items-center list-none m-0 flex-wrap p-0">
+            {collection.collection_keywords.map((keyword) => (
+              <li className="m-0 p-0" key={keyword.keyword}>
+                {keyword.keyword}
+              </li>
+            ))}
+          </ul>
+        </>
+      )}
+
       <Datasets collection_id={collection_id} limit={15} />
     </div>
   );

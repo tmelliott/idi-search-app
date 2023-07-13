@@ -85,6 +85,11 @@ export const collectionsRouter = createTRPCRouter({
               agency_id: true,
             },
           },
+          collection_keywords: {
+            select: {
+              keyword: true,
+            },
+          },
           description: true,
         },
       });

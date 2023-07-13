@@ -21,13 +21,14 @@ model agencies {
 }
 
 model collections {
-    collection_id   String     @id
-    collection_name String?
-    agency_id       String?
-    database_id     String?
-    description     String?    @db.LongText
-    agency          agencies?  @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
-    datasets        datasets[]
+    collection_id       String                @id
+    collection_name     String?
+    agency_id           String?
+    database_id         String?
+    description         String?               @db.LongText
+    agency              agencies?             @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
+    datasets            datasets[]
+    collection_keywords collection_keywords[]
 
     @@index([agency_id])
     @@fulltext([collection_name, description])
@@ -127,4 +128,13 @@ model db_info {
     id         Int      @id
     db_updated DateTime @updatedAt
     db_refresh String
+}
+
+model collection_keywords {
+    id            Int         @id @default(autoincrement())
+    keyword       String
+    collection_id String
+    collection    collections @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_keywords_collection_id_fkey")
+
+    @@index([collection_id])
 }

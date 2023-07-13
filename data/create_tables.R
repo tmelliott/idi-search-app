@@ -130,6 +130,15 @@ suppressMessages({
                 )
             }
 
+            # grab keywords, if they exist
+            kwd_row <- grep("Keywords", x$Index)
+            keywords <- character()
+            if (length(kwd_row) > 0) {
+                keywords <- trimws(
+                    strsplit(x[[2]][kwd_row], ";", fixed = TRUE)[[1]]
+                )
+            }
+
             list(
                 collection = tibble(
                     collection_schema = schema[2],
@@ -144,7 +153,8 @@ suppressMessages({
                             gsub("\\[|\\]", "", tables$idi.table.name),
                         dd_order = seq_len(n())
                     ),
-                codes = codes
+                codes = codes,
+                keywords = stringr::str_to_title(keywords)
             )
         })
 })
@@ -244,6 +254,23 @@ codes <- map(collection_tables, "codes") |>
         variable_id = str_replace_all(variable_id, "\\[|\\]", "")
     ) |>
     filter(!is.na(code) & !is.na(label))
+
+cli::cli_progress_step("Extracting keywords")
+keywords <- lapply(
+    collection_tables,
+    \(x) {
+        if (length(x$keywords) == 0) {
+            return(NULL)
+        }
+        cbind(
+            collection_name = x$collection$collection_name[1],
+            keyword = x$keywords
+        ) |>
+            as_tibble()
+    }
+) |>
+    bind_rows() |>
+    distinct()
 
 
 repair_colnames <- function(x, expr, name) {
@@ -485,6 +512,15 @@ if (any(tbl > 1L)) {
     stop("")
 }
 
+# link keywords to collection_id
+keywords <- keywords |>
+    left_join(collections |> select(collection_name, collection_id),
+        by = "collection_name"
+    ) |>
+    filter(!is.na(collection_id) & !is.na(keyword)) |>
+    select(collection_id, keyword) |>
+    distinct()
+
 # isin <- all_variables$dataset_id %in% datasets$dataset_id
 # if (!all(isin)) {
 #     print(all_variables[!isin, c("variable_id", "dataset_id")] |> as.data.frame())
@@ -714,6 +750,7 @@ readr::write_csv(
     "data/out/datasets_regex.csv"
 )
 readr::write_csv(codes, "data/out/code_values.csv", quote = "all")
+readr::write_csv(keywords, "data/out/keywords.csv", quote = "all")
 
 cli::cli_progress_done()
 
