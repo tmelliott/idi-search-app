@@ -86,7 +86,6 @@ cli::cli_progress_step("Processing dictionaries")
 suppressMessages({
     collection_tables <- files |>
         lapply(\(file) {
-            # cat("\r* Processing dictionary", x, "...")
             x <- readxl::read_excel(file, sheet = "Index")
             di <- grep("Dataset Name", x$Index)
             dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
@@ -116,7 +115,7 @@ suppressMessages({
             if (sum(has_codes) == 1) {
                 codes <- readxl::read_excel(file,
                     sheet = sheet_names[has_codes]
-                )
+                ) |> suppressWarnings()
                 code_cols <- tolower(colnames(codes))
                 variable_col <- grep("variable.+name", code_cols)[1]
                 code_col <- which(grepl("code", code_cols) &
@@ -298,6 +297,9 @@ variables <- sheets |>
             repair_colnames("primary", "primary_key")
         colnames(x) <- cn
         if (is.null(x[["variable_name"]])) x$variable_name <- x$variable_id
+        x$variable_name <- ifelse(is.na(x$variable_name),
+            x$variable_id, x$variable_name
+        )
         if (is.null(x[["type"]])) x$type <- NA_character_
         if (is.null(x[["size"]])) x$size <- NA_integer_
 
@@ -357,7 +359,7 @@ vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
     table()
 if (any(vid_tab > 1L)) {
     cli::cli_alert_danger("Duplicate variable-dataset IDs")
-    cli::cli_ul(vid_tab[vid_tab > 1L])
+    cli::cli_ul(names(vid_tab[vid_tab > 1L]))
     stop("Duplicate IDs")
 }
 
@@ -459,6 +461,7 @@ datasets <- datasets |>
     )
 
 cli::cli_progress_step("Merging collections")
+# original_collections <- collections
 collections <- datasets |>
     filter(!is.na(collection_name)) |>
     select(collection_name, database_id) |>

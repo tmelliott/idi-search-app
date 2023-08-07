@@ -44,6 +44,7 @@
     - IDI IR RESTRICT data
     - IDI IR Tax Estate or Trust Beneficiary Details (IR6B) data
     - IDI Working for Families Research data
+    - IDI IR Debt data
 
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
@@ -94,6 +95,7 @@
   name: Ministry of Justice
   collections:
     - IDI Ministry of Justice Criminal Court Charges data
+    - IDI MOJ Debt data
 
 - id: MSD
   name: Ministry of Social Development
@@ -150,6 +152,7 @@
     - IDI Business Register data
     - IDI Longitudinal Immigration Survey of NZ
     - IDI General Social Survey 2021 data (GSS2021)
+    - IDI Household Economic Survey data
 
 - id: SportNZ
   name: Sport NZ
@@ -163,6 +166,11 @@
   name: Tū Ora Compass Health
   collections:
     - IDI OPC Osteoarthritis Primary Care data
+
+- id: UoO
+  name: University of Otago
+  collections:
+    - National Stroke Register
 
 - id: WiseGroup
   name: WiseGroup
