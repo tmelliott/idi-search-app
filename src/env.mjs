@@ -15,6 +15,8 @@ const server = z.object({
  */
 const client = z.object({
   NEXT_PUBLIC_UPDATED_AT: z.string(),
+  NEXT_PUBLIC_MATOMO_URL: z.string().url(),
+  NEXT_PUBLIC_MATOMO_SITE_ID: z.string(),
 });
 
 /**
@@ -27,6 +29,8 @@ const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_UPDATED_AT: process.env.NEXT_PUBLIC_UPDATED_AT,
+  NEXT_PUBLIC_MATOMO_URL: process.env.NEXT_PUBLIC_MATOMO_URL,
+  NEXT_PUBLIC_MATOMO_SITE_ID: process.env.NEXT_PUBLIC_MATOMO_SITE_ID,
 };
 
 // Don't touch the part below
