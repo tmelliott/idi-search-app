@@ -21,7 +21,7 @@ const DualLayout = ({ children }: PropsWithChildren) => {
     const { v } = router.query;
     setInfo(v ? true : false);
     setLanding(!v && router.pathname === "/");
-  }, [router.query]);
+  }, [router.query, router.pathname]);
 
   return (
     <MainLayout>
