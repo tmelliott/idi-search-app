@@ -18,7 +18,6 @@
     "@mdx-js/react": "^2.3.0",
     "@next/mdx": "^13.2.1",
     "@prisma/client": "^4.15.0",
-    "@socialgouv/matomo-next": "^1.6.1",
     "@tanstack/react-query": "^4.20.2",
     "@tanstack/react-table": "^8.7.9",
     "@trpc/client": "^10.9.0",

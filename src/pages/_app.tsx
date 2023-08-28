@@ -2,7 +2,6 @@ import { useEffect } from "react";
 
 import PlausibleProvider from "next-plausible";
 
-import init from "@socialgouv/matomo-next";
 import { Layouts } from "~/layout";
 import "~/styles/globals.css";
 import type { NextComponentTypeWithLayout } from "~/types/types";
@@ -12,10 +11,18 @@ const MyApp = ({ Component, pageProps }: NextComponentTypeWithLayout) => {
   const Layout = Layouts[Component.Layout || "Main"];
 
   useEffect(() => {
-    init({
-      url: process.env.NEXT_PUBLIC_MATOMO_URL || "",
-      siteId: process.env.NEXT_PUBLIC_MATOMO_SITE_ID || "",
-    });
+    // @ts-ignore
+    var _mtm = (window._mtm = window._mtm || []);
+    _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
+    (function () {
+      var d = document,
+        g = d.createElement("script"),
+        s = d.getElementsByTagName("script")[0];
+      g.async = true;
+      g.src =
+        "https://ec2-3-104-45-196.ap-southeast-2.compute.amazonaws.com/js/container_HJj42ra5.js";
+      s?.parentNode?.insertBefore(g, s);
+    })();
   }, []);
 
   // TODO: add MDX component wrapper
