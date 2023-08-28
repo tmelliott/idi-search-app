@@ -7,15 +7,24 @@ import "~/styles/globals.css";
 import type { NextComponentTypeWithLayout } from "~/types/types";
 import { api } from "~/utils/api";
 
+declare global {
+  // Matomo window object type
+  interface Window {
+    _mtm: {
+      "mtm.startTime": number;
+      event: string;
+    }[];
+  }
+}
+
 const MyApp = ({ Component, pageProps }: NextComponentTypeWithLayout) => {
   const Layout = Layouts[Component.Layout || "Main"];
 
   useEffect(() => {
-    // @ts-ignore
-    var _mtm = (window._mtm = window._mtm || []);
+    const _mtm = (window._mtm = window._mtm || []);
     _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
     (function () {
-      var d = document,
+      const d = document,
         g = d.createElement("script"),
         s = d.getElementsByTagName("script")[0];
       g.async = true;
