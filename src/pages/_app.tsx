@@ -1,5 +1,3 @@
-import { useEffect } from "react";
-
 import PlausibleProvider from "next-plausible";
 import { GoogleAnalytics } from "nextjs-google-analytics";
 
