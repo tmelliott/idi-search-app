@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { useRouter } from "next/router";
+import { event } from "nextjs-google-analytics";
 
 import { FunnelIcon, Cog8ToothIcon } from "@heroicons/react/24/outline";
 import { XMarkIcon } from "@heroicons/react/24/solid";
@@ -16,6 +17,11 @@ const Search = () => {
 
     if (value === "" && s === undefined) return;
     if (s === value) return;
+
+    event("search", {
+      category: "search",
+      label: value,
+    });
 
     void router.push(
       {

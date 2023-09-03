@@ -1,38 +1,15 @@
 import { useEffect } from "react";
 
 import PlausibleProvider from "next-plausible";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import { Layouts } from "~/layout";
 import "~/styles/globals.css";
 import type { NextComponentTypeWithLayout } from "~/types/types";
 import { api } from "~/utils/api";
 
-declare global {
-  // Matomo window object type
-  interface Window {
-    _mtm: {
-      "mtm.startTime": number;
-      event: string;
-    }[];
-  }
-}
-
 const MyApp = ({ Component, pageProps }: NextComponentTypeWithLayout) => {
   const Layout = Layouts[Component.Layout || "Main"];
-
-  useEffect(() => {
-    const _mtm = (window._mtm = window._mtm || []);
-    _mtm.push({ "mtm.startTime": new Date().getTime(), event: "mtm.Start" });
-    (function () {
-      const d = document,
-        g = d.createElement("script"),
-        s = d.getElementsByTagName("script")[0];
-      g.async = true;
-      g.src =
-        "https://ec2-3-104-45-196.ap-southeast-2.compute.amazonaws.com/js/container_HJj42ra5.js";
-      s?.parentNode?.insertBefore(g, s);
-    })();
-  }, []);
 
   // TODO: add MDX component wrapper
 
@@ -43,6 +20,7 @@ const MyApp = ({ Component, pageProps }: NextComponentTypeWithLayout) => {
       selfHosted={true}
       enabled={true}
     >
+      <GoogleAnalytics trackPageViews />
       <Layout>
         <Component {...pageProps} />
       </Layout>
