@@ -1,0 +1,9 @@
+cli
+tidyverse
+googledrive
+dotenv
+parallel
+RMySQL
+dbplyr
+stringdist
+pbapply
