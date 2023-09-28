@@ -1,4 +1,5 @@
 import PlausibleProvider from "next-plausible";
+import { GoogleAnalytics } from "nextjs-google-analytics";
 
 import { Layouts } from "~/layout";
 import "~/styles/globals.css";
@@ -17,6 +18,7 @@ const MyApp = ({ Component, pageProps }: NextComponentTypeWithLayout) => {
       selfHosted={true}
       enabled={true}
     >
+      <GoogleAnalytics trackPageViews />
       <Layout>
         <Component {...pageProps} />
       </Layout>

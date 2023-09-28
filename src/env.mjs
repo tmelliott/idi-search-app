@@ -15,6 +15,7 @@ const server = z.object({
  */
 const client = z.object({
   NEXT_PUBLIC_UPDATED_AT: z.string(),
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: z.string(),
 });
 
 /**
@@ -27,6 +28,7 @@ const processEnv = {
   DATABASE_URL: process.env.DATABASE_URL,
   NODE_ENV: process.env.NODE_ENV,
   NEXT_PUBLIC_UPDATED_AT: process.env.NEXT_PUBLIC_UPDATED_AT,
+  NEXT_PUBLIC_GA_MEASUREMENT_ID: process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID,
 };
 
 // Don't touch the part below
