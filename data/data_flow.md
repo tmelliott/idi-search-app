@@ -5,22 +5,34 @@ author: Tom Elliott
 
 ```mermaid
 flowchart TD
-    dict[Excel Data Dictionary]
-    new[New Data]
-    live["IDI Search App Database\n(PlanetScale)"]
+    dict[Data Dictionary]
+    rawvars[IDI Variable List]
+    new[New Data folder]
+    live[("IDI Search App Database\n(PlanetScale)")]
 
-    dict -->|Manual upload| new
+    dict --> new
+    rawvars --> new
     subgraph gdrive[Google Drive]
-    new --> R1{"Clean\n(R script)"}
-    R1 --> collection & dataset & variables
-    subgraph csv[CSV files]
+    new --> R1[["Process & clean\n(R script)"]]
+    R1 --> collection & dataset & variables & vars
+    subgraph meta[DD Metadata]
         collection[Collection]
         dataset[Dataset]
         variables[Variables]
     end
-    csv --> archive[Refresh Archive]
+    vars[Variable Lists]
+    collection & dataset & variables & vars & extra --> R2
     extra[Manual metadata]
     end gdrive[Google Drive]
-    collection & dataset & variables & extra --> R2{"Process\n(R script)"}
-    R2 -->live
+    R2[["Combine\n(R script)"]]
+    subgraph final[Final CSV files]
+      direction TB
+      Agency
+      Collection
+      Dataset
+      Variable
+      Other
+    end
+    R2-->final
+    final -->live
 ```
