@@ -72,13 +72,36 @@ process_new_files <- function() {
 
     if (length(dd_files)) {
         cli::cli_progress_step("Processing data dictionaries")
-        print(dd_files)
-        lapply(dd_files, process_dd, dd_dir)
+        lapply(
+            dd_files,
+            \(f) tryCatch(
+                process_dd(f, dd_dir),
+                error = function(e) {
+                    file.rename(
+                        f,
+                        file.path(bad_dir, basename(f))
+                    )
+                },
+                finally = NULL
+            )
+        )
     }
 
     if (length(vl_files)) {
         cli::cli_progress_step("Processing variable lists")
-        lapply(vl_files, process_vl, vl_dir)
+        lapply(
+            vl_files,
+            \(f) tryCatch(
+                process_vl(f, vl_dir),
+                error = function(e) {
+                    file.rename(
+                        f,
+                        file.path(bad_dir, basename(f))
+                    )
+                },
+                finally = NULL
+            )
+        )
     }
 
     if (length(bad_files)) {
@@ -104,16 +127,22 @@ classify_file <- function(file_name) {
 }
 
 process_dd <- function(file, dd_dir) {
-    x <- readxl::read_excel(file, sheet = "Index")
-    di <- grep("Dataset Name", x$Index)
-    dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
+    x <- readxl::read_excel(file,
+        sheet = "Index",
+        col_names = FALSE
+    ) |>
+        suppressMessages() |>
+        suppressWarnings()
+
+    di <- grep("Dataset Name", x[[1]])
+    dj <- di + which(is.na(x[[1]][-(1:di)]))[1] - 1L
     tables <- x[(di + 1):dj, ]
     cn <- as.character(x[di, ])
     tables <- tables[!is.na(cn) & cn != "NA"]
     cn <- cn[!is.na(cn) & cn != "NA"]
     colnames(tables) <- cn
-    col <- gsub("\\r|\\n", "", x[[2]][grep("Title", x$Index)])
-    schema <- x[[2]][grep("schema", tolower(x$Index))]
+    col <- gsub("\\r|\\n", "", x[[2]][grep("Title", x[[1]])])
+    schema <- x[[2]][grep("schema", tolower(x[[1]]))]
     if (length(schema) == 0) {
         schema <- c("UNKNOWN", tolower(make.names(col)))
     } else {
@@ -148,7 +177,7 @@ process_dd <- function(file, dd_dir) {
     }
 
     # grab keywords, if they exist
-    kwd_row <- grep("Keywords", x$Index)
+    kwd_row <- grep("Keywords", x[[1]])
     keywords <- character()
     if (length(kwd_row) > 0) {
         keywords <- trimws(
@@ -156,31 +185,40 @@ process_dd <- function(file, dd_dir) {
         )
     }
 
-    collection <- tibble(
+    collection <- tibble::tibble(
         collection_schema = schema[2],
         collection_name = col,
         database_id = stringr::str_trim(tolower(schema[1])),
-        description = x[[2]][grep("Introduction", x$Index)],
+        description = x[[2]][grep("Introduction", x[[1]])],
         keywords = paste(stringr::str_to_title(keywords),
-            sep = "; "
+            collapse = "; "
         )
     )
 
     tables <- tables |>
-        mutate(
+        dplyr::mutate(
             collection_name = col,
             dataset_id =
                 gsub("\\[|\\]", "", tables$idi.table.name),
-            dd_order = seq_len(n())
+            dd_order = seq_len(dplyr::n())
         )
     codes <- codes
 
     DIR <- file.path(dd_dir, tools::file_path_sans_ext(basename(file)))
     if (!dir.exists(DIR)) dir.create(DIR)
-    readr::write_csv(collection, file.path(DIR, "collection.csv"))
-    readr::write_csv(tables, file.path(DIR, "tables.csv"))
+
+    collection_file <- file.path(DIR, "collection.csv")
+    tables_file <- file.path(DIR, "tables.csv")
+    if (file.exists(collection_file)) unlink(collection_file)
+    if (file.exists(tables_file)) unlink(tables_file)
+    readr::write_csv(collection, collection_file)
+    readr::write_csv(tables, tables_file)
     if (!is.null(codes)) {
-        readr::write_csv(codes, file.path(DIR, "codes.csv"))
+        codes_file <- file.path(DIR, "codes.csv")
+        if (file.exists(codes_file)) {
+            unlink(codes_file)
+        }
+        readr::write_csv(codes, codes_file)
     }
 }
 
@@ -200,7 +238,9 @@ process_vl <- function(file, vl_dir) {
             date <- substr(x[3], 1L, 6L)
             dir <- file.path(vl_dir, date)
             if (!dir.exists(dir)) dir.create(dir)
-            readr::write_csv(z, file.path(dir, fname))
+            v_file <- file.path(dir, fname)
+            if (file.exists(v_file)) unlink(v_file)
+            readr::write_csv(z, vfile)
         }
     )
 }
