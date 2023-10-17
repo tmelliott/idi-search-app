@@ -1,5 +1,5 @@
-miss_idi <- readr::read_csv('data/missing_in_idi.csv')
-miss_dict <- readr::read_csv('data/missing_in_dictionaries.csv')
+miss_idi <- readr::read_csv("data/missing_in_idi.csv")
+miss_dict <- readr::read_csv("data/missing_in_dictionaries.csv")
 
 
 idi_ids <- miss_dict |>
@@ -8,7 +8,7 @@ idi_ids <- miss_dict |>
     dplyr::distinct() |>
     dplyr::mutate(
         dataset_id_stripped = stringr::str_replace(dataset_id, "[0-9]{5,}", ""),
-        dataset_id_unique = stringr::str_match(dataset_id, "([0-9]{5,})")[,2]
+        dataset_id_unique = stringr::str_match(dataset_id, "([0-9]{5,})")[, 2]
     ) |>
     dplyr::select(-dataset_id) |>
     dplyr::group_by(dataset_id_stripped) |>

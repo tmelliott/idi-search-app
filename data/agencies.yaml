@@ -40,6 +40,7 @@
     - IDI IR Tax Autocalc Information
     - IDI SLA IRD Consolidated Data Extract data
     - IDI SLA IRD Unit Record Monthly Data Extract data
+    - IDI IR Debt data
     - IDI IR Full data
     - IDI IR RESTRICT data
     - IDI IR Tax Estate or Trust Beneficiary Details (IR6B) data
@@ -64,6 +65,8 @@
     - IDI SLA Student Loans Account Manager (SLAM) data
     - IDI MOE PROGRAMME FOR INTERNATIONAL STUDENT ASSESSMENT (PISA) 2009
     - IDI MOE Programme for International Student Assessment (PISA) 2018
+    - IDI MOE Compulsary Schooling (CS) Student Attendance data
+    - IDI MOE Early Childhood Education (ECE) Student Attendance data
 
 - id: MOH
   name: Ministry of Health
@@ -94,6 +97,7 @@
   name: Ministry of Justice
   collections:
     - IDI Ministry of Justice Criminal Court Charges data
+    - IDI MOJ Debt data
 
 - id: MSD
   name: Ministry of Social Development
@@ -116,6 +120,7 @@
     - IDI NZ Police data NIA Links Data
     - IDI POL Recorded Crime Offenders data
     - "IDI NZ Police data : Recorded Crime Victims (RCVS)"
+    - Genesis Youth Trust
 
 - id: NZR
   name: NZ Rugby
@@ -141,8 +146,8 @@
     - IDI Census of Population and Dwellings data 2018
     - IDI Disability Survey data
     - IDI HES Net Worth Supplement
+    - IDI Household Economic Survey data
     - IDI HLFS Supplements
-    - IDI HLFS Wellbeing Supp
     - IDI HLFS Wellbeing Supplement data
     - IDI Household Labour Force Survey data (HLFS) data
     - IDI Iwi Affiliation Census 2018
@@ -150,6 +155,7 @@
     - IDI Business Register data
     - IDI Longitudinal Immigration Survey of NZ
     - IDI General Social Survey 2021 data (GSS2021)
+    - IDI General Social Survey Ongoing Supplements
 
 - id: SportNZ
   name: Sport NZ
@@ -163,6 +169,16 @@
   name: Tū Ora Compass Health
   collections:
     - IDI OPC Osteoarthritis Primary Care data
+
+- id: UoA
+  name: University of Auckland
+  collections:
+    - Centre of Innovation and Entrepreneurship Participation
+
+- id: UoO
+  name: University of Otago
+  collections:
+    - National Stroke Register
 
 - id: WiseGroup
   name: WiseGroup
