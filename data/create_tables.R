@@ -86,6 +86,7 @@ cli::cli_progress_step("Processing dictionaries")
 suppressMessages({
     collection_tables <- files |>
         lapply(\(file) {
+            # cat("\n* Processing dictionary", file, "...")
             x <- readxl::read_excel(file, sheet = "Index")
             di <- grep("Dataset Name", x$Index)
             dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
@@ -104,6 +105,10 @@ suppressMessages({
             }
             tables <- tables[!is.na(tables[[3]]), ]
             colnames(tables) <- fixTableNames(colnames(tables))
+            tables <- tables |>
+                mutate(
+                    idi.table.name = gsub("\\[|\\]", "", idi.table.name)
+                )
 
             # is there a 'Codes & Values' sheet?
             sheet_names <- readxl::excel_sheets(file)
@@ -310,6 +315,9 @@ variables <- sheets |>
         }
 
         x |>
+            filter(
+                !is.na(variable_id)
+            ) |>
             mutate(
                 size = as.integer(size),
                 dd_order = seq_len(n())
@@ -353,6 +361,12 @@ variables <- variables |>
         description, information, primary_key, type, size,
         .keep_all = TRUE
     )
+
+if (any(is.na(variables$variable_id))) {
+    w <- which(is.na(variables$variable_id))
+    print(variables[unique(w, w - 1, w + 1), ])
+    stop("NA variable_id")
+}
 
 vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
     tolower() |>
