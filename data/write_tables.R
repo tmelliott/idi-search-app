@@ -83,6 +83,29 @@ write_tables <- function() {
             )
         )
         cli_progress_done()
+
+        cli_h3("Keywords")
+        cli_progress_step("Read")
+        keywords <- readr::read_csv("data/out/keywords.csv",
+            show_col_types = FALSE
+        )
+        cli_progress_step("Delete")
+        dbExecute(con, "DELETE FROM collection_keywords;")
+        cli_progress_step("Write")
+        dbExecute(
+            con,
+            paste(
+                "INSERT INTO collection_keywords (keyword, collection_id)",
+                "VALUES",
+                glue::glue_sql_collapse(
+                    with(
+                        keywords,
+                        glue::glue_sql("({keyword}, {collection_id})", .con = con)
+                    ),
+                    ", "
+                )
+            )
+        )
     })
 
     ## TODO: refactor this to use UPDATE, INSERT, and DELETE instad of DELETE + INSERT

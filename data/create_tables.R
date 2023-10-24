@@ -120,7 +120,7 @@ suppressMessages({
             if (sum(has_codes) == 1) {
                 codes <- readxl::read_excel(file,
                     sheet = sheet_names[has_codes]
-                )
+                ) |> suppressWarnings()
                 code_cols <- tolower(colnames(codes))
                 variable_col <- grep("variable.+name", code_cols)[1]
                 code_col <- which(grepl("code", code_cols) &
@@ -131,6 +131,15 @@ suppressMessages({
                     variable_id = tolower(trimws(codes[[variable_col]])),
                     code = tolower(trimws(codes[[code_col]])),
                     label = tolower(trimws(codes[[label_col]]))
+                )
+            }
+
+            # grab keywords, if they exist
+            kwd_row <- grep("Keywords", x$Index)
+            keywords <- character()
+            if (length(kwd_row) > 0) {
+                keywords <- trimws(
+                    strsplit(x[[2]][kwd_row], ";", fixed = TRUE)[[1]]
                 )
             }
 
@@ -148,7 +157,8 @@ suppressMessages({
                             gsub("\\[|\\]", "", tables$idi.table.name),
                         dd_order = seq_len(n())
                     ),
-                codes = codes
+                codes = codes,
+                keywords = stringr::str_to_title(keywords)
             )
         })
 })
@@ -249,6 +259,23 @@ codes <- map(collection_tables, "codes") |>
     ) |>
     filter(!is.na(code) & !is.na(label))
 
+cli::cli_progress_step("Extracting keywords")
+keywords <- lapply(
+    collection_tables,
+    \(x) {
+        if (length(x$keywords) == 0) {
+            return(NULL)
+        }
+        cbind(
+            collection_name = x$collection$collection_name[1],
+            keyword = x$keywords
+        ) |>
+            as_tibble()
+    }
+) |>
+    bind_rows() |>
+    distinct()
+
 
 repair_colnames <- function(x, expr, name) {
     if (any(grepl(expr, x))) x[grep(expr, x)] <- name
@@ -275,6 +302,9 @@ variables <- sheets |>
             repair_colnames("primary", "primary_key")
         colnames(x) <- cn
         if (is.null(x[["variable_name"]])) x$variable_name <- x$variable_id
+        x$variable_name <- ifelse(is.na(x$variable_name),
+            x$variable_id, x$variable_name
+        )
         if (is.null(x[["type"]])) x$type <- NA_character_
         if (is.null(x[["size"]])) x$size <- NA_integer_
 
@@ -343,7 +373,7 @@ vid_tab <- with(variables, paste(variable_id, dataset_id)) |>
     table()
 if (any(vid_tab > 1L)) {
     cli::cli_alert_danger("Duplicate variable-dataset IDs")
-    cli::cli_ul(names(vid_tab)[vid_tab > 1L])
+    cli::cli_ul(names(vid_tab[vid_tab > 1L]))
     stop("Duplicate IDs")
 }
 
@@ -445,6 +475,7 @@ datasets <- datasets |>
     )
 
 cli::cli_progress_step("Merging collections")
+# original_collections <- collections
 collections <- datasets |>
     filter(!is.na(collection_name)) |>
     select(collection_name, database_id) |>
@@ -497,6 +528,15 @@ if (any(tbl > 1L)) {
     cli::cli_ul(names(tbl)[tbl > 1])
     stop("")
 }
+
+# link keywords to collection_id
+keywords <- keywords |>
+    left_join(collections |> select(collection_name, collection_id),
+        by = "collection_name"
+    ) |>
+    filter(!is.na(collection_id) & !is.na(keyword)) |>
+    select(collection_id, keyword) |>
+    distinct()
 
 # isin <- all_variables$dataset_id %in% datasets$dataset_id
 # if (!all(isin)) {
@@ -727,6 +767,7 @@ readr::write_csv(
     "data/out/datasets_regex.csv"
 )
 readr::write_csv(codes, "data/out/code_values.csv", quote = "all")
+readr::write_csv(keywords, "data/out/keywords.csv", quote = "all")
 
 cli::cli_progress_done()
 
