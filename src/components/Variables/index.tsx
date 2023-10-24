@@ -54,7 +54,12 @@ const columns = [
         text={info.row.original.dataset?.dataset_name || <em>Not Available</em>}
         subtext={info.row.original.dataset?.collection?.collection_name}
         style="name"
-        indicator={info.row.original.description !== null ? "success" : "none"}
+        indicator={
+          info.row.original.dataset?.collection &&
+          info.row.original.dataset?.collection.description !== null
+            ? "success"
+            : "none"
+        }
       />
     ),
   }),

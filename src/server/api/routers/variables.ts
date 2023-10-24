@@ -95,6 +95,7 @@ export const variablesRouter = createTRPCRouter({
               collection: {
                 select: {
                   collection_name: true,
+                  description: true,
                 },
               },
             },
