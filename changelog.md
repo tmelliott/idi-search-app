@@ -1,3 +1,9 @@
+# version 1.0.1
+
+October 2023 refresh
+
+- Show keywords for collections
+
 # version 1.0.0
 
 This is a major release, featuring a refactored app using Typescript and TRPC. This should reduce bugs and make future development significantly easier.
