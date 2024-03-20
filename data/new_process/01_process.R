@@ -9,6 +9,7 @@ process_new_files <- function() {
 
     cli::cli_progress_step("Setting up temporary directories")
     temp_dir <- "tmp"
+    if (!dir.exists(temp_dir)) dir.create(temp_dir)
     new_dir <- file.path(temp_dir, "new")
     dd_dir <- file.path(temp_dir, "dd")
     vl_dir <- file.path(temp_dir, "vl")
@@ -19,7 +20,7 @@ process_new_files <- function() {
     if (!dir.exists(vl_dir)) dir.create(vl_dir)
     if (!dir.exists(bad_dir)) dir.create(bad_dir)
 
-    if (Sys.getenv("N_CORES") == "") {
+    if (Sys.getenv("N_CORES") == "" || Sys.getenv("N_CORES") == "1") {
         cl <- NULL
     } else {
         cli::cli_progress_step("Initializing cluster")
@@ -39,7 +40,9 @@ process_new_files <- function() {
     pbapply::pboptions(type = "timer")
     cli::cli_alert("Downloading dictionaries ...")
 
-    new_files <- googledrive::drive_ls(file.path(Sys.getenv("GOOGLE_PATH"), "NEW"))
+    new_files <- googledrive::drive_ls(
+        file.path(Sys.getenv("GOOGLE_PATH"), "New Files - Upload here")
+    )
     if (nrow(new_files) == 0L) {
         cli::cli_abort("No new files to process")
         return()
@@ -81,6 +84,17 @@ process_new_files <- function() {
                         f,
                         file.path(bad_dir, basename(f))
                     )
+                    cat(
+                        paste0(
+                            "Error processing ",
+                            basename(f),
+                            ": ",
+                            e$message
+                        ),
+                        file = file.path(bad_dir, "errors.txt"),
+                        sep = "\n",
+                        append = TRUE
+                    )
                 },
                 finally = NULL
             )
@@ -113,6 +127,51 @@ process_new_files <- function() {
             )
         })
     }
+
+    # either move files in googledrive to 'raw files' or 'Bad Files'
+    cli::cli_progress_bar("Moving files in Google Drive",
+        total = length(new_files)
+    )
+    for (file in new_files) {
+        if (file.exists(file.path(temp_dir, "bad", basename(file)))) {
+            googledrive::drive_mv(
+                file.path(
+                    Sys.getenv("GOOGLE_PATH"),
+                    "New Files - Upload here",
+                    basename(file)
+                ),
+                file.path(
+                    Sys.getenv("GOOGLE_PATH"),
+                    "Bad Files - rejected",
+                    basename(file)
+                )
+            )
+        } else {
+            googledrive::drive_mv(
+                file.path(
+                    Sys.getenv("GOOGLE_PATH"),
+                    "New Files - Upload here",
+                    basename(file)
+                ),
+                file.path(
+                    Sys.getenv("GOOGLE_PATH"),
+                    "Metadata",
+                    ifelse(file %in% dd_files,
+                        "Data dictionaries",
+                        "Variable lists"
+                    ),
+                    "Raw files",
+                    basename(file)
+                )
+            )
+        }
+        cli::cli_progress_update()
+    }
+    cli::cli_progress_done()
+
+    if (!is.null(cl)) stopCluster(cl)
+    unlink(file.path(temp_dir, "new"), recursive = TRUE)
+    unlink(file.path(temp_dir, "bad"), recursive = TRUE)
 }
 
 classify_file <- function(file_name) {
@@ -185,14 +244,12 @@ process_dd <- function(file, dd_dir) {
         )
     }
 
-    collection <- tibble::tibble(
+    collection <- list(
         collection_schema = schema[2],
         collection_name = col,
         database_id = stringr::str_trim(tolower(schema[1])),
         description = x[[2]][grep("Introduction", x[[1]])],
-        keywords = paste(stringr::str_to_title(keywords),
-            collapse = "; "
-        )
+        keywords = stringr::str_to_title(keywords)
     )
 
     tables <- tables |>
@@ -207,11 +264,11 @@ process_dd <- function(file, dd_dir) {
     DIR <- file.path(dd_dir, tools::file_path_sans_ext(basename(file)))
     if (!dir.exists(DIR)) dir.create(DIR)
 
-    collection_file <- file.path(DIR, "collection.csv")
+    collection_file <- file.path(DIR, "collection.yaml")
     tables_file <- file.path(DIR, "tables.csv")
     if (file.exists(collection_file)) unlink(collection_file)
     if (file.exists(tables_file)) unlink(tables_file)
-    readr::write_csv(collection, collection_file)
+    yaml::write_yaml(collection, collection_file)
     readr::write_csv(tables, tables_file)
     if (!is.null(codes)) {
         codes_file <- file.path(DIR, "codes.csv")
@@ -220,11 +277,23 @@ process_dd <- function(file, dd_dir) {
         }
         readr::write_csv(codes, codes_file)
     }
+
+    # variables
+    variables <- readxl::read_excel(file,
+        # TODO: make this more robust
+        sheet = 2L,
+        col_names = FALSE
+    ) |>
+        suppressMessages() |>
+        suppressWarnings()
+    readr::write_csv(variables, file.path(DIR, "variables.csv"))
+
+    unlink(file)
 }
 
 process_vl <- function(file, vl_dir) {
     sheets <- readxl::excel_sheets(file)
-    refresh_lists <- stringr::str_match(sheets, "varlist(Adhoc)?([0-9]+)?")
+    refresh_lists <- stringr::str_match(sheets, "varlist(Adhoc)?([0-9]+)?.+")
     refresh_lists[, 1] <- sheets
 
     apply(
@@ -240,7 +309,10 @@ process_vl <- function(file, vl_dir) {
             if (!dir.exists(dir)) dir.create(dir)
             v_file <- file.path(dir, fname)
             if (file.exists(v_file)) unlink(v_file)
-            readr::write_csv(z, vfile)
+            readr::write_csv(z, v_file)
         }
     )
 }
+
+
+process_new_files()
