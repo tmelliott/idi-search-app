@@ -32,6 +32,7 @@
   name: Kāinga Ora and Ministry of Social Development
   collections:
     - IDI Housing NZ / Kāinga Ora Social Housing data
+    - IDI HNZ House Intervention data
 
 - id: IRD
   name: Inland Revenue
@@ -45,6 +46,7 @@
     - IDI IR RESTRICT data
     - IDI IR Tax Estate or Trust Beneficiary Details (IR6B) data
     - IDI Working for Families Research data
+    - IDI IR Cost of Living Payment
 
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
@@ -114,6 +116,7 @@
     - IDI Ministry of Social Development Employment Assistance and Education History data
     - IDI Ministry of Social Development Residential and Postal Address data
     - IDI SLA MSD Study Link data
+    - "New Zealand Defence Force; Veterans Affairs"
 
 - id: NZPOL
   name: New Zealand Police
@@ -122,6 +125,7 @@
     - IDI POL Recorded Crime Offenders data
     - "IDI NZ Police data : Recorded Crime Victims (RCVS)"
     - Genesis Youth Trust
+    - IDI NZ Police NIA Links data
 
 - id: NZR
   name: NZ Rugby
@@ -142,7 +146,8 @@
 - id: SNZ
   name: Statistics New Zealand
   collections:
-    - IDI Experimental Adminstrative Population Census data
+    - IDI Experimental Administrative Population Census data
+    - "IDI Experimental Adminstrative Population Census: Household information"
     - IDI Census of Population and Dwellings data 2013
     - IDI Census of Population and Dwellings data 2018
     - IDI Disability Survey data
@@ -175,6 +180,7 @@
   name: University of Auckland
   collections:
     - Centre of Innovation and Entrepreneurship Participation
+    - ARCOS
 
 - id: UoO
   name: University of Otago

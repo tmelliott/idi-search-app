@@ -10,7 +10,61 @@ acc_cla_life_time_future_est,Estimated future cost over lifetime,acc_clean.claim
 acc_cla_life_time_estimate,Estimated total cost over lifetime,acc_clean.claims
 acc_pay_first_service_date_text,Earliest recorded treatment/service date,acc_clean.payments
 acc_pay_last_service_date_text,Most recent treatment/service date.,acc_clean.payments
-cen_ind_dwell_age_code,Age - single years,cen_clean.census_individual_2018
+acc_add_first_claim_date,The first claim lodged with ACC for a client,acc_clean.addresses
+ref_date,Reference date,data.apc_hhld_addresses
+snz_uid,Unique person identifier,data.apc_hhld_addresses
+snz_idi_address_register_uid,Unique address identifier,data.apc_hhld_addresses
+meshblock_code,meshblock of address,data.apc_hhld_addresses
+sa2_code,Statistical area 2 of address,data.apc_hhld_addresses
+talb_code,Territorial authority or local board of address,data.apc_hhld_addresses
+region_code,region of address,data.apc_hhld_addresses
+apc_hhld_ind,household indicator,data.apc_hhld_addresses
+apc_hhld_address_qual_score,address score,data.apc_hhld_addresses
+apc_hhld_address_sources_code,Data sources of address,data.apc_hhld_addresses
+c18_address_dwell_nbr,2018 Census number of dwellings at the address,data.apc_hhld_addresses
+c18_address_pd_ind,2018 Census private dwelling indicator,data.apc_hhld_addresses
+c18_address_npd_ind,2018 Census non-private dwelling indicator,data.apc_hhld_addresses
+ref_date,Reference date,data.apc_hhld_memberships
+snz_uid,Unique perosn identifier,data.apc_hhld_memberships
+apc_hhld_uid,Unique household identifier,data.apc_hhld_memberships
+apc_hhld_uid,Unique household identifier,data.apc_hhld_constants
+snz_idi_address_register_uid,Unique address identifier,data.apc_hhld_constants
+meshblock_code,Meshblock of household,data.apc_hhld_constants
+sa2_code,Statistical Area 2 of household,data.apc_hhld_constants
+talb_code,Territorial authority or local board of household,data.apc_hhld_constants
+region_code,Region of household,data.apc_hhld_constants
+apc_hhld_size_nbr,Household size,data.apc_hhld_constants
+ref_date,Reference date,data.apc_hhld_time_series
+apc_hhld_uid,Unique household identifier,data.apc_hhld_time_series
+snz_idi_address_register_uid,Unique address identifier,data.apc_hhld_time_series
+apc_hhld_children_u15_nbr,Number of children under 15 years old,data.apc_hhld_time_series
+apc_hhld_adults_15plus_nbr,Number of adults 15 years or older,data.apc_hhld_time_series
+apc_hhld_youngest_member_age_nbr,Age of youngest member in household,data.apc_hhld_time_series
+apc_hhld_oldest_member_age_nbr,Age of oldest member in household,data.apc_hhld_time_series
+apc_hhld_income_amt,Total household income,data.apc_hhld_time_series
+apc_hhld_income_src01_amt,Household income from wages and salary,data.apc_hhld_time_series
+apc_hhld_income_src02_amt,Household income from self-employment,data.apc_hhld_time_series
+apc_hhld_income_src03_amt,Household income from investments,data.apc_hhld_time_series
+apc_hhld_income_src04_amt,Household income from ACC,data.apc_hhld_time_series
+apc_hhld_income_src05_amt,Household income from NZ Super or Veteran's Pension,data.apc_hhld_time_series
+apc_hhld_income_src07_amt,Household income from Jobseeker Support,data.apc_hhld_time_series
+apc_hhld_income_src08_amt,Household income from Sole Parent Support,data.apc_hhld_time_series
+apc_hhld_income_src09_amt,Household income from Supported Living Payment,data.apc_hhld_time_series
+apc_hhld_income_src10_amt,Household income from Student Allowance,data.apc_hhld_time_series
+apc_hhld_income_src11_amt,Household income from other benefits,data.apc_hhld_time_series
+apc_hhld_income_src12_amt,Household income from other sources,data.apc_hhld_time_series
+apc_hhld_income_missing_nbr,Household missing flag for total income,data.apc_hhld_time_series
+apc_hhld_income_sources_code,Household income sources,data.apc_hhld_time_series
+ref_date,Reference date,data.apc_relationships
+snz_uid,Unique person identifier,data.apc_relationships
+related_snz_uid,Unique person identifier of the person related to a person with a certain snz_uid,data.apc_relationships
+apc_relationship_type_code,The code specifying the relationship type,data.apc_relationships
+apc_relationship_derived_ind,Primary or derived indicator,data.apc_relationships
+apc_relationship_source_code,Data sources,data.apc_relationships
+apc_relationship_source_date,Date of data source,data.apc_relationships
+apc_ur_addr_1yrago_ind_code,address 1 year ago indicator,data.apc_time_series
+apc_ur_addr_5yrago_ind_code,address 5 year ago indicator,data.apc_time_series
+cen_ind_dwell_age_code,"Age - single years",cen_clean.census_individual_2018
 cen_ind_dwell_sex_code,Sex,cen_clean.census_individual_2018
 cen_ind_ethgr_synm,Ethnic group synonym,cen_clean.census_individual_2018
 cen_ind_birth_country_synm,Birth country synonym,cen_clean.census_individual_2018
@@ -65,8 +119,6 @@ gss_hq_person_code,gss_hq_person_code,gss_clean.gss_household_2016
 snz_sex_code,snz_sex_code,gss_clean.gss_household_2016
 gss_hq_household_code,gss_hq_household_code,gss_clean.gss_household_2018
 gss_hq_person_code,gss_hq_person_code,gss_clean.gss_household_2018
-gss_hq_s1_qbirth_month_nbr,gss_hq_s1_qbirth_month_nbr,gss_clean.gss_household_2018
-gss_hq_s1_qbirth_year_nbr,gss_hq_s1_qbirth_year_nbr,gss_clean.gss_household_2018
 gss_pq_household_code,gss_pq_household_code,gss_clean.gss_person_2014
 gss_pq_person_code,gss_pq_person_code,gss_clean.gss_person_2014
 gss_pq_household_code,gss_pq_household_code,gss_clean.gss_person_2016
@@ -2366,6 +2418,27 @@ sqfinalwgt_97,SQfinalwgt_97,clean_read_hlfs.hlfs_wellbeing_datestamp
 sqfinalwgt_98,SQfinalwgt_98,clean_read_hlfs.hlfs_wellbeing_datestamp
 sqfinalwgt_99,SQfinalwgt_99,clean_read_hlfs.hlfs_wellbeing_datestamp
 sqfinalwgt_100,SQfinalwgt_100,clean_read_hlfs.hlfs_wellbeing_datestamp
+snz_house_uid,House ID,clean_read_hnz.hnz_house_intervention_202312
+whh,whole of house heating,clean_read_hnz.hnz_house_intervention_202312
+date_whh,date whole of house heating,clean_read_hnz.hnz_house_intervention_202312
+retrofit,retrofit,clean_read_hnz.hnz_house_intervention_202312
+date_retrofit,date retrofit,clean_read_hnz.hnz_house_intervention_202312
+homestar,homestar,clean_read_hnz.hnz_house_intervention_202312
+homestar_date_delivery_actual,homestar date of delivery,clean_read_hnz.hnz_house_intervention_202312
+homestar_cert_date,homestar certification date,clean_read_hnz.hnz_house_intervention_202312
+hhs_pass,healthy homes standards pass,clean_read_hnz.hnz_house_intervention_202312
+hhs_heating,healthy homes standards heating,clean_read_hnz.hnz_house_intervention_202312
+hhs_insulation,healthy homes standards insulation,clean_read_hnz.hnz_house_intervention_202312
+hhs_ventilation,healthy homes standards ventilation,clean_read_hnz.hnz_house_intervention_202312
+hhs_draught_stopping,healthy homes standards draught stopping,clean_read_hnz.hnz_house_intervention_202312
+hhs_moisture_ingress,healthy homes standards moisture ingress,clean_read_hnz.hnz_house_intervention_202312
+date_hhs,date healthy homes standards,clean_read_hnz.hnz_house_intervention_202312
+hhwo_spend_band,healthy homes work order spend band,clean_read_hnz.hnz_house_intervention_202312
+date_first_hhwo,date first healthy homes work order,clean_read_hnz.hnz_house_intervention_202312
+date_last_hhwo,date last healthy homes work order,clean_read_hnz.hnz_house_intervention_202312
+rah,right at home,clean_read_hnz.hnz_house_intervention_202312
+date_rah,date right at home,clean_read_hnz.hnz_house_intervention_202312
+property_type,property type,clean_read_hnz.hnz_house_intervention_202312
 snz_hes_psu_uid,snz_hes_psu_uid,clean_read_hes.hes_household
 snz_hes_strat_uid,snz_hes_strat_uid,clean_read_hes.hes_household
 hes_year,HES_Year,clean_read_hes.hes_household
@@ -2651,6 +2724,12 @@ relation_to_pers_23,Relation_to_Pers_23,clean_read_hes.hes_relationship
 relation_to_pers_24,Relation_to_Pers_24,clean_read_hes.hes_relationship
 relation_to_pers_25,Relation_to_Pers_25,clean_read_hes.hes_relationship
 relation_to_pers_26,Relation_to_Pers_26,clean_read_hes.hes_relationship
+snz_ird_uid,IRD Encrypted Unique Identificator,clean_read_ir.ir_cost_of_living
+fintprofilenumber,Profile Number,clean_read_ir.ir_cost_of_living
+fstraccounttype,Cost of Living Account,clean_read_ir.ir_cost_of_living
+fdtminstalmentdate,Instalment Date,clean_read_ir.ir_cost_of_living
+fdtmrefundeddate,Date Refunded,clean_read_ir.ir_cost_of_living
+fcurrefundedamount,Refrunded Amount,clean_read_ir.ir_cost_of_living
 date_processed,Transaction date,clean_read_debt.ir_debt_transactions
 tax_type,Products involved in the particular debt case,clean_read_debt.ir_debt_transactions
 running_balance,running balance,clean_read_debt.ir_debt_transactions
@@ -3133,6 +3212,17 @@ linkedmwgt_rep96,linkedMwgt_rep96,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep97,linkedMwgt_rep97,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep98,linkedMwgt_rep98,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep99,linkedMwgt_rep99,clean_read_moh_nzhs.moh_nzhs_child
+snz_moh_uid,snz_moh_uid,clean_read_moh_primhd.primhd_diagnoses_202312
+referral_id,REFERRAL_ID,clean_read_moh_primhd.primhd_diagnoses_202312
+organisation_id,ORGANISATION_ID,clean_read_moh_primhd.primhd_diagnoses_202312
+classification_code_id,CLASSIFICATION_CODE_ID,clean_read_moh_primhd.primhd_diagnoses_202312
+diagnosis_type,DIAGNOSIS_TYPE,clean_read_moh_primhd.primhd_diagnoses_202312
+classification_start_date,CLASSIFICATION_START_DATE,clean_read_moh_primhd.primhd_diagnoses_202312
+classification_end_date,CLASSIFICATION_END_DATE,clean_read_moh_primhd.primhd_diagnoses_202312
+clinical_coding_system_id,CLINICAL_CODING_SYSTEM_ID,clean_read_moh_primhd.primhd_diagnoses_202312
+clinical_code,CLINICAL_CODE,clean_read_moh_primhd.primhd_diagnoses_202312
+clinical_code_type,CLINICAL_CODE_TYPE,clean_read_moh_primhd.primhd_diagnoses_202312
+diagnosis_grouping_code,DIAGNOSIS_GROUPING_CODE,clean_read_moh_primhd.primhd_diagnoses_202312
 nasclegalname_value,NASCLegalName_Value,clean_read_moh_socrates.moh_client_status_hist
 reasonforclientstatuschange_valu,ReasonForClientStatusChange_Valu,clean_read_moh_socrates.moh_client_status_hist
 snz_moh_uid,snz_moh_uid,clean_read_moh_socrates.ethnicity
@@ -3950,6 +4040,9 @@ supservcd,supservcd,clean_read_msd.wish_{datestamp}
 threshold,threshold,clean_read_msd.wish_{datestamp}
 wklycosts,Weekly costs,clean_read_msd.wish_{datestamp}
 wklyrate,Weekly rate,clean_read_msd.wish_{datestamp}
+snz_msd_uid,Unique Client Identifier,clean_read_nzdf.vietnam_veterans_2023
+snz_swn_nbr,Social Welfare Number,clean_read_nzdf.vietnam_veterans_2023
+snz_moh_uid,MoH Unique Identifier,clean_read_nzdf.vietnam_veterans_2023
 cyf_ive_source_uk_var1_text,cyf_ive_source_uk_var1_text,cyf_clean.cyf_investgtns_event
 snz_prsn_uid,snz_prsn_uid,clean_read_temp_archive.cyf_cc_cli_seg_options
 snz_msd_uid,snz_msd_uid,clean_read_temp_archive.cyf_cc_cli_seg_options
@@ -3969,6 +4062,14 @@ seg3,Seg3,clean_read_temp_archive.cyf_cc_cli_seg_options
 seg4,Seg4,clean_read_temp_archive.cyf_cc_cli_seg_options
 seg5,Seg5,clean_read_temp_archive.cyf_cc_cli_seg_options
 seg6,Seg6,clean_read_temp_archive.cyf_cc_cli_seg_options
+snz_jus_uid,Justice UID,clean_read_pol.yorst_202312
+genesis_client_alert,Genesis Client Alert,clean_read_pol.yorst_202312
+snz_pol_yorst_uid,YORST UID,clean_read_pol.yorst_202312
+yorst_score,YORST Score,clean_read_pol.yorst_202312
+completion_dt,YORST Completion Date,clean_read_pol.yorst_202312
+creation_ts,YORST Created Date,clean_read_pol.yorst_202312
+assign_station,Assigned Station,clean_read_pol.yorst_202312
+information_alert_start_date,Information Alert Start Date,clean_read_pol.yorst_202312
 snz_uid,snz_uid,ird_income_adjustment_historic
 snz_ird_uid,snz_ird_uid,ird_income_adjustment_historic
 ir_adj_snz_unique_nbr,ir_adj_snz_unique_nbr,ird_income_adjustment_historic
@@ -4035,6 +4136,235 @@ date_finish,date_finish,clean_read_sla.sla_nrb_borrowers
 snz_ird_uid,snz_ird_uid,clean_read_sla.sla_border_move
 date_start,date_start,clean_read_sla.sla_border_move
 date_end,date_end,clean_read_sla.sla_border_move
+snz_moh_uid,Encrypted NHI numbers,clean_read_arcos.arcosv_202312
+registration_number,Participant Registration Number,clean_read_arcos.arcosv_202312
+b3_1,Event type,clean_read_arcos.arcosv_202312
+b3_1_1,Was the patient diagnosed with COVID-19 ?,clean_read_arcos.arcosv_202312
+b3_1_2,Date of COVID-19 diagnosis.,clean_read_arcos.arcosv_202312
+birth_year,Year of Birth,clean_read_arcos.arcosv_202312
+birth_month,Month of Birth,clean_read_arcos.arcosv_202312
+sex,Sex,clean_read_arcos.arcosv_202312
+sex_1,Was a non-binary gender identified?,clean_read_arcos.arcosv_202312
+b5_1,Public hospital,clean_read_arcos.arcosv_202312
+b5_1_1,"If Yes, identify the hospital.",clean_read_arcos.arcosv_202312
+b5_1_2__1,GP source,clean_read_arcos.arcosv_202312
+b5_1_2__2,Private Hospital source,clean_read_arcos.arcosv_202312
+b5_1_2__3,Rest Home source,clean_read_arcos.arcosv_202312
+b5_1_2__4,Coroner source,clean_read_arcos.arcosv_202312
+b5_1_2__5,Death Certificate source,clean_read_arcos.arcosv_202312
+b5_1_2__6,Ministry of Health source,clean_read_arcos.arcosv_202312
+b5_1_2__7,Other source,clean_read_arcos.arcosv_202312
+b6_1,Date of event,clean_read_arcos.arcosv_202312
+b6_2,Was the participant already in hospital when the stroke/TIAevent occurred?,clean_read_arcos.arcosv_202312
+b6_3,Was participant alive at time of notification ?,clean_read_arcos.arcosv_202312
+b7_1__1,Did this assessment take place at a hospital?,clean_read_arcos.arcosv_202312
+b7_1__2,Did this assessment take place at a GP clinic?,clean_read_arcos.arcosv_202312
+b7_1__3,Was this information obtained from medical notes only?,clean_read_arcos.arcosv_202312
+b7_1__4,Was this information obtained from other sources?,clean_read_arcos.arcosv_202312
+b8_1___1,New Zealand European,clean_read_arcos.arcosv_202312
+b8_1___2,Māori,clean_read_arcos.arcosv_202312
+b8_1___3,Samoan,clean_read_arcos.arcosv_202312
+b8_1___4,Cook Island Maori,clean_read_arcos.arcosv_202312
+b8_1___5,Tongan,clean_read_arcos.arcosv_202312
+b8_1___6,Niuean,clean_read_arcos.arcosv_202312
+b8_1___7,Chinese,clean_read_arcos.arcosv_202312
+b8_1___8,Indian,clean_read_arcos.arcosv_202312
+b8_1___9,MELAA,clean_read_arcos.arcosv_202312
+b8_1___10,Other Europeans,clean_read_arcos.arcosv_202312
+b8_1___11,Other ethnic group,clean_read_arcos.arcosv_202312
+b8_2,Current marital status,clean_read_arcos.arcosv_202312
+b8_3,Usual dwelling place of participant prior to stroke/TIA.,clean_read_arcos.arcosv_202312
+b8_4,Participant's highest qualification,clean_read_arcos.arcosv_202312
+b8_5,Employment Status prior to stroke/TIA,clean_read_arcos.arcosv_202312
+b9_1___1,Previous stroke,clean_read_arcos.arcosv_202312
+b9_1___2,Previous TIA (mini-stroke),clean_read_arcos.arcosv_202312
+b9_1___3,Elevated blood lipids (cholesterol),clean_read_arcos.arcosv_202312
+b9_1___4,"Hypertension, elevated bloodpressure",clean_read_arcos.arcosv_202312
+b9_1___5,Diabetes,clean_read_arcos.arcosv_202312
+b9_1___6,"Coronary artery disease, angina(heart attack)",clean_read_arcos.arcosv_202312
+b9_1___7,"Previous Irregular pulse(arrhythmia), atrial fibrillation",clean_read_arcos.arcosv_202312
+b9_1___8,Valvular heart disease,clean_read_arcos.arcosv_202312
+b9_1___9,Heart failure,clean_read_arcos.arcosv_202312
+b9_1___10,Peripheral vascular disease (pain inlegs when walking),clean_read_arcos.arcosv_202312
+b9_1___11,Epilepsy/seizures,clean_read_arcos.arcosv_202312
+b9_1___12,Migraine,clean_read_arcos.arcosv_202312
+b9_1___13,Previous head injury (resulting inloss of consciousness),clean_read_arcos.arcosv_202312
+b9_1___15,Patent Foramen Ovale defect (PFO),clean_read_arcos.arcosv_202312
+b9_1___14,None of the above,clean_read_arcos.arcosv_202312
+b9_1_2,"If Yes to previous stroke, the date of previous stroke (if known) ?",clean_read_arcos.arcosv_202312
+b9_2,"Serious fall (that is, a fall that resulted in injury or requiredmedical attention)",clean_read_arcos.arcosv_202312
+b9_2_1,"If yes, what was the date of fall ? If several, put the most recent date.",clean_read_arcos.arcosv_202312
+b10_1__1,Aspirin,clean_read_arcos.arcosv_202312
+b10_1__2,Dipyridamole,clean_read_arcos.arcosv_202312
+b10_1__3,Clopidogrel,clean_read_arcos.arcosv_202312
+b10_1__4,Warfarin,clean_read_arcos.arcosv_202312
+b10_1__5,Dabigatran,clean_read_arcos.arcosv_202312
+b10_1__6,Rivaroxaban,clean_read_arcos.arcosv_202312
+b10_1__7,Blood pressure lowering medications,clean_read_arcos.arcosv_202312
+b10_1__8,Lipid lowering therapy (statins),clean_read_arcos.arcosv_202312
+b10_1__9,Diabetes medications,clean_read_arcos.arcosv_202312
+b10_1__10,Mood modification therapy,clean_read_arcos.arcosv_202312
+b10_1__11,Supplements (Vitamins),clean_read_arcos.arcosv_202312
+b10_1__12,Oral contraceptives,clean_read_arcos.arcosv_202312
+b10_1__13,None of the above,clean_read_arcos.arcosv_202312
+b11_1,Smoked cigarettes,clean_read_arcos.arcosv_202312
+b11_2,"If yes, number of years participant has been smoking.",clean_read_arcos.arcosv_202312
+b11_3,Participant's smoking habits in the month prior to the stroke/TIA.,clean_read_arcos.arcosv_202312
+b11_4__1,Tobacco,clean_read_arcos.arcosv_202312
+b11_4__2,Vapes,clean_read_arcos.arcosv_202312
+b11_4__3,Hookah/Shisha,clean_read_arcos.arcosv_202312
+b11_4__4,Cannabis,clean_read_arcos.arcosv_202312
+b11_4__5,Others,clean_read_arcos.arcosv_202312
+b11_4__6,Never smoked,clean_read_arcos.arcosv_202312
+b12_1,Has participant consumed alcohol in the year prior to thestroke/TIA?,clean_read_arcos.arcosv_202312
+b12_2,Standard alcoholic drinks in a day.,clean_read_arcos.arcosv_202312
+b12_3,Years of alcohol consumption in total.,clean_read_arcos.arcosv_202312
+b13_1,Father or mother had a stroke or heart attack before reaching the age of 65.,clean_read_arcos.arcosv_202312
+b14_1,"Systolic blood pressure (mm Hg)(First recorded in hospital)",clean_read_arcos.arcosv_202312
+b14_2,"Diastolic blood pressure (mm Hg)(First recorded in hospital)",clean_read_arcos.arcosv_202312
+b14_3,"Date blood pressure taken(First recorded in hospital)",clean_read_arcos.arcosv_202312
+b14_4,Blood lipids LDL (mmol/l),clean_read_arcos.arcosv_202312
+b14_5,Blood lipids HDL (mmol/l),clean_read_arcos.arcosv_202312
+b14_6,Total Cholesterol (mmol/l),clean_read_arcos.arcosv_202312
+b14_7,Triglycerides (mmol/l),clean_read_arcos.arcosv_202312
+b14_8,C-reactive Protein (mg/l),clean_read_arcos.arcosv_202312
+b14_9,HbA1c,clean_read_arcos.arcosv_202312
+b_14_9_1,What was the unit used to measure HBA1C ?,clean_read_arcos.arcosv_202312
+b15_1,Premorbid MRS,clean_read_arcos.arcosv_202312
+b16_1,Date and time when participant was last known well.,clean_read_arcos.arcosv_202312
+b16_2,Awake at the time of onset of symptoms.,clean_read_arcos.arcosv_202312
+b16_2_1,"If awake, time when symptoms started.",clean_read_arcos.arcosv_202312
+b16_2_2,"If not awake, time when symptoms started.",clean_read_arcos.arcosv_202312
+b16_3,"If the time of event onset is unknown, how many hoursago was the participant alright? (Or else leave blank)",clean_read_arcos.arcosv_202312
+b17_1,Weakness in limbs,clean_read_arcos.arcosv_202312
+b17_1_1,"If weakness in limbs, which side was most aff ected?",clean_read_arcos.arcosv_202312
+b17_2,"Sensory symptoms (e.g. numbness, tingling, in face orlimbs)",clean_read_arcos.arcosv_202312
+b17_2_1,"If sensory symptoms, which side was most affected?",clean_read_arcos.arcosv_202312
+b17_3,Disturbance of speech or communication (e.g.dysarthria/dysphasia),clean_read_arcos.arcosv_202312
+b17_4,Change in vision (double or blurred vision),clean_read_arcos.arcosv_202312
+b17_4_1,"If change in vision, which side was most affected?",clean_read_arcos.arcosv_202312
+b17_5,Partial or complete blindness,clean_read_arcos.arcosv_202312
+b17_5_1,"If partial or complete blindness, which side was most affected?",clean_read_arcos.arcosv_202312
+b17_6,Weakness in face,clean_read_arcos.arcosv_202312
+b17_6_1,"If weakness in face, which side was most aff ected?",clean_read_arcos.arcosv_202312
+b17_7,Disturbance of balance or walking (e.g. ataxia),clean_read_arcos.arcosv_202312
+b17_8,"Other symptom (e.g. headache, neck stiff ness)",clean_read_arcos.arcosv_202312
+b17_9,Did all focal symptoms resolve within 24 hours?,clean_read_arcos.arcosv_202312
+b17_9_1,"If Yes, duration of symptoms?",clean_read_arcos.arcosv_202312
+b17_10__1,Time unit between onset of symptoms and seeking medical attention: minutes,clean_read_arcos.arcosv_202312
+b17_10__2,Time unit between onset of symptoms and seeking medical attention: hours,clean_read_arcos.arcosv_202312
+b17_10__3,Time unit between onset of symptoms and seeking medical attention: days,clean_read_arcos.arcosv_202312
+b17_10__4,Time unit between onset of symptoms and seeking medical attention: more than a month,clean_read_arcos.arcosv_202312
+b17_10_1,Time between onset of symptoms and seeking medical attention in minutes,clean_read_arcos.arcosv_202312
+b17_10_2,Time between onset of symptoms and seeking medical attention in hours,clean_read_arcos.arcosv_202312
+b17_10_3,Time between onset of symptoms and seeking medical attention in days,clean_read_arcos.arcosv_202312
+b18_1,Has the diagnosis been confirmed ?,clean_read_arcos.arcosv_202312
+b18_1_1__1,Diagnosis confirmed by General practitioner,clean_read_arcos.arcosv_202312
+b18_1_1__2,Diagnosis confirmed by General physician,clean_read_arcos.arcosv_202312
+b18_1_1__3,Diagnosis confirmed by Geriatrician,clean_read_arcos.arcosv_202312
+b18_1_1__4,Diagnosis confirmed by Neurologist,clean_read_arcos.arcosv_202312
+b18_1_1__5,Diagnosis confirmed by Pathologist,clean_read_arcos.arcosv_202312
+b18_1_1__6,Diagnosis confirmed by Other,clean_read_arcos.arcosv_202312
+b19_1,Age ≥60 years,clean_read_arcos.arcosv_202312
+b19_2,Blood pressure ≥140/90 mm Hg,clean_read_arcos.arcosv_202312
+b19_3,Speech impairment without weakness,clean_read_arcos.arcosv_202312
+b19_4,Unilateral weakness,clean_read_arcos.arcosv_202312
+b19_5,Duration of TIA 10-59 minutes,clean_read_arcos.arcosv_202312
+b19_6,Duration of TIA ≥60 minutes,clean_read_arcos.arcosv_202312
+b19_7,Diabetes mellitus present,clean_read_arcos.arcosv_202312
+b19_8,Dual TIA,clean_read_arcos.arcosv_202312
+b19_9,Ipsilateral ≥50% stenosis of internal carotid artery and/orcerebral major artery,clean_read_arcos.arcosv_202312
+b20_1,Was a Glasgow coma score recorded at the time of strokeonset (e.g. Ambulance notes) or on presentation?,clean_read_arcos.arcosv_202312
+b20_1_1,Glasgow Coma Score at the time of stroke or on presentation? (2 digits),clean_read_arcos.arcosv_202312
+b20_2,Was a Glasgow coma score recorded during the first 7days after stroke onset/presentation?,clean_read_arcos.arcosv_202312
+b20_2_1,Worst Glasgow Coma Score during the first 7 days after stroke onset/presentation?,clean_read_arcos.arcosv_202312
+b20_3,Date of scoring.,clean_read_arcos.arcosv_202312
+b21_1,Who referred this participant to the hospital ?,clean_read_arcos.arcosv_202312
+b21_3,Date of initial presentation to hospital.,clean_read_arcos.arcosv_202312
+b21_4,Time of arrival at hospital (24 hour clock),clean_read_arcos.arcosv_202312
+b21_5___1,Did the participant reach the acute hospital by ambulance?,clean_read_arcos.arcosv_202312
+b21_5___2,Did the participant reach the acute hospital by helicopter?,clean_read_arcos.arcosv_202312
+b21_5___3,Did the participant reach the acute hospital by private car?,clean_read_arcos.arcosv_202312
+b21_5___4,Did the participant reach the acute hospital by public transport?,clean_read_arcos.arcosv_202312
+b21_5___5,Did the participant reach the acute hospital by other transport?,clean_read_arcos.arcosv_202312
+b21_5_1___1,"If the participant reach the acute hospital by public transport, was it by taxi?",clean_read_arcos.arcosv_202312
+b21_5_1___2,"If the participant reach the acute hospital by public transport, was it by bus?",clean_read_arcos.arcosv_202312
+b21_5_1___3,"If the participant reach the acute hospital by public transport, was it by train?",clean_read_arcos.arcosv_202312
+b21_5_1___4,"If the participant reach the acute hospital by public transport, was it by ferry?",clean_read_arcos.arcosv_202312
+b21_6,Was the participant transferred to a second hospital?,clean_read_arcos.arcosv_202312
+b21_6_1,"If transferred to a second hospital, which hospital",clean_read_arcos.arcosv_202312
+b21_7___1,Transfer by road ambulance,clean_read_arcos.arcosv_202312
+b21_7___2,Transfer by helicopter?,clean_read_arcos.arcosv_202312
+b21_7___3,Transfer by another way?,clean_read_arcos.arcosv_202312
+b21_8,Which department first identified the participant?,clean_read_arcos.arcosv_202312
+b21_9,Did the stroke/TIA occur within 28 days of a surgical procedure?,clean_read_arcos.arcosv_202312
+b21_10,Was participant transferred to a hospital rehabilitation unit as an inpatient?,clean_read_arcos.arcosv_202312
+b21_11_1,Date of transfer/admission to rehabilitation unit,clean_read_arcos.arcosv_202312
+b22_1,Participant treated in a stroke unit during hospitalisation.,clean_read_arcos.arcosv_202312
+b22_2,Participant had more than 50% of stay on a stroke unit.,clean_read_arcos.arcosv_202312
+b22_3,Participant had his brain scan done within 24 hours of admission.,clean_read_arcos.arcosv_202312
+b22_4___1,Did the participant receive Endovascular clot retrieval (ECR)?,clean_read_arcos.arcosv_202312
+b22_4___2,Did the participant receive IV Thrombolytic therapy?,clean_read_arcos.arcosv_202312
+b22_4___4,Did the participant receive neither ECR nor IV Thrombolytic therapy?,clean_read_arcos.arcosv_202312
+b22_4_1,Date of the ECR procedure.,clean_read_arcos.arcosv_202312
+b22_4_2,Date of the IV Thrombolytic therapy procedure.,clean_read_arcos.arcosv_202312
+b22_4_3,Time of the ECR procedure.,clean_read_arcos.arcosv_202312
+b22_4_4,Time of the IV Thrombolytic therapy procedure.,clean_read_arcos.arcosv_202312
+b23,Was a miniACE Cognitive test completed by the DHB?,clean_read_arcos.arcosv_202312
+b24_1,Aneurysm clipping,clean_read_arcos.arcosv_202312
+b24_1_1,Aneurysm clipping date,clean_read_arcos.arcosv_202312
+b24_2,Aneurysm coiling,clean_read_arcos.arcosv_202312
+b24_2_1,Aneurysm coiling date,clean_read_arcos.arcosv_202312
+b24_3,Did the participant die after the initial notification ?,clean_read_arcos.arcosv_202312
+b25_1,MRS score taken at baseline.,clean_read_arcos.arcosv_202312
+b25_2,MRS Score,clean_read_arcos.arcosv_202312
+b25_3,"If the mRS was not taken or unknown, mark the category.",clean_read_arcos.arcosv_202312
+b26_1,Was the NIHSS done at admission ?,clean_read_arcos.arcosv_202312
+b26_1_1,NIH Stroke Scale (Total Score),clean_read_arcos.arcosv_202312
+d1_2,Participant discharged from hospital?,clean_read_arcos.arcosv_202312
+d1_3,Date of final discharge,clean_read_arcos.arcosv_202312
+d_event,Event Date,clean_read_arcos.arcosv_202312
+d1_4,Participant was discharged to,clean_read_arcos.arcosv_202312
+d1_5,Are the participant's contact details after discharge different to those in Contact Details form?,clean_read_arcos.arcosv_202312
+d2_1___1,Was Aspirin prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___2,Was Dipyridamole prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___3,Was Clopidogrel prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___4,Was Warfarin prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___5,Was Dibigatran prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___6,Was Rivaroxaban prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___7,Were Blood pressure lowering medications prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___8,Was Lipid lowering therapy (statins) prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___9,Were Diabetes medications prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___10,Was Mood modification therapy prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___11,Was Other medications prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d2_1___12,Was none of the above prescribed at hospital discharge?,clean_read_arcos.arcosv_202312
+d3___1,Was CT Scan undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+d3___2,Was MRI Scan undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+d3___3,Was Doppler/USG undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+d3___4,Was ECG undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+d3___5,Was TT-Echo undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+d3___6,Was TO-Echo undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+d3___8,Was ePRF (Electronic Pt. Report)/AmbulanceReport undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+d3___7,Were Other scans undertaken during hospitalisation?,clean_read_arcos.arcosv_202312
+ct_date,Date and Time of CT acquisition.,clean_read_arcos.arcosv_202312
+mri_date,Date and Time of MRI acquisition.,clean_read_arcos.arcosv_202312
+d4___1,Admission notes available,clean_read_arcos.arcosv_202312
+d4___2,Discharge summary available,clean_read_arcos.arcosv_202312
+d4___6,Additional Discharge summary available,clean_read_arcos.arcosv_202312
+d4___3,Rehab summary available,clean_read_arcos.arcosv_202312
+d4___4,Death report available,clean_read_arcos.arcosv_202312
+d4___5,Transfer report available,clean_read_arcos.arcosv_202312
+d4___7,Other report available,clean_read_arcos.arcosv_202312
+r1_1,Date of event,clean_read_arcos.arcosv_202312
+r1_4_1,Confirmed diagnosis by WHO classification,clean_read_arcos.arcosv_202312
+r1_4_2,Confirmed diagnosis by tissue-based classification,clean_read_arcos.arcosv_202312
+r1_4_3,"If stroke or TIA, what is the certainty of the diagnosis?",clean_read_arcos.arcosv_202312
+r1_4_4,"If stroke, what is the OCSP Clinical Criteria?",clean_read_arcos.arcosv_202312
+r1_4_5,"If stroke, what is the pathological classifi cation?",clean_read_arcos.arcosv_202312
+r1_10,"If ischaemic stroke or TIA, what is the TOAST criteria?",clean_read_arcos.arcosv_202312
+r1_11,"If Subarachnoid haemorrhage, presence of cerebralaneurysm.",clean_read_arcos.arcosv_202312
+r1_5,Was there a potential secondary cause of stroke?,clean_read_arcos.arcosv_202312
+r1_5_1,"If potential secondary cause of stroke, specify",clean_read_arcos.arcosv_202312
 eq_activities_dich_6mo,eq_activities_dich_6mo,clean_read_nsr.regions_202306
 eq_pain_dich_6mo,eq_pain_dich_6mo,clean_read_nsr.regions_202306
 eq_anxiety_dich_6mo,eq_anxiety_dich_6mo,clean_read_nsr.regions_202306
