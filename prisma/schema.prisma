@@ -3,13 +3,13 @@
 
 generator client {
     provider        = "prisma-client-js"
-    previewFeatures = ["fullTextSearch", "fullTextIndex"]
+    previewFeatures = ["fullTextSearch"]
 }
 
 datasource db {
-    provider     = "mysql"
-    url          = env("DATABASE_URL")
-    relationMode = "prisma"
+    provider = "postgresql"
+    url      = env("DATABASE_URL")
+    // relationMode = "prisma"
 }
 
 model agencies {
@@ -17,7 +17,7 @@ model agencies {
     agency_name String?
     collections collections[]
 
-    @@fulltext([agency_name])
+    // @@fulltext([agency_name])
 }
 
 model collections {
@@ -25,13 +25,13 @@ model collections {
     collection_name     String?
     agency_id           String?
     database_id         String?
-    description         String?               @db.LongText
+    description         String?
     agency              agencies?             @relation(fields: [agency_id], references: [agency_id], onDelete: NoAction, onUpdate: NoAction, map: "collection_agency_fkey")
     datasets            datasets[]
     collection_keywords collection_keywords[]
+    // @@fulltext([collection_name, description])
 
     @@index([agency_id])
-    @@fulltext([collection_name, description])
 }
 
 model datasets {
@@ -40,7 +40,7 @@ model datasets {
     collection_id    String?
     // order of dataset in data dictionary
     dd_order         Int          @default(0)
-    description      String?      @db.LongText
+    description      String?
     reference_period String?
     collection       collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
     variables        variables[]
@@ -48,9 +48,9 @@ model datasets {
     alternate table_matches[]  @relation("alt_table")
     matches   table_matches[]  @relation("match_table")
     regexes   datasets_regex[] @relation("datasets_regex")
+    // @@fulltext([dataset_name, description])
 
     @@index([collection_id])
-    @@fulltext([dataset_name, description])
 }
 
 model variables {
@@ -59,8 +59,8 @@ model variables {
     dataset_id    String
     // order of variable in data dictionary
     dd_order      Int      @default(0)
-    description   String?  @db.LongText
-    information   String?  @db.LongText
+    description   String?
+    information   String?
     primary_key   Boolean?
     type          String?
     size          Int?
@@ -69,11 +69,11 @@ model variables {
 
     alternate variable_matches[] @relation("alt_variable")
     matches   variable_matches[] @relation("match_variable")
+    // @@fulltext([variable_name, description])
 
     @@id([variable_id, dataset_id], name: "v_id")
     @@unique([dataset_id, variable_id])
     @@index([dataset_id])
-    @@fulltext([variable_name, description])
 }
 
 model table_matches {
@@ -114,7 +114,7 @@ model code_values {
     id          Int    @id @default(autoincrement())
     variable_id String
     code        String
-    label       String @db.LongText
+    label       String
 }
 
 // this model is for writing weekly to prevent planetscale db

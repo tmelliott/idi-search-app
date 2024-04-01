@@ -1,18 +1,26 @@
-library(RMySQL)
+# library(RMySQL)
+library(RPostgreSQL)
 library(dbplyr)
 library(pbapply)
 library(cli)
+library(dotenv)
 
 write_tables <- function() {
     cli_h1("Writing tables to database")
 
     cli_progress_step("Connecting to database")
+    db_string <- Sys.getenv("DATABASE_URL")
+    db_params <- stringr::str_match(db_string, "postgresql://(?<user>[^:]+):(?<password>[^@]+)@(?<domain>[^/]+)/(?<dbname>[^?]+)")[1, ]
+    db_params <- lapply(names(db_params),
+        \(x) as.character(db_params[x])) |>
+        setNames(names(db_params))
     con <- dbConnect(
-        MySQL(),
-        user = "root",
-        host = "127.0.0.1",
-        port = 3309,
-        dbname = "idisearchapp"
+        PostgreSQL(),
+        user = db_params$user,
+        password = db_params$password,
+        dbname = db_params$dbname,
+        host = db_params$domain,
+        port = 5432,
     )
     cli_process_done()
 
