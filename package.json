@@ -1,6 +1,6 @@
 {
   "name": "idi-search-app",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Explore the datasets available in New Zealand's IDI",
   "private": true,
   "scripts": {
