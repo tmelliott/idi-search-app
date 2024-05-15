@@ -34,7 +34,7 @@ const config = {
     defaultLocale: "en",
   },
   images: {
-    domains: ["terourou.org"],
+    domains: ["terourou.org", "inzight.co.nz"],
   },
   pageExtensions: ["js", "jsx", "ts", "tsx", "md", "mdx"],
 };

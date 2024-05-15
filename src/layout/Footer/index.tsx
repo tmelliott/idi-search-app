@@ -7,7 +7,7 @@ import TwitterIcon from "./twitter.png";
 
 function Footer() {
   return (
-    <footer className="flex flex-col gap-3 md:flex-row justify-between items-cneter bg-gray-900 px-4 py-2 text-xs text-gray-400">
+    <footer className="flex flex-col gap-12 md:flex-row justify-between items-cneter bg-gray-900 px-4 py-2 text-xs text-gray-400">
       <div className="flex flex-col gap-y-1">
         <p>
           Elliott, Milne, Li, Simpson, and Sporle (2021).{` `}
@@ -23,6 +23,7 @@ function Footer() {
         </p>
         <p>
           A collaboration by{" "}
+          <A href="https://inzight.co.nz">iNZight Analytics Ltd</A>,{` `}
           <A href="https://terourou.org?utm_medium=web&utm_source=idisearch&utm_content=footer">
             Te Rourou Tātaritanga
           </A>
@@ -31,12 +32,20 @@ function Footer() {
             COMPASS
           </A>
           ,{` `}
-          <A href="https://wgtn.ac.nz">Victoria University of Wellington</A>,{` `}
+          <A href="https://wgtn.ac.nz">Victoria University of Wellington</A>,
+          {` `}
           and <A href="https://auckland.ac.nz">The University of Auckland</A>.
-          Funded by <A href="https://mbie.govt.nz">MBIE</A>.
         </p>
       </div>
       <div className="flex justify-center items-center gap-4">
+        <a href="https://inzight.co.nz">
+          <Image
+            src="https://inzight.co.nz/favicon.ico"
+            width={20}
+            height={20}
+            alt="iNZight"
+          />
+        </a>
         <a href="https://terourou.org">
           <Image
             src="https://terourou.org/favicon.ico"
