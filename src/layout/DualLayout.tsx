@@ -26,7 +26,7 @@ const DualLayout = ({ children }: PropsWithChildren) => {
   return (
     <MainLayout>
       <div className="h-full">
-        <div className="md:h-full flex md:overflow-x-hidden">
+        <div className="relative md:h-full flex md:overflow-x-hidden">
           <div className="flex-1 overflow-y-scroll">
             <Config />
             {/* {router.pathname !== "/" && (
@@ -39,7 +39,7 @@ const DualLayout = ({ children }: PropsWithChildren) => {
           </div>
 
           {landing && (
-            <div className="absolute w-1/2 right-0 p-4 hidden md:block">
+            <div className="absolute overflow-y-scroll w-1/2 h-full right-0 p-4 hidden md:block overflow-x-hidden">
               <LandingPage />
             </div>
           )}
