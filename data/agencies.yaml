@@ -12,11 +12,14 @@
   name: New Zealand Customs Service
   collections:
     - IDI Customs International Travel and Migration data
+    - Customs Historic Arrival and Departure card
+    - Migrant Unit Record Probabilities
 
 - id: DoC
   name: Department of Corrections
   collections:
     - Offender Management Periods
+    - "Sentences, Orders, and Remand"
 
 - id: DIA
   name: Department of Internal Affairs
@@ -27,6 +30,11 @@
   name: Early Start Project
   collections:
     - IDI Early Start Project data
+
+- id: Enable
+  name: Enable New Zealand
+  collections:
+    - ENABLE
 
 - id: HNZ
   name: Kāinga Ora and Ministry of Social Development
@@ -70,6 +78,9 @@
     - IDI MOE Compulsary Schooling (CS) Student Attendance data
     - IDI MOE Early Childhood Education (ECE) Student Attendance data
     - IDI MOE Provider Profile data
+    - School Equity Index History
+    - IDI MOE School Roll Return data
+    - "IDI MOE Student Ongoing Resource Scheme (ORS) Criterion"
 
 - id: MOH
   name: Ministry of Health
@@ -95,6 +106,8 @@
     - IDI MOH Private Hospital Discharges data
     - IDI MOH Programme for the Integration of Mental Health data
     - IDI MOH Public Hospital Discharges data
+    - "IDI MOH Aotearoa Immunisation Register (AIR)"
+    - "IDI Virtual Diabetes Register (VDR)"
 
 - id: MOJ
   name: Ministry of Justice
@@ -117,6 +130,8 @@
     - IDI Ministry of Social Development Residential and Postal Address data
     - IDI SLA MSD Study Link data
     - "New Zealand Defence Force; Veterans Affairs"
+    - MSD SORT Participation
+    - MSD SORT Participation Adhoc
 
 - id: NZPOL
   name: New Zealand Police
@@ -161,7 +176,11 @@
     - IDI Business Register data
     - IDI Longitudinal Immigration Survey of NZ
     - IDI General Social Survey 2021 data (GSS2021)
+    - IDI General Social Survey 2023 data (GSS2023)
     - IDI General Social Survey Ongoing Supplements
+    - IDI Derived Population data
+    - Household Income and Living Survey
+    - Stats NZ 2023 Household Disability Survey
 
 - id: SportNZ
   name: Sport NZ

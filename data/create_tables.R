@@ -143,9 +143,14 @@ suppressMessages({
                 )
             }
 
+            if (!"reference.period" %in% names(tables)) {
+                tables <- tables |>
+                    mutate(reference.period = NA)
+            }
+
             list(
                 collection = tibble(
-                    collection_schema = schema[2],
+                    collection_schema = tolower(schema[2]),
                     collection_name = col,
                     database_id = stringr::str_trim(tolower(schema[1])),
                     description = x[[2]][grep("Introduction", x$Index)],
@@ -201,7 +206,8 @@ if (any(table(collections$collection_name) > 1L)) {
     tbl <- table(collections$collection_name)
     tbl <- tbl[tbl > 1L]
     cli::cli_alert_danger("Bad collection names")
-    cli::cli_ul(tbl[tbl > 1L])
+    bad_col <- collections |> filter(collection_name %in% names(tbl))
+    print(bad_col)
     stop()
 }
 
@@ -215,9 +221,9 @@ datasets <- suppressMessages(
             reference_period = "reference.period"
         ) |>
         mutate(
-            dataset_id = gsub("*", "", dataset_id, fixed = TRUE),
+            dataset_id = tolower(gsub("*", "", dataset_id, fixed = TRUE)),
             dataset_name = gsub("*", "", dataset_name, fixed = TRUE),
-            dataset_id = gsub("^\\[?IDI\\_Adhoc\\]?\\.", "", dataset_id)
+            dataset_id = gsub("^\\[?idi\\_adhoc\\]?\\.", "", dataset_id)
         ) |>
         select(dataset_id, dataset_name, collection_name, dd_order, description, reference_period) |>
         mutate(dataset_id = stringr::str_trim(tolower(dataset_id)))
@@ -247,7 +253,7 @@ if (any(dup_ids > 1L)) {
             )
         )
     )
-    cli::cli_ul(dup_ids[dup_ids > 1])
+    cli::cli_ul(names(dup_ids)[dup_ids > 1])
     stop()
 }
 
@@ -338,13 +344,13 @@ variables <- variables |>
     bind_rows() |>
     mutate(
         primary_key = !is.na(primary_key) & primary_key == "Y",
-        schema = str_replace_all(schema, "\\[|\\]", ""),
+        schema = tolower(str_replace_all(schema, "\\[|\\]", "")),
         variable_id = str_replace_all(variable_id, "\\[|\\]", ""),
         variable_name = str_replace_all(variable_name, "\\[|\\]", ""),
-        dataset_id = str_replace(schema, "IDI_Adhoc\\.", ""),
+        dataset_id = str_replace(schema, "idi_adhoc\\.", ""),
         dataset_id = str_replace(dataset_id, "\n", "__"),
         database_id = ifelse(
-            str_detect(schema, "IDI_Adhoc"),
+            str_detect(schema, "idi_adhoc"),
             "IDI_Adhoc",
             "IDI_Clean"
         )
@@ -415,6 +421,9 @@ regex_matched_datasets <- apply(regex_matches, 1L, \(x) {
         distinct()
 }) |> bind_rows()
 
+if (any(regex_matched_datasets$dataset_id |> table() > 1)) {
+    stop("Duplicated regex")
+}
 
 # saveRDS(refresh_vars, "data/cache/refresh_vars.rda")
 # refresh_vars <- readRDS("data/cache/refresh_vars.rda")
@@ -455,8 +464,8 @@ av <- all_variables |>
     mutate(dataset_id = dd_dataset_id) |>
     select(-dd_dataset_id) |>
     group_by(across(-type)) |>
-    summarize(type = most_common(type)) |>
-    ungroup() |>
+    summarize(type = most_common(type), .groups = "drop") |>
+    # ungroup() |>
     distinct() |>
     bind_rows(
         all_variables |>

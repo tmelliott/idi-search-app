@@ -55,7 +55,7 @@ model datasets {
 
 model variables {
     variable_id   String
-    variable_name String?
+    variable_name String?  @db.LongText
     dataset_id    String
     // order of variable in data dictionary
     dd_order      Int      @default(0)

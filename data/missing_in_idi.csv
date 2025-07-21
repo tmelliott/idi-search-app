@@ -1,15 +1,6 @@
 variable_id,variable_name,dataset_id
-acc_cla_tot_entitlements_paid_amt,Total entitlement payments paid to date,acc_clean.claims
-acc_cla_last_entitlement_payment_date,Last Entitlement payment date,acc_clean.claims
-acc_cla_gradual_process_claim_ind,Gradual process claim indicator,acc_clean.claims
-acc_cla_wilful_self_inflict_status_text,Wilful self inflicted claim status,acc_clean.claims
-acc_cla_wilful_self_inflict_ind_date_text,Wilful self inflicted claim status date,acc_clean.claims
-acc_cla_lodgement_provider_hospital,Public or Private hospital of the ACC45 lodgment provider (if applicable),acc_clean.claims
-acc_cla_life_time_est_year,Base year of life time estimate,acc_clean.claims
-acc_cla_life_time_future_est,Estimated future cost over lifetime,acc_clean.claims
-acc_cla_life_time_estimate,Estimated total cost over lifetime,acc_clean.claims
-acc_pay_first_service_date_text,Earliest recorded treatment/service date,acc_clean.payments
-acc_pay_last_service_date_text,Most recent treatment/service date.,acc_clean.payments
+apc_ur_addr_1yrago_ind_code,address 1 year ago indicator,data.apc_time_series
+apc_ur_addr_5yrago_ind_code,address 5 year ago indicator,data.apc_time_series
 ref_date,Reference date,data.apc_hhld_addresses
 snz_uid,Unique person identifier,data.apc_hhld_addresses
 snz_idi_address_register_uid,Unique address identifier,data.apc_hhld_addresses
@@ -61,8 +52,6 @@ apc_relationship_type_code,The code specifying the relationship type,data.apc_re
 apc_relationship_derived_ind,Primary or derived indicator,data.apc_relationships
 apc_relationship_source_code,Data sources,data.apc_relationships
 apc_relationship_source_date,Date of data source,data.apc_relationships
-apc_ur_addr_1yrago_ind_code,address 1 year ago indicator,data.apc_time_series
-apc_ur_addr_5yrago_ind_code,address 5 year ago indicator,data.apc_time_series
 cen_ind_dwell_age_code,"Age - single years",cen_clean.census_individual_2018
 cen_ind_dwell_sex_code,Sex,cen_clean.census_individual_2018
 cen_ind_ethgr_synm,Ethnic group synonym,cen_clean.census_individual_2018
@@ -90,6 +79,7 @@ cor_pro_programme_type_text,cor_pro_programme_type_text,cor_clean.ra_programmes
 cor_off_external_ref_type_code,cor_off_external_ref_type_code,cor_clean.offender_d
 cor_off_pref_ethnicity_code,cor_off_pref_ethnicity_code,cor_clean.offender_d
 cor_mmp_imposed_sentence_length_nbr,cor_mmp_imposed_sentence_length_nbr,cor_clean.ra_ofndr_major_mgmt_period_a
+gss_hq_hhld_finalwgt_1-100,gss_hq_hhld_finalwgt_1-100,gss_clean.gss_household_2021
 snz_uid,snz_uid,gss_clean.identity
 gss_id_collection_code,gss_id_collection_code,gss_clean.identity
 snz_gss_hhld_uid,snz_gss_hhld_uid,gss_clean.identity
@@ -108,7 +98,7 @@ gss_id_ta_code,gss_id_ta_code,gss_clean.identity
 gss_id_meshblock_code,gss_id_meshblock_code,gss_clean.identity
 gss_id_meshblock_imputed_ind,gss_id_meshblock_imputed_ind,gss_clean.identity
 snz_idi_address_register_uid,snz_idi_address_register_uid,gss_clean.identity
-gss_hq_hhld_finalwgt_1-100,gss_hq_hhld_finalwgt_1-100,gss_clean.gss_household_2021
+gss_hq_hhld_finalwgt_1-100,gss_hq_hhld_finalwgt_1-100,gss_clean.gss_household_2023
 gss_hq_household_code,gss_hq_household_code,gss_clean.gss_household_2014
 gss_hq_person_code,gss_hq_person_code,gss_clean.gss_household_2014
 snz_sex_code,snz_sex_code,gss_clean.gss_household_2014
@@ -2750,6 +2740,7 @@ employee_share_scheme_ded,Employee share scheme deduction,clean_read_ir_monthly.
 income_source_code,Income source code,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
 paydate_filing_period,Paydate filing period,clean_read_ir_monthly.ei_e_{quarter}_{timestamp}
 ir_ac_title_text,ir_ac_title_text,NA
+ir_ir6b_tax_nil_distribution_ind,Nil distribution,ir_clean.ird_trusts_ir6b
 snz_cen_uid,Unique identifier,iwi_affiliation_census_2018
 method,Estimate type,iwi_affiliation_census_2018
 iwi_code,Iwi affiliation,iwi_affiliation_census_2018
@@ -2812,6 +2803,15 @@ piaac_match_meshblock_imputed_in,piaac_match_meshblock_imputed_in,piaac_clean.da
 māori_n,Māori_N,clean_read_moe.moe_pisa_2018
 māori_p,Māori_P,clean_read_moe.moe_pisa_2018
 moe_pp_sch_enrl_sche_status_code,School Enrolment Scheme Status,moe_clean.provider_profile
+snz_moe_uid,Encrypted National Student Number,clean_read_moe.student_ors_criterion_{datestamp}
+assessmentdate,Assessment Date,clean_read_moe.student_ors_criterion_{datestamp}
+exitdate,Exit Date,clean_read_moe.student_ors_criterion_{datestamp}
+exitreasoncode,Exit Reason Code,clean_read_moe.student_ors_criterion_{datestamp}
+criterion1,Student Assessment 1,clean_read_moe.student_ors_criterion_{datestamp}
+criterion2,Student Assessment 2,clean_read_moe.student_ors_criterion_{datestamp}
+criterion3,Student Assessment 3,clean_read_moe.student_ors_criterion_{datestamp}
+criterion4,Student Assessment 4,clean_read_moe.student_ors_criterion_{datestamp}
+extractiondate,Extraction Date,clean_read_moe.student_ors_criterion_{datestamp}
 moe_crs_compulsory_course_costs_,moe_crs_compulsory_course_costs_,moe_clean.course
 moe_crs_pbrf_course_complete_yea,moe_crs_pbrf_course_complete_yea,moe_clean.course
 moe_ttr_orig_eligibility_reason_,moe_ttr_orig_eligibility_reason_,moe_clean.targeted_training
@@ -2860,111 +2860,6 @@ fully_vaccinated_activity_date,Date fully vaccinated,clean_read_moh_cir.moh_cir_
 first_additional_dose_date,Date of first additional dose,clean_read_moh_cir.moh_cir_vaccination_status
 first_booster_activity_date,Date of first booster dose,clean_read_moh_cir.moh_cir_vaccination_status
 last_vacc_activity_date,Date of latest vaccination,clean_read_moh_cir.moh_cir_vaccination_status
-snz_moh_uid,Stats NZ unique identifier for MOH data,clean_read_moh_hsu.hsu_202210
-hsu_year,Year,clean_read_moh_hsu.hsu_202210
-hsu_period_start_date,Reference period start,clean_read_moh_hsu.hsu_202210
-hsu_period_end_date,Reference period end,clean_read_moh_hsu.hsu_202210
-alive_at_period_end_date,Person is alive at the end of the reference period,clean_read_moh_hsu.hsu_202210
-month_of_birth,Month of birth,clean_read_moh_hsu.hsu_202210
-year_of_birth,Year of birth,clean_read_moh_hsu.hsu_202210
-month_of_death,Month of death,clean_read_moh_hsu.hsu_202210
-year_of_death,Year of death,clean_read_moh_hsu.hsu_202210
-gender_code,Gender (Sex),clean_read_moh_hsu.hsu_202210
-ethnic_code_1,Total response ethnic group code 1,clean_read_moh_hsu.hsu_202210
-ethnic_code_2,Total response ethnic group code 2,clean_read_moh_hsu.hsu_202210
-ethnic_code_3,Total response ethnic group code 3,clean_read_moh_hsu.hsu_202210
-ethnicity_priority,Prioritised ethnic group,clean_read_moh_hsu.hsu_202210
-ethnicity_mpao,Prioritised ethnic group,clean_read_moh_hsu.hsu_202210
-ethnicity_is_maori,Belongs to the Māori ethnic group,clean_read_moh_hsu.hsu_202210
-ethnicity_is_pacific,Belongs to the Pacific ethnic group,clean_read_moh_hsu.hsu_202210
-ethnicity_is_asian,Belongs to the Asian ethnic group,clean_read_moh_hsu.hsu_202210
-ethnicity_is_melaa,Belongs to the MELAA ethnic group,clean_read_moh_hsu.hsu_202210
-ethnicity_is_euro,Belongs to the European ethnic group (including NZ European),clean_read_moh_hsu.hsu_202210
-ethnicity_is_other,Belongs to the Other ethnic group,clean_read_moh_hsu.hsu_202210
-ethnicity_is_missing,No ethnic group recorded,clean_read_moh_hsu.hsu_202210
-dhb_domicile_code,DHB of domicile code,clean_read_moh_hsu.hsu_202210
-dhb_domicile_name,DHB of domicile name,clean_read_moh_hsu.hsu_202210
-dhb_pho_service_code,The DHB name of the PHO the NHI is enrolled with.,clean_read_moh_hsu.hsu_202210
-dhb_pho_service_name,The DHB name of the PHO the NHI is enrolled with.,clean_read_moh_hsu.hsu_202210
-meshblock_person_addr_code,"The meshblock associated with the NHI's last known address (closest to the end of the year), as recorded anywhere in the health system.",clean_read_moh_hsu.hsu_202210
-domicile_person_addr_code,"The domicile code associated with the NHI's last known address (closest to the end of the year), as recorded anywhere in the health system.",clean_read_moh_hsu.hsu_202210
-nzdep13_decile,NZDep2013 decile,clean_read_moh_hsu.hsu_202210
-nzdep13_quintile,NZDep2013 quintile,clean_read_moh_hsu.hsu_202210
-pho_enrol,Indicator of whether the NHI was enrolled with a PHO in the year of interest,clean_read_moh_hsu.hsu_202210
-pho_cons,Indicator of whether the NHI had a consultation with their PHO in the year of interest,clean_read_moh_hsu.hsu_202210
-can,Indicator of whether the NHI was diagnosed with cancer in the reference period,clean_read_moh_hsu.hsu_202210
-labs,Indicator of whether the NHI had a lab test in the reference period,clean_read_moh_hsu.hsu_202210
-hosp_priv,Indicator of whether the NHI was admitted to a public hospital in the reference period,clean_read_moh_hsu.hsu_202210
-hosp_pub,Indicator of whether the NHI was admitted to a public hospital in the reference period,clean_read_moh_hsu.hsu_202210
-npac,Indicator of whether the NHI had a non-admitted event in the reference period,clean_read_moh_hsu.hsu_202210
-gms,Indicator of whether the NHI received a General Medical Subsidy in the perod of interest,clean_read_moh_hsu.hsu_202210
-mort,Indicator of whether the NHI died within the reference period,clean_read_moh_hsu.hsu_202210
-pharm,Indicator of whether the NHI was dispensed a publically funded pharmaceutical prescription in the reference period.,clean_read_moh_hsu.hsu_202210
-nir,Indicator of whether the NHI received a vaccination in the reference period.,clean_read_moh_hsu.hsu_202210
-mat_mum,Indicator of whether the NHI delivered a baby in the reference period,clean_read_moh_hsu.hsu_202210
-mat_ch,Indicator of whether the NHI was a live birth (ie they were born alive) in the reference period,clean_read_moh_hsu.hsu_202210
-primhd_act,Indicator of whether the NHI had a PRIMHD activity in the reference period,clean_read_moh_hsu.hsu_202210
-primhd_ref,Indicator of whether the NHI had a PRIMHD referral in the reference period,clean_read_moh_hsu.hsu_202210
-cir,Indicator of whether the NHI had a COVID-19 Immunisation,clean_read_moh_hsu.hsu_202210
-oseas_hosp,The NHI is not resident in New Zealand as recorded in their hospital event,clean_read_moh_hsu.hsu_202210
-pho_only_flg,"The NHI is ONLY enrolled with a PHO, and has no other reported health events in our system",clean_read_moh_hsu.hsu_202210
-snz_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_hsu_datestamp
-snz_spine_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_hsu_datestamp
-snz_moh_uid,SNZ Unique Identifier,clean_read_moh_cir.moh_cir_hsu_datestamp
-gender_code,Gender,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnic_code_1,Total response ethnic group code 1,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnic_code_2,Total response ethnic group code 2,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnic_code_3,Total response ethnic group code 3,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_priority,Prioritised ethnic group,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_mpao,"Prioritised ethnic group in the order: Maori (M), Pacific (P), Asian (A), Other (EO), Missing (X). Other includes Other, Euro, and MELAA.",clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_is_maori,Belongs to the Māori ethnic group,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_is_pacific,Belongs to the Pacific ethnic group,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_is_asian,Belongs to the Asian ethnic group,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_is_melaa,Belongs to the MELAA ethnic group,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_is_euro,Belongs to the European ethnic group (including NZ European),clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_is_other,Belongs to the Other ethnic group,clean_read_moh_cir.moh_cir_hsu_datestamp
-ethnicity_is_missing,No ethnic group recorded,clean_read_moh_cir.moh_cir_hsu_datestamp
-dhb_domicile_code,DHB of domicile code,clean_read_moh_cir.moh_cir_hsu_datestamp
-dhb_domicile_name,DHB of domicile name,clean_read_moh_cir.moh_cir_hsu_datestamp
-dhb_pho_service_code,The DHB name of the PHO the NHI is enrolled with.,clean_read_moh_cir.moh_cir_hsu_datestamp
-dhb_pho_service_name,The DHB name of the PHO the NHI is enrolled with.,clean_read_moh_cir.moh_cir_hsu_datestamp
-meshblock_person_addr_code,"The meshblock associated with the NHI's last known address (closest to the end of the year), as recorded anywhere in the health system.",clean_read_moh_cir.moh_cir_hsu_datestamp
-domicile_person_addr_code,"The domicile code associated with the NHI's last known address (closest to the end of the year), as recorded anywhere in the health system.",clean_read_moh_cir.moh_cir_hsu_datestamp
-nzdep13_decile,NZDep2013 quintile,clean_read_moh_cir.moh_cir_hsu_datestamp
-nzdep13_quintile,NZDep2013 decile,clean_read_moh_cir.moh_cir_hsu_datestamp
-pho_enrol,Indicator of whether the NHI was enrolled with a PHO in the year of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-pho_cons,Indicator of whether the NHI had a consultation with their PHO in the year of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-can,Indicator of whether the NHI was diagnosed with cancer in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-labs,Indicator of whether the NHI had a lab test in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-hosp_priv,Indicator of whether the NHI was admitted to a public hospital in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-hosp_pub,Indicator of whether the NHI was admitted to a public hospital in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-npac,Indicator of whether the NHI had a non-admitted event in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-gms,Indicator of whether the NHI received a General Medical Subsidy in the perod of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-mort,Indicator of whether the NHI died within the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-pharm,Indicator of whether the NHI was dispensed a publically funded pharmaceutical prescription in the period of interest.,clean_read_moh_cir.moh_cir_hsu_datestamp
-nir,The NHI received a vaccination in the period of interest.,clean_read_moh_cir.moh_cir_hsu_datestamp
-mat_mum,The NHI delivered a baby in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-mat_ch,The NHI was a live birth (ie they were born) in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-primhd_act,The NHI had a PRIMHD activity in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-primhd_ref,The NHI had a PRIMHD referral in the period of interest,clean_read_moh_cir.moh_cir_hsu_datestamp
-oseas_hosp,The NHI is not resident in New Zealand as recorded in their hospital event,clean_read_moh_cir.moh_cir_hsu_datestamp
-pho_only_flg,"The NHI is ONLY enrolled with a PHO, and has no other reported health events in our system",clean_read_moh_cir.moh_cir_hsu_datestamp
-cir,The NHI had a COVID-19 Immunisation,clean_read_moh_cir.moh_cir_hsu_datestamp
-cir_only,The NHIs only contact with the health system in the relevant period is getting a COVID-19 vaccine,clean_read_moh_cir.moh_cir_hsu_datestamp
-source,source,clean_read_moh_cir.moh_cir_hsu_datestamp
-month_of_birth,Month of birth,clean_read_moh_cir.moh_cir_hsu_datestamp
-year_of_birth,Year of birth,clean_read_moh_cir.moh_cir_hsu_datestamp
-month_of_death,Month of death,clean_read_moh_cir.moh_cir_hsu_datestamp
-year_of_death,Year of death,clean_read_moh_cir.moh_cir_hsu_datestamp
-max_activity,Latest date health service use,clean_read_moh_cir.moh_cir_hsu_datestamp
-min_activity,Earliest date health service use,clean_read_moh_cir.moh_cir_hsu_datestamp
-max_pho_enrolment,Latest date PHO enrolment,clean_read_moh_cir.moh_cir_hsu_datestamp
-min_pho_enrolment,Earliest date PHO enrolment,clean_read_moh_cir.moh_cir_hsu_datestamp
-pho_current,Enrolled with a PHO in the last month,clean_read_moh_cir.moh_cir_hsu_datestamp
-activity_or_currentphoenrol,Received a health service or current PHO enrolment,clean_read_moh_cir.moh_cir_hsu_datestamp
-cvip_eligible,Eligible to receive a COVID-19 vaccine,clean_read_moh_cir.moh_cir_hsu_datestamp
-last_vacc_activity_date,Date of first COVID-19 vaccine,clean_read_moh_cir.moh_cir_hsu_datestamp
-first_vacc_activity_date,Date of last COVID-19 vaccine,clean_read_moh_cir.moh_cir_hsu_datestamp
 moh_irai_scale_cps2_code,moh_irai_Scale_CPS2_code,moh_clean.interrai
 moh_irai_scale_divert_code,moh_irai_Scale_DIVERT_code,moh_clean.interrai
 mean_nurse_visits_y7,mean_nurse_visits_Y7,clean_read_moh_nzhs.moh_nzhs_adult
@@ -3186,6 +3081,7 @@ linkedmwgt_rep96,linkedMwgt_rep96,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep97,linkedMwgt_rep97,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep98,linkedMwgt_rep98,clean_read_moh_nzhs.moh_nzhs_child
 linkedmwgt_rep99,linkedMwgt_rep99,clean_read_moh_nzhs.moh_nzhs_child
+moh_nes_adr_last_enrolment_date,moh_nes_adr_last_enrolment_date,moh_clean.pop_cohort_nes_address
 nasclegalname_value,NASCLegalName_Value,clean_read_moh_socrates.moh_client_status_hist
 reasonforclientstatuschange_valu,ReasonForClientStatusChange_Valu,clean_read_moh_socrates.moh_client_status_hist
 snz_moh_uid,snz_moh_uid,clean_read_moh_socrates.ethnicity
@@ -3585,31 +3481,31 @@ child_birth_month_nbr,Child Birth Month,clean_read_msd.pchddobo_{datestamp}
 child_birth_year,Child Birth Year,clean_read_msd.pchddobo_{datestamp}
 child_gender,child_gender,clean_read_msd.pchddobo_{datestamp}
 childage,childage,clean_read_msd.pchddobo_{datestamp}
-snz_msd_uid,Unique Client Identifier,clean_read_msd.prntspo_{datestamp}
-snz_swn_nbr,Social Welfare Number,clean_read_msd.prntspo_{datestamp}
-partner_snz_msd_uid,Unique Client's Partner Identifier,clean_read_msd.prntspo_{datestamp}
-partner_snz_swn_nbr,Social Welfare Number,clean_read_msd.prntspo_{datestamp}
-serv,serv,clean_read_msd.prntspo_{datestamp}
-supp,supp,clean_read_msd.prntspo_{datestamp}
-beg_date,beg_date,clean_read_msd.prntspo_{datestamp}
-end_date,end_date,clean_read_msd.prntspo_{datestamp}
-additional_service_data,additional_service_data,clean_read_msd.prntspo_{datestamp}
-aport,aport,clean_read_msd.prntspo_{datestamp}
-qlfyind,qlfyind,clean_read_msd.prntspo_{datestamp}
+snz_msd_uid,Unique Client Identifier,clean_read_msd.prntsupo_{datestamp}
+snz_swn_nbr,Social Welfare Number,clean_read_msd.prntsupo_{datestamp}
+partner_snz_msd_uid,Unique Client's Partner Identifier,clean_read_msd.prntsupo_{datestamp}
+partner_snz_swn_nbr,Social Welfare Number,clean_read_msd.prntsupo_{datestamp}
+serv,serv,clean_read_msd.prntsupo_{datestamp}
+supp,supp,clean_read_msd.prntsupo_{datestamp}
+beg_date,beg_date,clean_read_msd.prntsupo_{datestamp}
+end_date,end_date,clean_read_msd.prntsupo_{datestamp}
+additional_service_data,additional_service_data,clean_read_msd.prntsupo_{datestamp}
+aport,aport,clean_read_msd.prntsupo_{datestamp}
+qlfyind,qlfyind,clean_read_msd.prntsupo_{datestamp}
 srtet,srtet,clean_read_msd.prntsupo_{datestamp}
-clind,clind,clean_read_msd.prntspo_{datestamp}
-susp,susp,clean_read_msd.prntspo_{datestamp}
-cancdt,cancdt,clean_read_msd.prntspo_{datestamp}
+clind,clind,clean_read_msd.prntsupo_{datestamp}
+susp,susp,clean_read_msd.prntsupo_{datestamp}
+cancdt,cancdt,clean_read_msd.prntsupo_{datestamp}
 caretype,caretype,clean_read_msd.prntsupo_{datestamp}
-entdt,entdt,clean_read_msd.prntspo_{datestamp}
-othrt,othrt,clean_read_msd.prntspo_{datestamp}
+entdt,entdt,clean_read_msd.prntsupo_{datestamp}
+othrt,othrt,clean_read_msd.prntsupo_{datestamp}
 payrsncde,payrsncde,clean_read_msd.prntsupo_{datestamp}
-revdt,revdt,clean_read_msd.prntspo_{datestamp}
-rsncd,rsncd,clean_read_msd.prntspo_{datestamp}
-srvst,srvst,clean_read_msd.prntspo_{datestamp}
-typind,typind,clean_read_msd.prntspo_{datestamp}
-wklycst,wklycst,clean_read_msd.prntspo_{datestamp}
-wklyrt,wklyrt,clean_read_msd.prntspo_{datestamp}
+revdt,revdt,clean_read_msd.prntsupo_{datestamp}
+rsncd,rsncd,clean_read_msd.prntsupo_{datestamp}
+srvst,srvst,clean_read_msd.prntsupo_{datestamp}
+typind,typind,clean_read_msd.prntsupo_{datestamp}
+wklycst,wklycst,clean_read_msd.prntsupo_{datestamp}
+wklyrt,wklyrt,clean_read_msd.prntsupo_{datestamp}
 snz_msd_uid,Unique Client Identifier,clean_read_msd.psnoro_{datestamp}
 snz_swn_nbr,Social Welfare Number,clean_read_msd.psnoro_{datestamp}
 serv,serv,clean_read_msd.psnoro_{datestamp}
@@ -4003,6 +3899,21 @@ supservcd,supservcd,clean_read_msd.wish_{datestamp}
 threshold,threshold,clean_read_msd.wish_{datestamp}
 wklycosts,Weekly costs,clean_read_msd.wish_{datestamp}
 wklyrate,Weekly rate,clean_read_msd.wish_{datestamp}
+snz_msd_uid,Unique Client Identifier,clean_read_msd.msd_income_detail_{datestamp}
+snz_swn_nbr,Social Welfare Number,clean_read_msd.msd_income_detail_{datestamp}
+child_snz_msd_uid,Unique Client's Child Identifier,clean_read_msd.msd_income_detail_{datestamp}
+child_snz_swn_nbr,Social Welfare Number,clean_read_msd.msd_income_detail_{datestamp}
+serv,Service code,clean_read_msd.msd_income_detail_{datestamp}
+beg_date,Beginning date of extract,clean_read_msd.msd_income_detail_{datestamp}
+end_date,End date of extract,clean_read_msd.msd_income_detail_{datestamp}
+effdt,Effective date,clean_read_msd.msd_income_detail_{datestamp}
+income_code,Income code,clean_read_msd.msd_income_detail_{datestamp}
+income_description,Income description,clean_read_msd.msd_income_detail_{datestamp}
+frequency,Income frequency,clean_read_msd.msd_income_detail_{datestamp}
+unadjusted_amount,Income amount unadjusted for frequency,clean_read_msd.msd_income_detail_{datestamp}
+weekinc,Weekly income,clean_read_msd.msd_income_detail_{datestamp}
+hours,Hours of work,clean_read_msd.msd_income_detail_{datestamp}
+ibind,Incapacity benefit indicator,clean_read_msd.msd_income_detail_{datestamp}
 cyf_ive_source_uk_var1_text,cyf_ive_source_uk_var1_text,cyf_clean.cyf_investgtns_event
 snz_prsn_uid,snz_prsn_uid,clean_read_temp_archive.cyf_cc_cli_seg_options
 snz_msd_uid,snz_msd_uid,clean_read_temp_archive.cyf_cc_cli_seg_options
