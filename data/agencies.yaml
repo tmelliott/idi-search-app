@@ -88,6 +88,7 @@
   name: Ministry of Health
   collections:
     - IDI MOH SOCRATES Disability Support Services data
+    - "Disability Support Services (DSS) SOCRATES"
     - New Zealand Health Survey
     - IDI MOH B4 School Checks data
     - IDI MOH Cancer Registrations data
@@ -116,6 +117,7 @@
   collections:
     - IDI Ministry of Justice Criminal Court Charges data
     - IDI MOJ Debt data
+    - "New Zealand Crime & Victims Survey (NZCVS)"
 
 - id: MSD
   name: Ministry of Social Development

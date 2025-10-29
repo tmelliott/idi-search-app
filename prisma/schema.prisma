@@ -41,7 +41,7 @@ model datasets {
     // order of dataset in data dictionary
     dd_order         Int          @default(0)
     description      String?      @db.LongText
-    reference_period String?
+    reference_period String?      @db.LongText
     collection       collections? @relation(fields: [collection_id], references: [collection_id], onDelete: NoAction, onUpdate: NoAction, map: "dataset_collection_fkey")
     variables        variables[]
 
