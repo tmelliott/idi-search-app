@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 
 import dayjs from "dayjs";
@@ -60,6 +61,18 @@ const LandingPage = () => {
             ))}
         </tbody>
       </table>
+      <hr />
+      <p className="font-bold mt-4 text-right -mb-4">Proudly supported by</p>
+      <div className="flex justify-end">
+        <a href="https://inzight.co.nz">
+          <Image
+            src="https://inzight.co.nz/inzight-light.png"
+            width={200}
+            height={50}
+            alt="iNZight Analytics Ltd"
+          />
+        </a>
+      </div>
     </div>
   );
 };

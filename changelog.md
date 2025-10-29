@@ -1,3 +1,20 @@
+# version 1.0.5
+
+- Adds Octoer 2025 refresh
+- Updated dictionaries
+
+# version 1.0.4
+
+Adds July/October 2024 and March 2025 refresh
+
+# version 1.0.3
+
+July 2025 refresh
+
+# version 1.0.2
+
+March 2024 refresh
+
 # version 1.0.1
 
 October 2023 refresh

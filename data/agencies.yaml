@@ -12,11 +12,14 @@
   name: New Zealand Customs Service
   collections:
     - IDI Customs International Travel and Migration data
+    - Customs Historic Arrival and Departure card
+    - Migrant Unit Record Probabilities
 
 - id: DoC
   name: Department of Corrections
   collections:
     - Offender Management Periods
+    - "Sentences, Orders, and Remand"
 
 - id: DIA
   name: Department of Internal Affairs
@@ -28,10 +31,16 @@
   collections:
     - IDI Early Start Project data
 
+- id: Enable
+  name: Enable New Zealand
+  collections:
+    - ENABLE
+
 - id: HNZ
   name: Kāinga Ora and Ministry of Social Development
   collections:
     - IDI Housing NZ / Kāinga Ora Social Housing data
+    - IDI HNZ House Intervention data
 
 - id: IRD
   name: Inland Revenue
@@ -45,6 +54,7 @@
     - IDI IR RESTRICT data
     - IDI IR Tax Estate or Trust Beneficiary Details (IR6B) data
     - IDI Working for Families Research data
+    - IDI IR Cost of Living Payment
 
 - id: MBIE
   name: Ministry of Business, Innovation, and Employment
@@ -68,11 +78,17 @@
     - IDI MOE Compulsary Schooling (CS) Student Attendance data
     - IDI MOE Early Childhood Education (ECE) Student Attendance data
     - IDI MOE Provider Profile data
+    - School Equity Index History
+    - IDI MOE School Roll Return data
+    - "IDI MOE Student Ongoing Resource Scheme (ORS) Criterion"
+    - Gateway Enrolment Te Kura Adhoc
+    - Gateway Enrolment Te Kura
 
 - id: MOH
   name: Ministry of Health
   collections:
     - IDI MOH SOCRATES Disability Support Services data
+    - "Disability Support Services (DSS) SOCRATES"
     - New Zealand Health Survey
     - IDI MOH B4 School Checks data
     - IDI MOH Cancer Registrations data
@@ -93,12 +109,15 @@
     - IDI MOH Private Hospital Discharges data
     - IDI MOH Programme for the Integration of Mental Health data
     - IDI MOH Public Hospital Discharges data
+    - "IDI MOH Aotearoa Immunisation Register (AIR)"
+    - "IDI Virtual Diabetes Register (VDR)"
 
 - id: MOJ
   name: Ministry of Justice
   collections:
     - IDI Ministry of Justice Criminal Court Charges data
     - IDI MOJ Debt data
+    - "New Zealand Crime & Victims Survey (NZCVS)"
 
 - id: MSD
   name: Ministry of Social Development
@@ -114,6 +133,9 @@
     - IDI Ministry of Social Development Employment Assistance and Education History data
     - IDI Ministry of Social Development Residential and Postal Address data
     - IDI SLA MSD Study Link data
+    - "New Zealand Defence Force; Veterans Affairs"
+    - MSD SORT Participation
+    - MSD SORT Participation Adhoc
 
 - id: NZPOL
   name: New Zealand Police
@@ -122,6 +144,7 @@
     - IDI POL Recorded Crime Offenders data
     - "IDI NZ Police data : Recorded Crime Victims (RCVS)"
     - Genesis Youth Trust
+    - IDI NZ Police NIA Links data
 
 - id: NZR
   name: NZ Rugby
@@ -142,7 +165,8 @@
 - id: SNZ
   name: Statistics New Zealand
   collections:
-    - IDI Experimental Adminstrative Population Census data
+    - IDI Experimental Administrative Population Census data
+    - "IDI Experimental Adminstrative Population Census: Household information"
     - IDI Census of Population and Dwellings data 2013
     - IDI Census of Population and Dwellings data 2018
     - IDI Disability Survey data
@@ -156,7 +180,11 @@
     - IDI Business Register data
     - IDI Longitudinal Immigration Survey of NZ
     - IDI General Social Survey 2021 data (GSS2021)
+    - IDI General Social Survey 2023 data (GSS2023)
     - IDI General Social Survey Ongoing Supplements
+    - IDI Derived Population data
+    - Household Income and Living Survey
+    - Stats NZ 2023 Household Disability Survey
 
 - id: SportNZ
   name: Sport NZ
@@ -175,6 +203,7 @@
   name: University of Auckland
   collections:
     - Centre of Innovation and Entrepreneurship Participation
+    - ARCOS
 
 - id: UoO
   name: University of Otago
