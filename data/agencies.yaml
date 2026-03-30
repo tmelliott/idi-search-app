@@ -63,6 +63,7 @@
     - IDI MBIE Tenancy Bond data
     - IDI MBIE Migration selections data
     - IDI Survey of New Zealand Arrivals data
+    - IDI Migrant Survey data
 
 - id: MOE
   name: Ministry of Education
@@ -111,6 +112,7 @@
     - IDI MOH Public Hospital Discharges data
     - "IDI MOH Aotearoa Immunisation Register (AIR)"
     - "IDI Virtual Diabetes Register (VDR)"
+    - "IDI MOH Integrated Primary Mental Health and Addiction (IPHMA) dataset"
 
 - id: MOJ
   name: Ministry of Justice
@@ -118,6 +120,7 @@
     - IDI Ministry of Justice Criminal Court Charges data
     - IDI MOJ Debt data
     - "New Zealand Crime & Victims Survey (NZCVS)"
+    - IDI Ministry of Justice Judicial Initiative Charges
 
 - id: MSD
   name: Ministry of Social Development

@@ -1,6 +1,11 @@
+# version 1.0.6
+
+- Adds March 2026 refresh
+- Updated dictionaries
+
 # version 1.0.5
 
-- Adds Octoer 2025 refresh
+- Adds October 2025 refresh
 - Updated dictionaries
 
 # version 1.0.4

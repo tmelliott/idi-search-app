@@ -1,6 +1,6 @@
 {
   "name": "idi-search-app",
-  "version": "1.0.4",
+  "version": "1.0.6",
   "description": "Explore the datasets available in New Zealand's IDI",
   "private": true,
   "scripts": {
@@ -24,6 +24,8 @@
     "@trpc/next": "^10.9.0",
     "@trpc/react-query": "^10.9.0",
     "@trpc/server": "^10.9.0",
+    "baseline-browser-mapping": "^2.10.12",
+    "caniuse-lite": "^1.0.30001782",
     "dayjs": "^1.11.7",
     "gray-matter": "^4.0.3",
     "mdx-mermaid": "^1.3.2",

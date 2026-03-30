@@ -5,6 +5,8 @@ data/out
 /.pnp
 .pnp.js
 
+workplans
+
 # testing
 /coverage
 
