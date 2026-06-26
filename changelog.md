@@ -1,3 +1,8 @@
+# version 1.0.7
+
+- June 2026 refresh
+- Updated dictionaries
+
 # version 1.0.6
 
 - Adds March 2026 refresh

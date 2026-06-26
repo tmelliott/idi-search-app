@@ -86,8 +86,11 @@ cli::cli_progress_step("Processing dictionaries")
 suppressMessages({
     collection_tables <- files |>
         lapply(\(file) {
-            # cat("\n* Processing dictionary", file, "...")
-            x <- readxl::read_excel(file, sheet = "Index")
+            x <- try(readxl::read_excel(file, sheet = "Index"), silent = TRUE)
+            if (inherits(x, "try-error")) {
+                cli::cli_alert_danger("Error reading dictionary {file}")
+                return(NULL)
+            }
             di <- grep("Dataset Name", x$Index)
             dj <- di + which(is.na(x$Index[-(1:di)]))[1] - 1L
             tables <- x[(di + 1):dj, ]
@@ -211,7 +214,7 @@ if (any(table(collections$collection_name) > 1L)) {
     stop()
 }
 
-cli::cli_progress_step("Extracing datasets")
+cli::cli_progress_step("Extracting datasets")
 datasets <- suppressMessages(
     map(collection_tables, "tables") |>
         bind_rows() |>
@@ -234,6 +237,10 @@ if (any(grepl("\n", datasets$dataset_id))) {
         mutate(dataset_id = gsub("\n", "__", dataset_id))
 }
 
+# drop any datasets with missing ID and no characters in the name (e.g., "..." entered in the template)
+datasets <- datasets |>
+    filter(!is.na(dataset_id) & grepl("^[a-z0-9\\._]+$", dataset_id))
+
 dup_ids <- datasets$dataset_id |>
     tolower() |>
     table()
@@ -253,7 +260,9 @@ if (any(dup_ids > 1L)) {
             )
         )
     )
-    cli::cli_ul(names(dup_ids)[dup_ids > 1])
+    badids <- names(dup_ids)[dup_ids > 1]
+    badids <- datasets |> filter(dataset_id %in% badids)
+    print(badids)
     stop()
 }
 

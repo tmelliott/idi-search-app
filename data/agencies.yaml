@@ -31,6 +31,11 @@
   collections:
     - IDI Early Start Project data
 
+- id: EC
+  name: Electoral Commission
+  collections:
+    - Electoral Commission Electoral Roll
+
 - id: Enable
   name: Enable New Zealand
   collections:
@@ -139,6 +144,11 @@
     - "New Zealand Defence Force; Veterans Affairs"
     - MSD SORT Participation
     - MSD SORT Participation Adhoc
+
+- id: MHD
+  name: Ministry of Housing and Development
+  collections:
+    - Transitional Housing Data
 
 - id: NZPOL
   name: New Zealand Police

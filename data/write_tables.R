@@ -32,7 +32,8 @@ write_tables <- function() {
                 glue::glue_sql_collapse(
                     glue::glue_sql("({agencies$agency_id}, {agencies$agency_name})", .con = con),
                     ", "
-                )
+                ),
+                .con = con
             )
         )
         cli_progress_done()
@@ -55,7 +56,8 @@ write_tables <- function() {
                         glue::glue_sql("({collection_id}, {collection_name}, {agency_id}, {database_id}, {description})", .con = con)
                     ),
                     ", "
-                )
+                ),
+                .con = con
             )
         )
         cli_progress_done()
